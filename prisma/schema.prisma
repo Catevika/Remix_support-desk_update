@@ -1,0 +1,101 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  username     String   @default("")
+  email        String   @unique
+  passwordHash String
+  service      String
+
+  Roles    Role[]
+  Services Service[]
+  Tickets  Ticket[]
+  Products Product[]
+  Status   Status[]
+  Notes    Note[]
+  @@map("Users")
+}
+
+model Role {
+  author    User     @relation(fields: [authorId], references: [id])
+  authorId  String   @db.ObjectId
+  roleId    String   @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  roleType  String   @unique @default("")
+
+  @@map("Roles")
+}
+
+model Service {
+  author        User     @relation(fields: [authorId], references: [id])
+  authorId      String   @db.ObjectId
+  serviceId     String   @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  name          String   @unique @default("")
+
+  @@map("Services")
+}
+
+model Product {
+  author    User     @relation(fields: [authorId], references: [id])
+  authorId  String   @db.ObjectId
+  productId String   @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  device    String   @unique @default("")
+
+  Tickets Ticket[]
+  @@map("Products")
+}
+
+model Ticket {
+  author          User     @relation(fields: [authorId], references: [id])
+  authorId        String   @db.ObjectId
+  ticketProduct   Product  @relation(fields: [ticketProductId], references: [productId])
+  ticketProductId String   @db.ObjectId
+  ticketStatus    Status   @relation(fields: [ticketStatusId], references: [statusId])
+  ticketStatusId  String   @db.ObjectId
+  ticketId        String   @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  title           String   @default("")
+  description     String   @default("")
+
+  Notes Note[]
+  @@map("Tickets")
+}
+
+model Status {
+  technician   User     @relation(fields: [technicianId], references: [id])
+  technicianId String   @db.ObjectId
+  statusId     String   @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  type         String   @unique @default("")
+
+  Tickets Ticket[]
+}
+
+model Note {
+  noteUser     User     @relation(fields: [noteUserId], references: [id])
+  noteUserId   String   @db.ObjectId
+  noteTicket   Ticket   @relation(fields: [noteTicketId], references: [ticketId])
+  noteTicketId String   @db.ObjectId
+  noteId       String   @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  text         String   @default("")
+
+  @@map("Notes")
+}
