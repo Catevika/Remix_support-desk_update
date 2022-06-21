@@ -110,7 +110,7 @@ export default function RoleRoute() {
 
 	return (
 		<>
-			<main className='form-container'>
+			<main className='form-container form-container-admin'>
 				<p>
 					{data?.username && (
 						<>

@@ -27,7 +27,7 @@ export default function ProductsRoute() {
 					<FaTools className='icon-size icon-shadow' /> Back to Board
 				</Link>
 				<AdminNavBar />
-				<h1>Create New Product</h1>
+				<h1>Manage Product List</h1>
 				<Form action='/logout' method='post'>
 					<button type='submit' className='btn'>
 						Logout

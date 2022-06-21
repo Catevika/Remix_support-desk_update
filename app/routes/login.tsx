@@ -88,7 +88,7 @@ export default function Login() {
 				</Link>
 				<h1>Login to access your Support-Desk!</h1>
 			</header>
-			<main className='form-conainer'>
+			<main className='form-container form-container-center'>
 				<div className='form-content'>
 					<Form method='post' className='form'>
 						<input

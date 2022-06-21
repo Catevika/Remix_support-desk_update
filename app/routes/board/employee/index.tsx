@@ -4,6 +4,7 @@ import { useLoaderData, Link, Form } from '@remix-run/react';
 import { requireUser } from '~/utils/session.server';
 import { FaTools, FaQuestionCircle, FaTicketAlt } from 'react-icons/fa';
 import { CgProfile } from 'react-icons/cg';
+import { getTicketListingByUserId } from '~/models/tickets.server';
 
 export const meta: MetaFunction = () => {
   return {
@@ -13,15 +14,19 @@ export const meta: MetaFunction = () => {
 
 type LoaderData = {
   user: Awaited<ReturnType<typeof requireUser>>;
+  tickets: Awaited<ReturnType<typeof getTicketListingByUserId>> | null;
 };
 
 export const loader: LoaderFunction = async ({ request }) => {
   const user = await requireUser(request);
-  return json<LoaderData>({ user });
-};
+  const tickets = await getTicketListingByUserId(user.id);
+  
+  return json<LoaderData>({ user, tickets });
+}
 
-export default function userBoardRoute() {
-  const { user } = useLoaderData<LoaderData>();
+export default function userBoardRoute(): JSX.Element {
+  const { user, tickets } = useLoaderData<LoaderData>();
+  const lastTicket = tickets ? tickets[0] : null;
 
   return (
     <>
@@ -56,7 +61,7 @@ export default function userBoardRoute() {
               </Link>
             </li>
             <li>
-              <Link to='/board/employee/tickets' className='btn btn-block nav-links'>
+              <Link to={(lastTicket && typeof lastTicket !== 'string') ? (`/board/employee/tickets/${lastTicket.ticketId}`) : ('/board/employee/tickets/new-ticket')} className='btn btn-block nav-links'>
                 <FaTicketAlt className='icon-size icon-space' />
                 &nbsp;View my Tickets
               </Link>

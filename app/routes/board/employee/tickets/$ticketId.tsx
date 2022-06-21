@@ -190,16 +190,18 @@ export default function NewTicketRoute() {
 	}
 
 	const isNewTicket = !data.ticket ;
+	const isCreating = Boolean(fetcher.submission?.formData.get('intent') === 'create');
+	const isUpdating = Boolean(fetcher.submission?.formData.get('intent') === 'update');
 	
 	return (
 		<>
 			<main className='form-container'>
-				<div className='form-content'>
-					<fetcher.Form reloadDocument method='post' className='form' key={ data.ticket?.ticketId ?? 'new-ticket'}>
-					<p className='list'>
+				<fetcher.Form reloadDocument method='post' className='form' key={ data.ticket?.ticketId ?? 'new-ticket'}>
+					<p className='inline'>
 						{isNewTicket ? 'New' : null }&nbsp;Ticket from:<span className='capitalize'>&nbsp;{user?.username}&nbsp;</span> - Email:<span>&nbsp;{user?.email}</span>
 					</p>
-						<div>
+					<div className='form-content'>
+						<div className='form-group'>
 							<label htmlFor="title">
 								Title:{''}
 								<input
@@ -211,16 +213,16 @@ export default function NewTicketRoute() {
 									aria-errormessage={actionData?.fieldErrors?.title ? 'title-error' : undefined}
 									autoFocus
 								/>
-							</label>
 							{actionData?.fieldErrors?.title ? (
 								<p
-									className='error-danger'
-									role='alert'
-									id='title-error'
+								className='error-danger'
+								role='alert'
+								id='title-error'
 								>
 									{actionData.fieldErrors.title}
 								</p>
 							) : null}
+							</label>
 						</div>
 						<div className='form-group'>
 							<label htmlFor='status'>Status:
@@ -299,53 +301,56 @@ export default function NewTicketRoute() {
 									className='form-textarea'
 								/>
 							</label>
-							{actionData?.fieldErrors?.description ? (
-								<p
-									className='error-danger'
-									role='alert'
-									id='description-error'
-								>
-									{actionData.fieldErrors.description}
-								</p>
-							) : null}
 						</div>
-						<div id='form-error-message'>
-							{actionData?.formError ? (
-								<p className='error-danger' role='alert'>
-									{actionData.formError}
-								</p>
-							) : null}
-							{data.ticket ? (
-								<div className='form form-group'>
+						{actionData?.fieldErrors?.description ? (
+							<p
+								className='error-danger'
+								role='alert'
+								id='description-error'
+							>
+								{actionData.fieldErrors.description}
+							</p>
+						) : null}
+						{actionData?.formError ? (
+							<p className='error-danger' role='alert'>
+								{actionData.formError}
+							</p>
+						) : null}
+						{data.ticket ? (
+							<>
+								<div className='form-group inline'>
 									<label>Created at:&nbsp;
 										<input
 											type='text'
 											id='createdAt'
-											name='title'
+											name='createdAt'
 											defaultValue={new Date(data.ticket.createdAt).toLocaleString()}
-											disabled
+											disabled={isCreating}
 										/>
 									</label>
 									<label>Updated at:&nbsp;
 										<input
 											type='text'
 											id='updatedAt'
-											name='title'
+											name='updatedAt'
 											defaultValue={new Date(data.ticket.updatedAt).toLocaleString()}
-											disabled
+											disabled={isUpdating}
 										/>
 									</label>
-								</div>) : null
-							}
-							<button type='submit' className='btn form-btn'>
-							{data.ticket ? 'Update' : 'Send'}
+								</div>
+							</>) : null
+						}
+						<div className='inline'>
+							<button type='submit' name='intent' value={data.ticket ? 'Update' : 'Send'} className='btn form-btn'>
+							{isNewTicket ? (isCreating ? 'Sending...' : 'Send') : null}
+							{isNewTicket ? null : (isUpdating ? 'Updating...' : 'Update')}
 							</button>
 							{data.ticket ? <Link to='/board/employee/tickets/new-ticket'>
-								<button className='btn form-btn'>Back to Create Ticket</button>
+								<button className='btn form-btn'>Go to Create Ticket</button>
 							</Link> : null}
 						</div>
-					</fetcher.Form>
-				</div>
+					</div>
+				</fetcher.Form>
 			</main>
 		</>
 	);

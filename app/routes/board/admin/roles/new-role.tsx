@@ -87,7 +87,7 @@ export default function NewRoleRoute() {
 
 	return (
 		<>
-			<main className='form-container'>
+			<main className='form-container form-container-admin'>
 				<div className='form-content'>
 					<Form reloadDocument method='post' className='form'>
 						<p className='list'>

@@ -110,7 +110,7 @@ export default function ProductRoute() {
 
 	return (
 		<>
-			<main className='form-container'>
+			<main className='form-container form-container-admin'>
 				{data.username && (
 					<p>
 						Product created by{' '}

@@ -33,7 +33,7 @@ export default function RolesRoute() {
 						Logout
 					</button>
 				</Form>
-				<h1>Create New Role</h1>
+				<h1>Manage Role List</h1>
 			</header>
 			<main className='grid-container'>
 				{roles.length ? (

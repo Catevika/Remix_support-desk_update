@@ -107,7 +107,7 @@ export default function ServiceRoute() {
 
   return (
     <>
-      <main className='form-container'>
+      <main className='form-container form-container-admin'>
         {data.username && (
           <p>
             Service created by{' '}

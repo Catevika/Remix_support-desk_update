@@ -31,7 +31,7 @@ export default function TicketsRoute() {
 				<Link to='/board/employee' className='icon-header'>
 					<FaTools className='icon-size icon-shadow' /> Back to Board
 				</Link>
-				<h1>Create New Ticket</h1>
+				<h1>Manage your Tickets</h1>
 				<Form action='/logout' method='post'>
 					<button type='submit' className='btn'>
 						Logout
@@ -40,14 +40,17 @@ export default function TicketsRoute() {
 			</header>
 			<main className='grid-container'>
 				<div>
-					<div>
-						<MdMiscellaneousServices className='icon-size icon-container' />
-						<p>Your tickets:&nbsp;
-							{pathname === '/board/employee/tickets'
-								? (<Link to='/board/employee/tickets/new-ticket'><span>Create new ticket</span></Link>)
-								: null}
-						</p>
-					</div>
+					<MdMiscellaneousServices className='icon-size icon-container' />
+					<p className='inline'>
+						Your tickets:
+					</p>
+					<p className='inline'>
+					{ ticketsByUserId.length && (typeof ticketsByUserId !== 'string') 
+						? pathname === '/board/employee/tickets'
+							? <Link to='/board/employee/tickets/new-ticket'><em>Manage your tickets</em></Link>
+							: <em>To update another Ticket, click on its title</em>
+						: null }
+					</p>
 					{ticketsByUserId.length && (typeof ticketsByUserId !== 'string') ? (
 						<div className='nav-ul-container'>
 							{

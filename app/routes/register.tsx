@@ -141,7 +141,7 @@ export default function Register() {
 				</Link>
 				<h1>Register to access your Support-Desk!</h1>
 			</header>
-			<div className='form-container'>
+			<div className='form-container form-container-center'>
 				<div className='form-content'>
 					<fetcher.Form reloadDocument method='post' className='form'>
 						<input

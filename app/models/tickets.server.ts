@@ -1,4 +1,5 @@
 import type { Note } from "@prisma/client";
+import {json} from '@remix-run/node';
 import { prisma } from "~/utils/db.server";
 
 export type Ticket = { author: string, authorId: string, ticketProduct: string; ticketProductId: string; ticketStatus: string; ticketStatusId: string; ticketId: string, createdAt: string; updatedAt: string; title: string, description: string; Notes: Note[]; };

@@ -27,7 +27,7 @@ export default function StatusRoute() {
 					<FaTools className='icon-size icon-shadow' /> Back to Board
 				</Link>
 				<AdminNavBar />
-				<h1>Create New Status</h1>
+				<h1>Manage Status List</h1>
 				<Form action='/logout' method='post'>
 					<button type='submit' className='btn'>
 						Logout

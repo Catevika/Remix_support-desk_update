@@ -34,7 +34,7 @@ export default function ServicesRoute() {
 						Logout
 					</button>
 				</Form>
-				<h1>Create New Service</h1>
+				<h1>Manage Service List</h1>
 			</header>
 			<main className='grid-container'>
 				{services.length ? (
