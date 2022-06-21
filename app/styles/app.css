@@ -18,7 +18,8 @@
 
 body {
 	font-family: 'Poppins', sans-serif;
-	height: 100vh;
+	height: calc(100vh - 70px);
+	margin-top: 70px;
 	background-color: var(--dark);
 	color: var(--light);
 }
@@ -39,6 +40,10 @@ a {
 	color: var(--light);
 }
 
+div {
+	position: relative;
+}
+
 a:hover {
 	color: var(--hover);
 }
@@ -51,9 +56,12 @@ li {
 	list-style: none;
 }
 
+select {
+	cursor: pointer;
+}
+
 ul {
-	/* list-style: none; */
-	margin: 0 auto;
+	margin: 10px 10px 0 20px;
 }
 
 span {
@@ -148,10 +156,6 @@ em {
 	font-size: 1rem;
 }
 
-.form-btn {
-	margin-top: 30px;
-}
-
 .container {
 	width: 100%;
 	margin: 0 auto;
@@ -161,13 +165,17 @@ em {
 
 .grid-container {
 	display: grid;
-	grid-template-columns: 1fr 2fr 1fr;
+	grid-template-columns: repeat(2, 1fr);
 	grid-gap: 20px;
-	margin: 20px auto;
+	margin: 62px auto 20px;
 	padding: 0 20px;
 }
 
 .header {
+	overflow: hidden;
+	position: fixed;
+	top: 0;
+	left: 0;
 	height: 62px;
 	display: flex;
 	justify-content: space-between;
@@ -257,12 +265,6 @@ em {
 	border-radius: 0.5rem;
 }
 
-.nav-inline {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-}
-
 .nav-links {
 	display: flex;
 	justify-content: center;
@@ -271,6 +273,22 @@ em {
 
 .nav-links + .nav-links {
 	margin-top: 20px;
+}
+
+.nav-ul-container {
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+	align-items: flex-start;
+	position: fixed;
+	top: 10rem;
+	height: calc(100% - 10rem);
+	overflow-y: scroll;
+}
+
+.nav-ul-container::-webkit-scrollbar {
+	width: 0;
+	background: transparent;
 }
 
 .inline {
@@ -322,10 +340,11 @@ em {
 	color: #fff;
 }
 
-.uppercase {
-	text-transform: uppercase;
+.status-Updated {
+	background-color: lightyellow;
+	color: var(--dark);
 }
 
-.hidden-msg:not(first-child) {
-	display: none;
+.uppercase {
+	text-transform: uppercase;
 }

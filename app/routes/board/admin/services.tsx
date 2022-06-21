@@ -17,7 +17,7 @@ export const loader: LoaderFunction = async () => {
 	return json<LoaderData>({ services });
 };
 
-/* TODO: Add a pagination to service list  */
+// TODO: Add a pagination to service list
 // TODO: Add a search field to service list
 
 export default function ServicesRoute() {

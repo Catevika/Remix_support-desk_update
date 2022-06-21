@@ -29,11 +29,17 @@ input:focus {
 	justify-content: center;
 }
 
+.form-btn {
+	margin-top: 20px;
+}
+
 .form-container {
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
-	align-items: center;
+	align-content: center;
+	width: 60vw;
+	margin-right: 10vw;
 	height: 85vh;
 }
 

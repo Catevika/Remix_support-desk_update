@@ -3,7 +3,7 @@ import type { User } from "@prisma/client";
 import { prisma } from "~/utils/db.server";
 import bcrypt from "bcryptjs";
 import invariant from "tiny-invariant";
-import { getUserByEmail, getUserById } from "../models/user.server";
+import { getUserById } from "../models/user.server";
 
 export type { User } from "@prisma/client";
 

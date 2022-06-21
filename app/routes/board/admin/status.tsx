@@ -15,7 +15,7 @@ export const loader: LoaderFunction = async () => {
 	return json<LoaderData>({ statuses });
 };
 
-/* TODO: Add a pagination to status list  */
+// TODO: Add a pagination to status list
 // TODO: Add a search field to status list
 
 export default function StatusRoute() {

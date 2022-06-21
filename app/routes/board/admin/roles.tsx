@@ -16,7 +16,7 @@ export const loader: LoaderFunction = async () => {
 	return json<LoaderData>({ roles });
 };
 
-/* TODO: Add a pagination to role list  */
+// TODO: Add a pagination to role list
 // TODO: Add a search field to role list
 
 export default function RolesRoute() {

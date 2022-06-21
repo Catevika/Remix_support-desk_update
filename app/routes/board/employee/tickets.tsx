@@ -18,10 +18,7 @@ export const loader: LoaderFunction = async ({ request }) => {
 };
 
 // TODO: Add service to ticket everywhere it is needed to be able to get the number of tickets per service
-
-// TODO: Add status to the ticket title
-
-/* TODO: Add a pagination to ticket list  */
+// TODO: Add a pagination to ticket list
 // TODO: Add a search field to ticket list
 
 export default function TicketsRoute() {
@@ -52,13 +49,11 @@ export default function TicketsRoute() {
 						</p>
 					</div>
 					{ticketsByUserId.length && (typeof ticketsByUserId !== 'string') ? (
-						<div>
+						<div className='nav-ul-container'>
 							{
 								ticketsByUserId.map((ticket) => (
 									<ul key={ticket.ticketId}>
-										<Link to={ticket.ticketId} prefetch='intent'>
-											<li className='list border-bottom'><span>{ticket.title}</span></li>
-										</Link>
+										<li className='list border-bottom'>Title:&nbsp;<Link to={ticket.ticketId} prefetch='intent'><span>{ticket.title}</span></Link></li>
 										<li className='list'>Id:&nbsp;<span>{ticket.ticketId}</span></li>
 										<li className='list' >Status:&nbsp;<span className={
 											ticket.ticketStatus.type
@@ -67,7 +62,6 @@ export default function TicketsRoute() {
 										}>{ticket.ticketStatus.type}</span></li>
 										<li className='list'>Product:&nbsp;<span>{ticket.ticketProduct.device}</span></li>
 										<li className='list'>Date:&nbsp;{new Date(ticket.createdAt).toLocaleString() !== new Date(ticket.updatedAt).toLocaleString() ? <span>{new Date(ticket.updatedAt).toLocaleString()}</span> : <span>{new Date(ticket.createdAt).toLocaleString()}</span>}</li>
-										<li>**</li>
 									</ul>
 								))
 							}

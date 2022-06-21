@@ -14,7 +14,7 @@ export const loader: LoaderFunction = async () => {
 	return json<LoaderData>({ products });
 };
 
-/* TODO: Add a pagination to product list  */
+// TODO: Add a pagination to product list
 // TODO: Add a search field to product list
 
 export default function ProductsRoute() {

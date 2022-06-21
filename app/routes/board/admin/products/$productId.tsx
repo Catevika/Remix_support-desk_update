@@ -113,7 +113,7 @@ export default function ProductRoute() {
 			<main className='form-container'>
 				{data.username && (
 					<p>
-						Device created by{' '}
+						Product created by{' '}
 						<span className='capitalize'>{data.username}</span>
 					</p>
 				)}
