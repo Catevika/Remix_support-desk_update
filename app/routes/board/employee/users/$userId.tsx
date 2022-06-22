@@ -8,7 +8,7 @@ import {
 	useParams
 } from '@remix-run/react';
 import { prisma } from '~/utils/db.server';
-import { getUser } from '~/utils/session.server';
+import { requireUser } from '~/utils/session.server';
 import UserDisplay from '~/components/UserDisplay';
 import { FaTools } from 'react-icons/fa';
 
@@ -26,19 +26,18 @@ export const meta: MetaFunction = ({
 		};
 	}
 	return {
-		title: `${data?.user?.username}`,
-		description: `Here ist your profile "${data?.user?.username}"`
+		title: `${data?.user?.username}`
 	};
 };
 
 type LoaderData = {
-	user: Awaited<ReturnType<typeof getUser>>;
+	user: Awaited<ReturnType<typeof requireUser>>;
 	isOwner: boolean;
 	canDelete: boolean;
 };
 
 export const loader: LoaderFunction = async ({ request, params }) => {
-	const user = await getUser(request);
+	const user = await requireUser(request);
 
 	if (!user) {
 		throw new Response('User Not Found.', {
@@ -51,7 +50,8 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 		isOwner: user.id === params.userId,
 		canDelete: true
 	};
-	return json(data);
+
+	return json<LoaderData>(data);
 };
 
 export const action: ActionFunction = async ({ request, params }) => {
@@ -76,13 +76,14 @@ export default function ProductRoute() {
 				<Link to='/board/employee/' className='icon-header'>
 					<FaTools className='icon-size icon-shadow' /> Back to Board
 				</Link>
+				<h1>Manage your User Profile</h1>
 				<Form action='/logout' method='post'>
 					<button type='submit' className='btn'>
 						Logout
 					</button>
 				</Form>
 			</header>
-			<main className='form-container'>
+			<main className='form-container form-container-center'>
 				<div className='form-content'>
 					<UserDisplay
 						user={data.user}

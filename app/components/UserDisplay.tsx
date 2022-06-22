@@ -55,17 +55,17 @@ export default function UserDisplay({
 	return (
 		<>
 			{user ? (
-				<ul className='main container'>
+				<ul>
 					<li className='list'>
 						Name:&nbsp;<span>{user.username}</span>
 					</li>
 					<li className='list'>
 						Email:&nbsp;<span>{user.email}</span>
 					</li>
-					<li className='list'>
+					<li className='list separator-bottom'>
 						Service:&nbsp;<span>{user.service}</span>
 					</li>
-					<li className='list border-up'>
+					<li className='list'>
 						Date Registered:&nbsp;
 						<span>{new Date(user.createdAt).toLocaleString()}</span>
 					</li>

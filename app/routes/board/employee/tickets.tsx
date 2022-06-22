@@ -23,7 +23,6 @@ export const loader: LoaderFunction = async ({ request }) => {
 
 export default function TicketsRoute() {
 	const { ticketsByUserId } = useLoaderData() as LoaderData;
-	const pathname = useLocation().pathname;
 
 	return (
 		<>
@@ -46,9 +45,7 @@ export default function TicketsRoute() {
 					</p>
 					<p className='inline'>
 					{ ticketsByUserId.length && (typeof ticketsByUserId !== 'string') 
-						? pathname === '/board/employee/tickets'
-							? <Link to='/board/employee/tickets/new-ticket'><em>Manage your tickets</em></Link>
-							: <em>To update another Ticket, click on its title</em>
+						? <em>To update a Ticket, click on its title</em>
 						: null }
 					</p>
 					{ticketsByUserId.length && (typeof ticketsByUserId !== 'string') ? (

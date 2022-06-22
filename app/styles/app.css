@@ -191,6 +191,14 @@ em {
 	font-size: 1.5rem;
 }
 
+.separator-bottom {
+	padding-bottom: 20px;
+	border-bottom: 1px solid var(--light);
+}
+
+.separator-right {
+}
+
 .icon-shadow {
 	-webkit-filter: drop-shadow(5px 5px 2px rgb(0 0 0 / 0.4));
 	filter: drop-shadow(5px 5px 2px rgb(0 0 0 / 0.4));
@@ -285,6 +293,7 @@ em {
 	top: 13rem;
 	height: calc(100% - 13rem);
 	overflow-y: scroll;
+	border-right: 1px solid var(--light);
 }
 
 .nav-ul-container::-webkit-scrollbar {

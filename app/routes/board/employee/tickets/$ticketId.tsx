@@ -14,7 +14,7 @@ import { prisma } from '~/utils/db.server';
 import { getProducts } from '~/models/products.server';
 import { getStatuses } from '~/models/status.server';
 import { validateTitle, validateDescription } from '~/utils/functions';
-import { getTicket, getTicketStatusType, getTicketProductDevice } from '~/models/tickets.server';
+import { getTicket, getTicketStatusType, getTicketProductDevice, deleteTicket } from '~/models/tickets.server';
 
 export const meta: MetaFunction = () => {
 	return {
@@ -93,6 +93,12 @@ export const action: ActionFunction = async ({ request, params }) => {
 	const status = form.get('status');
 	const product = form.get('product');
 	const description = form.get('description');
+	const intent = form.get('intent');
+
+	if(intent === 'delete') {
+		await deleteTicket(params.ticketId)
+		return redirect('/board/employee/tickets');
+	}
 
 	function onlyNumbers(str: string) {
 		return /^[0-9]+$/.test(str);
@@ -192,12 +198,13 @@ export default function NewTicketRoute() {
 	const isNewTicket = !data.ticket ;
 	const isCreating = Boolean(fetcher.submission?.formData.get('intent') === 'create');
 	const isUpdating = Boolean(fetcher.submission?.formData.get('intent') === 'update');
+	const isDeleting = Boolean(fetcher.submission?.formData.get('intent') === 'delete');
 	
 	return (
 		<>
 			<main className='form-container'>
 				<fetcher.Form reloadDocument method='post' className='form' key={ data.ticket?.ticketId ?? 'new-ticket'}>
-					<p className='inline'>
+					<p>
 						{isNewTicket ? 'New' : null }&nbsp;Ticket from:<span className='capitalize'>&nbsp;{user?.username}&nbsp;</span> - Email:<span>&nbsp;{user?.email}</span>
 					</p>
 					<div className='form-content'>
@@ -325,7 +332,6 @@ export default function NewTicketRoute() {
 											id='createdAt'
 											name='createdAt'
 											defaultValue={new Date(data.ticket.createdAt).toLocaleString()}
-											disabled={isCreating}
 										/>
 									</label>
 									<label>Updated at:&nbsp;
@@ -334,20 +340,22 @@ export default function NewTicketRoute() {
 											id='updatedAt'
 											name='updatedAt'
 											defaultValue={new Date(data.ticket.updatedAt).toLocaleString()}
-											disabled={isUpdating}
 										/>
 									</label>
 								</div>
 							</>) : null
 						}
 						<div className='inline'>
-							<button type='submit' name='intent' value={data.ticket ? 'Update' : 'Send'} className='btn form-btn'>
+							<button type='submit' name='intent' value={data.ticket ? 'Update' : 'Send'} className='btn form-btn' disabled={isCreating || isUpdating} >
 							{isNewTicket ? (isCreating ? 'Sending...' : 'Send') : null}
 							{isNewTicket ? null : (isUpdating ? 'Updating...' : 'Update')}
 							</button>
-							{data.ticket ? <Link to='/board/employee/tickets/new-ticket'>
-								<button className='btn form-btn'>Go to Create Ticket</button>
-							</Link> : null}
+							{isNewTicket ? null : <Link to='/board/employee/tickets/new-ticket'>
+								<button className='btn form-btn'>Back to New Ticket</button>
+							</Link>}
+							{ isNewTicket ? null : <button type='submit' name='intent' value='delete' className='btn form-btn btn-danger' disabled={isDeleting}>
+							{isDeleting ? 'isDeleting...' : 'Delete'}
+							</button>}
 						</div>
 					</div>
 				</fetcher.Form>

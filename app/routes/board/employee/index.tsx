@@ -1,6 +1,6 @@
 import type { MetaFunction, LoaderFunction } from '@remix-run/node';
 import { json } from '@remix-run/node';
-import { useLoaderData, Link, Form } from '@remix-run/react';
+import { useLoaderData, NavLink, Form } from '@remix-run/react';
 import { requireUser } from '~/utils/session.server';
 import { FaTools, FaQuestionCircle, FaTicketAlt } from 'react-icons/fa';
 import { CgProfile } from 'react-icons/cg';
@@ -52,28 +52,28 @@ export default function userBoardRoute(): JSX.Element {
         <nav className='nav'>
           <ul>
             <li>
-              <Link
+              <NavLink
                 to='/board/employee/tickets/new-ticket'
                 className='btn btn-reverse btn-block nav-links'
               >
                 <FaQuestionCircle className='icon-size icon-space' />
                 &nbsp;Create New Ticket
-              </Link>
+              </NavLink>
             </li>
             <li>
-              <Link to={(lastTicket && typeof lastTicket !== 'string') ? (`/board/employee/tickets/${lastTicket.ticketId}`) : ('/board/employee/tickets/new-ticket')} className='btn btn-block nav-links'>
+              <NavLink to={(lastTicket && typeof lastTicket !== 'string') ? (`/board/employee/tickets/${lastTicket.ticketId}`) : ('/board/employee/tickets/new-ticket')} className='btn btn-block nav-links'>
                 <FaTicketAlt className='icon-size icon-space' />
                 &nbsp;View my Tickets
-              </Link>
+              </NavLink>
             </li>
             <li>
-              <Link
+              <NavLink
                 to={`/board/employee/users/${user.id}`}
                 className='btn btn-block nav-links'
               >
                 <CgProfile className='icon-size icon-space' />
                 &nbsp;View my Profile
-              </Link>
+              </NavLink>
             </li>
           </ul>
         </nav>
