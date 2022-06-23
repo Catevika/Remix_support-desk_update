@@ -1,9 +1,10 @@
 import { json, LoaderFunction } from '@remix-run/node';
 import { Outlet, Form, useLoaderData, Link, NavLink, useCatch } from '@remix-run/react';
 import { getStatuses } from '~/models/status.server';
+import AdminNavBar from '~/components/AdminNavBar';
+import LogoutButton from '~/components/LogoutButton';
 import { SiStatuspage } from 'react-icons/si';
 import { FaTools } from 'react-icons/fa';
-import AdminNavBar from '~/components/AdminNavBar';
 
 type LoaderData = {
 	statuses: Awaited<ReturnType<typeof getStatuses>>;
@@ -15,8 +16,6 @@ export const loader: LoaderFunction = async () => {
 	return json<LoaderData>({ statuses });
 };
 
-// TODO: Add a pagination to status list
-// TODO: Add a search field to status list
 
 export default function StatusRoute() {
 	const { statuses } = useLoaderData() as LoaderData;
@@ -27,12 +26,8 @@ export default function StatusRoute() {
 					<FaTools className='icon-size icon-shadow' /> Back to Board
 				</Link>
 				<AdminNavBar />
+				<LogoutButton />
 				<h1>Manage Status List</h1>
-				<Form action='/logout' method='post'>
-					<button type='submit' className='btn'>
-						Logout
-					</button>
-				</Form>
 			</header>
 			<main className='grid-container'>
 				{statuses.length ? (

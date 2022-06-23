@@ -1,7 +1,9 @@
 import type { MetaFunction, LoaderFunction } from '@remix-run/node';
 import { json } from '@remix-run/node';
-import { useLoaderData, Link, Form, Outlet } from '@remix-run/react';
+import { useLoaderData, NavLink, Form, Outlet } from '@remix-run/react';
 import { requireAdminUser } from '~/utils/session.server';
+import { getProducts } from '~/models/products.server';
+import LogoutButton from '~/components/LogoutButton';
 import { FaTools } from 'react-icons/fa';
 
 export const meta: MetaFunction = () => {
@@ -12,26 +14,26 @@ export const meta: MetaFunction = () => {
 
 type LoaderData = {
   admin: Awaited<ReturnType<typeof requireAdminUser>>;
+  products: Awaited<ReturnType<typeof getProducts>> | null;
 };
 
 export const loader: LoaderFunction = async ({ request }) => {
   const admin = await requireAdminUser(request);
-  return json<LoaderData>({ admin });
+  const products = await getProducts();
+  
+  return json<LoaderData>({ admin, products });
 };
 
 export default function adminBoardRoute() {
-  const { admin } = useLoaderData() as LoaderData;
+  const { admin, products } = useLoaderData() as LoaderData;
+  const firstProduct = products ? products[0] : null;
 
   return (
     <>
       <header className='container header'>
         <FaTools className='icon-size icon-shadow' />
         <h1>Main Board</h1>
-        <Form action='/logout' method='post'>
-          <button type='submit' className='btn'>
-            Logout
-          </button>
-        </Form>
+        <LogoutButton />
       </header>
       <main>
         <p className='main-text'>
@@ -45,29 +47,29 @@ export default function adminBoardRoute() {
       <nav className='nav'>
         <ul>
           <li>
-            <Link to={'/board/admin/users/new-user'}>
+            <NavLink to={'/board/admin/users/new-user'}>
               Users - <span>TODO userlist / userTickets / userNotes ?</span>
-            </Link>
+            </NavLink>
           </li>
           <li>
-            <Link to={'/board/admin/services/new-service'}>
+            <NavLink to={'/board/admin/services/new-service'}>
               Services
-            </Link>
+            </NavLink>
           </li>
           <li>
-            <Link to={'/board/admin/products/new-product'}>
+            <NavLink to={(firstProduct && typeof firstProduct !== 'string') ? (`/board/admin/products/${firstProduct.productId}`) : ('/board/admin/products/new-product')}>
               Products
-            </Link>
+            </NavLink>
           </li>
           <li>
-            <Link to={'/board/admin/roles/new-role'}>
+            <NavLink to={'/board/admin/roles/new-role'}>
               Roles
-            </Link>
+            </NavLink>
           </li>
           <li>
-            <Link to={'/board/admin/status/new-status'}>
+            <NavLink to={'/board/admin/status/new-status'}>
               Status
-            </Link>
+            </NavLink>
           </li>
         </ul>
       </nav>

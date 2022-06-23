@@ -2,9 +2,10 @@ import type { MetaFunction, LoaderFunction } from '@remix-run/node';
 import { json } from '@remix-run/node';
 import { useLoaderData, NavLink, Form } from '@remix-run/react';
 import { requireUser } from '~/utils/session.server';
-import { FaTools, FaQuestionCircle, FaTicketAlt } from 'react-icons/fa';
-import { CgProfile } from 'react-icons/cg';
 import { getTicketListingByUserId } from '~/models/tickets.server';
+import LogoutButton from '~/components/LogoutButton';
+import { CgProfile } from 'react-icons/cg';
+import { FaTools, FaQuestionCircle, FaTicketAlt } from 'react-icons/fa';
 
 export const meta: MetaFunction = () => {
   return {
@@ -14,7 +15,7 @@ export const meta: MetaFunction = () => {
 
 type LoaderData = {
   user: Awaited<ReturnType<typeof requireUser>>;
-  tickets: Awaited<ReturnType<typeof getTicketListingByUserId>> | null;
+  tickets: Awaited<ReturnType<typeof getTicketListingByUserId>>;
 };
 
 export const loader: LoaderFunction = async ({ request }) => {
@@ -33,11 +34,7 @@ export default function userBoardRoute(): JSX.Element {
       <header className='container header'>
         <FaTools className='icon-size icon-shadow' />
         <h1>Main Board</h1>
-        <Form action='/logout' method='post'>
-          <button type='submit' className='btn'>
-            Logout
-          </button>
-        </Form>
+        <LogoutButton />
       </header>
       <main>
         <p className='main-text'>
@@ -61,10 +58,10 @@ export default function userBoardRoute(): JSX.Element {
               </NavLink>
             </li>
             <li>
-              <NavLink to={(lastTicket && typeof lastTicket !== 'string') ? (`/board/employee/tickets/${lastTicket.ticketId}`) : ('/board/employee/tickets/new-ticket')} className='btn btn-block nav-links'>
-                <FaTicketAlt className='icon-size icon-space' />
+            <NavLink to={(lastTicket && typeof lastTicket !== 'string') ? (`/board/employee/tickets/${lastTicket.ticketId}`) : ('/board/employee/tickets/new-ticket')} className='btn btn-block nav-links'>
+            <FaTicketAlt className='icon-size icon-space' />
                 &nbsp;View my Tickets
-              </NavLink>
+            </NavLink>
             </li>
             <li>
               <NavLink

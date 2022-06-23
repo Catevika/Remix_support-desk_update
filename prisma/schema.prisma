@@ -60,11 +60,11 @@ model Product {
 }
 
 model Ticket {
-  author          User     @relation(fields: [authorId], references: [id])
+  author          User      @relation(fields: [authorId], references: [id])
   authorId        String   @db.ObjectId
-  ticketProduct   Product  @relation(fields: [ticketProductId], references: [productId])
+  ticketProduct   Product?  @relation(fields: [ticketProductId], references: [productId])
   ticketProductId String   @db.ObjectId
-  ticketStatus    Status   @relation(fields: [ticketStatusId], references: [statusId])
+  ticketStatus    Status?   @relation(fields: [ticketStatusId], references: [statusId])
   ticketStatusId  String   @db.ObjectId
   ticketId        String   @id @default(auto()) @map("_id") @db.ObjectId
   createdAt       DateTime @default(now())

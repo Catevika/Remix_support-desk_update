@@ -2,9 +2,10 @@ import type { LoaderFunction } from '@remix-run/node';
 import { json } from '@remix-run/node';
 import { Outlet, Form, useLoaderData, Link, NavLink, useCatch } from '@remix-run/react';
 import { getRoles } from '~/models/roles.server';
+import AdminNavBar from '~/components/AdminNavBar';
+import LogoutButton from '~/components/LogoutButton';
 import { MdMiscellaneousServices } from 'react-icons/md';
 import { FaTools } from 'react-icons/fa';
-import AdminNavBar from '~/components/AdminNavBar';
 
 type LoaderData = {
 	roles: Awaited<ReturnType<typeof getRoles>>;
@@ -16,9 +17,6 @@ export const loader: LoaderFunction = async () => {
 	return json<LoaderData>({ roles });
 };
 
-// TODO: Add a pagination to role list
-// TODO: Add a search field to role list
-
 export default function RolesRoute() {
 	const { roles } = useLoaderData() as LoaderData;
 	return (
@@ -28,11 +26,7 @@ export default function RolesRoute() {
 					<FaTools className='icon-size icon-shadow' /> Back to Board
 				</Link>
 				<AdminNavBar />
-				<Form action='/logout' method='post'>
-					<button type='submit' className='btn'>
-						Logout
-					</button>
-				</Form>
+				<LogoutButton />
 				<h1>Manage Role List</h1>
 			</header>
 			<main className='grid-container'>

@@ -10,6 +10,7 @@ import {
 import { prisma } from '~/utils/db.server';
 import { requireUser } from '~/utils/session.server';
 import UserDisplay from '~/components/UserDisplay';
+import LogoutButton from '~/components/LogoutButton';
 import { FaTools } from 'react-icons/fa';
 
 // TODO: Add edit option - See Post from EGGHEAD.IO
@@ -76,12 +77,8 @@ export default function ProductRoute() {
 				<Link to='/board/employee/' className='icon-header'>
 					<FaTools className='icon-size icon-shadow' /> Back to Board
 				</Link>
+				<LogoutButton />
 				<h1>Manage your User Profile</h1>
-				<Form action='/logout' method='post'>
-					<button type='submit' className='btn'>
-						Logout
-					</button>
-				</Form>
 			</header>
 			<main className='form-container form-container-center'>
 				<div className='form-content'>
@@ -132,12 +129,12 @@ export function ErrorBoundary({ error }: { error: Error; }) {
 				<p>
 					To <span className='error-danger'>Delete your Account</span>, please
 					send a{' '}
-					<Link to={`/tickets/${userId}`}>
-						<span>ticket</span>
+					<Link to={`/board/employee/tickets/${userId}`}>
+						<span>Ticket</span>
 					</Link>{' '}
 					to your Support Desk.
 				</p>
-				<Link to={`/users/${userId}`}>
+				<Link to={`/board/employee/users/${userId}`}>
 					<button className='btn form-btn'>Back to Profile</button>
 				</Link>
 			</div>

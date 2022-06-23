@@ -3,23 +3,20 @@ import { json } from '@remix-run/node';
 import { Form, Outlet, useLoaderData, Link, useCatch, useLocation } from '@remix-run/react';
 import { getUserId } from '~/utils/session.server';
 import { getTicketListingByUserId } from '~/models/tickets.server';
+import LogoutButton from '~/components/LogoutButton';
 import { MdMiscellaneousServices } from 'react-icons/md';
 import { FaTools } from 'react-icons/fa';
-import { Product, Status } from '@prisma/client';
 
 type LoaderData = {
-	ticketsByUserId: Array<{ authorId: string; ticketId: string; title: string; createdAt: Date; updatedAt: Date; ticketStatus: Status; ticketProduct: Product; }> | string;
+	ticketsByUserId: Awaited<ReturnType<typeof getTicketListingByUserId>>;
 };
 
 export const loader: LoaderFunction = async ({ request }) => {
 	const userId = await getUserId(request);
 	const ticketsByUserId = await getTicketListingByUserId(userId);
+
 	return json<LoaderData>({ ticketsByUserId });
 };
-
-// TODO: Add service to ticket everywhere it is needed to be able to get the number of tickets per service
-// TODO: Add a pagination to ticket list
-// TODO: Add a search field to ticket list
 
 export default function TicketsRoute() {
 	const { ticketsByUserId } = useLoaderData() as LoaderData;
@@ -31,22 +28,18 @@ export default function TicketsRoute() {
 					<FaTools className='icon-size icon-shadow' /> Back to Board
 				</Link>
 				<h1>Manage your Tickets</h1>
-				<Form action='/logout' method='post'>
-					<button type='submit' className='btn'>
-						Logout
-					</button>
-				</Form>
+				<LogoutButton />
 			</header>
 			<main className='grid-container'>
 				<div>
+					<p className='inline-left'>
 					<MdMiscellaneousServices className='icon-size icon-container' />
-					<p className='inline'>
-						Your tickets:
+						Your tickets:&nbsp;<span>{ticketsByUserId.length}</span>
 					</p>
-					<p className='inline'>
-					{ ticketsByUserId.length && (typeof ticketsByUserId !== 'string') 
+					<p className='inline-left'>
+					{ticketsByUserId.length && (typeof ticketsByUserId !== 'string') 
 						? <em>To update a Ticket, click on its title</em>
-						: null }
+						: 'No ticket available yet'}
 					</p>
 					{ticketsByUserId.length && (typeof ticketsByUserId !== 'string') ? (
 						<div className='nav-ul-container'>
@@ -56,11 +49,11 @@ export default function TicketsRoute() {
 										<li className='list border-bottom'>Title:&nbsp;<Link to={ticket.ticketId} prefetch='intent'><span>{ticket.title}</span></Link></li>
 										<li className='list'>Id:&nbsp;<span>{ticket.ticketId}</span></li>
 										<li className='list' >Status:&nbsp;<span className={
-											ticket.ticketStatus.type
-												? `status status-${ticket.ticketStatus.type}`
+											ticket?.ticketStatus?.type
+												? `status status-${ticket?.ticketStatus.type}`
 												: undefined
-										}>{ticket.ticketStatus.type}</span></li>
-										<li className='list'>Product:&nbsp;<span>{ticket.ticketProduct.device}</span></li>
+										}>{ticket?.ticketStatus?.type}</span></li>
+										<li className='list'>Product:&nbsp;<span>{ticket?.ticketProduct?.device}</span></li>
 										<li className='list'>Date:&nbsp;{new Date(ticket.createdAt).toLocaleString() !== new Date(ticket.updatedAt).toLocaleString() ? <span>{new Date(ticket.updatedAt).toLocaleString()}</span> : <span>{new Date(ticket.createdAt).toLocaleString()}</span>}</li>
 									</ul>
 								))

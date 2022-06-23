@@ -54,13 +54,13 @@ input:focus {
 }
 
 .form-content {
-	padding: 0.5em 1.5em 1em;
+	padding: 1em 1.5em 1em;
 	border: 2px solid rgba(255, 255, 255, 0.1);
 	border-radius: 0.5rem;
 	box-shadow: 5px 5px 15px #211b36, -5px -5px 15px #372f5c;
 }
 
-.form-group {
+.form-group + .form-group {
 	margin-top: 20px;
 }
 

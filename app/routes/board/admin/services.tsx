@@ -2,10 +2,11 @@ import type { LoaderFunction } from '@remix-run/node';
 import { json } from '@remix-run/node';
 import { Form, useLoaderData, Link, NavLink, useCatch, Outlet } from '@remix-run/react';
 import { getServices } from '~/models/services.server';
+import AdminNavBar from '~/components/AdminNavBar';
+import LogoutButton from '~/components/LogoutButton';
 import { MdAutoAwesome } from 'react-icons/md';
 import { FaTools } from 'react-icons/fa';
 import { IconContext } from 'react-icons/lib';
-import AdminNavBar from '~/components/AdminNavBar';
 
 type LoaderData = {
 	services: Awaited<ReturnType<typeof getServices>>;
@@ -17,9 +18,6 @@ export const loader: LoaderFunction = async () => {
 	return json<LoaderData>({ services });
 };
 
-// TODO: Add a pagination to service list
-// TODO: Add a search field to service list
-
 export default function ServicesRoute() {
 	const { services } = useLoaderData() as LoaderData;
 	return (
@@ -29,11 +27,7 @@ export default function ServicesRoute() {
 					<FaTools className='icon-size icon-shadow' /> Back to Board
 				</Link>
 				<AdminNavBar />
-				<Form action='/logout' method='post'>
-					<button type='submit' className='btn'>
-						Logout
-					</button>
-				</Form>
+				<LogoutButton />
 				<h1>Manage Service List</h1>
 			</header>
 			<main className='grid-container'>

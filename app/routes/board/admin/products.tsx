@@ -1,9 +1,10 @@
 import { json, LoaderFunction } from '@remix-run/node';
 import { Form, useLoaderData, Link, NavLink, useCatch, Outlet } from '@remix-run/react';
 import { getProducts } from '~/models/products.server';
+import AdminNavBar from '~/components/AdminNavBar';
+import LogoutButton from '~/components/LogoutButton';
 import { MdOutlineDevicesOther } from 'react-icons/md';
 import { FaTools } from 'react-icons/fa';
-import AdminNavBar from '~/components/AdminNavBar';
 
 type LoaderData = {
 	products: Awaited<ReturnType<typeof getProducts>>;
@@ -13,9 +14,6 @@ export const loader: LoaderFunction = async () => {
 	const products = await getProducts();
 	return json<LoaderData>({ products });
 };
-
-// TODO: Add a pagination to product list
-// TODO: Add a search field to product list
 
 export default function ProductsRoute() {
 	const { products } = useLoaderData() as LoaderData;
@@ -27,19 +25,22 @@ export default function ProductsRoute() {
 					<FaTools className='icon-size icon-shadow' /> Back to Board
 				</Link>
 				<AdminNavBar />
+				<LogoutButton />
 				<h1>Manage Product List</h1>
-				<Form action='/logout' method='post'>
-					<button type='submit' className='btn'>
-						Logout
-					</button>
-				</Form>
 			</header>
 			<main className='grid-container'>
 				{products.length ? (
-					<>
-						<div>
+					<div>
+						<p className='inline-left'>
 							<MdOutlineDevicesOther className='icon-size icon-container' />
-							<p>Available products:&nbsp;<span>{products.length}</span></p>
+							Available products:&nbsp;<span>{products.length}</span>
+						</p>
+						<p className='inline-left'>
+						{products.length && (typeof products !== 'string') 
+						? <em>To update a Product, click on its title</em>
+						: 'No product available yet'}
+					</p>
+						<div className='nav-ul-container'>
 							<ul>
 								{products.map((product) => (
 									<li key={product.productId}>
@@ -53,12 +54,10 @@ export default function ProductsRoute() {
 								))}
 							</ul>
 						</div>
-					</>
+					</div>
 				) : "No product available yet."}
 				<div>
-					<div>
-						<Outlet />
-					</div>
+					<Outlet />
 				</div>
 			</main>
 		</>

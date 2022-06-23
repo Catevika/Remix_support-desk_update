@@ -51,16 +51,19 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 	
 		return data;
 	} else {
-		const [ticket, ticketStatus, ticketProduct] = await Promise.all([
+		const [user, products, statuses, ticket, ticketStatus, ticketProduct] = await Promise.all([
+			getUser(request),
+			getProducts(),
+			getStatuses(),
 			getTicket(params.ticketId),
 			getTicketStatusType(params.ticketId),
 			getTicketProductDevice(params.ticketId)
 		]);
 	
 		const data: LoaderData = {
-			user: await getUser(request),
-			products: await getProducts(),
-			statuses: await getStatuses(),
+			user,
+			products,
+			statuses,
 			ticket,
 			ticketStatus,
 			ticketProduct
@@ -98,7 +101,7 @@ export const action: ActionFunction = async ({ request, params }) => {
 	if(intent === 'delete') {
 		await deleteTicket(params.ticketId)
 		return redirect('/board/employee/tickets');
-	}
+	}	
 
 	function onlyNumbers(str: string) {
 		return /^[0-9]+$/.test(str);
@@ -215,7 +218,7 @@ export default function NewTicketRoute() {
 									type='text'
 									id='title'
 									name='title'
-									defaultValue={data.ticket?.title ?? actionData?.fields?.title }
+									defaultValue={data.ticket?.title}
 									aria-invalid={Boolean(actionData?.fieldErrors?.title)}
 									aria-errormessage={actionData?.fieldErrors?.title ? 'title-error' : undefined}
 									autoFocus
@@ -269,16 +272,16 @@ export default function NewTicketRoute() {
 									<select
 										id='product'
 										name='product'
-										defaultValue={data.ticketProduct?.device ?? '-- Please select a product --'}
+										defaultValue='-- Please select a product --'
 										onSelect={(e) => handleSelectProduct}
 										className='form-select'
 									>
 										<option
-											defaultValue={data.ticketProduct?.device ?? '-- Please select a product --'}
+											defaultValue={'-- Please select a product --'}
 											disabled
 											className='form-option-disabled'
 										>
-											{data.ticketProduct?.device ?? '-- Please select a product --'}
+											-- Please select a product --
 										</option>
 										{products.map((product: Product) => (
 											<option
@@ -298,7 +301,7 @@ export default function NewTicketRoute() {
 						<div className='form-group'>
 							<label htmlFor='description'>Issue Description:
 								<textarea
-									defaultValue={data.ticket?.description ?? actionData?.fields?.description}
+									defaultValue={data.ticket?.description}
 									id='description'
 									name='description'
 									aria-invalid={Boolean(actionData?.fieldErrors?.description)}
@@ -346,7 +349,12 @@ export default function NewTicketRoute() {
 							</>) : null
 						}
 						<div className='inline'>
-							<button type='submit' name='intent' value={data.ticket ? 'Update' : 'Send'} className='btn form-btn' disabled={isCreating || isUpdating} >
+							<button
+								type='submit'
+								name='intent'
+								value={data.ticket ? 'update' : 'create'} className='btn form-btn'
+								disabled={isCreating || isUpdating}
+							>
 							{isNewTicket ? (isCreating ? 'Sending...' : 'Send') : null}
 							{isNewTicket ? null : (isUpdating ? 'Updating...' : 'Update')}
 							</button>
