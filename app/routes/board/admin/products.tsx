@@ -1,5 +1,5 @@
 import { json, LoaderFunction } from '@remix-run/node';
-import { Form, useLoaderData, Link, NavLink, useCatch, Outlet } from '@remix-run/react';
+import { useLoaderData, Link, NavLink, useCatch, Outlet } from '@remix-run/react';
 import { getProducts } from '~/models/products.server';
 import AdminNavBar from '~/components/AdminNavBar';
 import LogoutButton from '~/components/LogoutButton';
@@ -39,7 +39,7 @@ export default function ProductsRoute() {
 						{products.length && (typeof products !== 'string') 
 						? <em>To update a Product, click on its title</em>
 						: 'No product available yet'}
-					</p>
+						</p>
 						<div className='nav-ul-container'>
 							<ul>
 								{products.map((product) => (

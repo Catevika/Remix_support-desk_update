@@ -12,10 +12,8 @@ type LoaderData = {
 
 export const loader: LoaderFunction = async () => {
 	const statuses = await getStatuses();
-
 	return json<LoaderData>({ statuses });
 };
-
 
 export default function StatusRoute() {
 	const { statuses } = useLoaderData() as LoaderData;
@@ -31,10 +29,17 @@ export default function StatusRoute() {
 			</header>
 			<main className='grid-container'>
 				{statuses.length ? (
-					<>
-						<div>
-							<SiStatuspage className='icon-size icon-container' />
-							<p>Available status:&nbsp;<span>{statuses.length}</span></p>
+					<div>
+						<p className='inline-left'>
+						<SiStatuspage className='icon-size icon-container' />
+							Available status:&nbsp;<span>{statuses.length}</span>
+						</p>
+						<p className='inline-left'>
+						{statuses.length && (typeof statuses !== 'string') 
+						? <em>To update a Status, click on its title</em>
+						: 'No status available yet'}
+						</p>
+						<div className='nav-ul-container'>
 							<ul>
 								{statuses.map((status) => (
 									<li key={status.statusId}>
@@ -47,12 +52,10 @@ export default function StatusRoute() {
 								))}
 							</ul>
 						</div>
-					</>
+					</div>
 				) : "No status available yet."}
 				<div>
-					<div>
-						<Outlet />
-					</div>
+					<Outlet />
 				</div>
 			</main>
 		</>
@@ -67,7 +70,7 @@ export function CatchBoundary() {
 			<div className='error-container'>
 				<div className='form-container form-content'>
 					<p>You must be logged in with administrator rights to create a status.</p>
-					<Link to='/login?redirectTo=/board/admin/sratus/new-status'>
+					<Link to='/login?redirectTo=/board/admin/status/new-status'>
 						<button className='btn form-btn'>Login</button>
 					</Link>
 				</div>

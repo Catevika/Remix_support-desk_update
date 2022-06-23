@@ -2,7 +2,6 @@ import type { MetaFunction, LoaderFunction } from '@remix-run/node';
 import { json } from '@remix-run/node';
 import { useLoaderData, NavLink, Outlet } from '@remix-run/react';
 import { requireAdminUser } from '~/utils/session.server';
-import { getProducts } from '~/models/products.server';
 import LogoutButton from '~/components/LogoutButton';
 import { FaTools } from 'react-icons/fa';
 

@@ -130,88 +130,85 @@ export default function NewProductRoute() {
 	const isDeleting = Boolean(transition.submission?.formData.get('intent') === 'delete');
 
 	return (
-		<>
-			<main className='form-container form-container-admin'>
-					<Form reloadDocument method='post' key={data.product?.productId ?? 'new-product'} className='form'>
-				<p>
-					{isNewProduct ? 'New' : null }&nbsp;Product from:<span className='capitalize'>&nbsp;{user?.username}&nbsp;</span> - Email:<span>&nbsp;{user?.email}</span>
-				</p>
-				<div className='form-content'>
-					<div className='form-group'>
-							<label htmlFor='device'>
-								{isNewProduct ? 'New' : null }&nbsp;Product:{' '}
-								<input
-									type='text'
-									defaultValue={data.product?.device}
-									name='device'
-									aria-invalid={Boolean(actionData?.fieldErrors?.device)}
-									aria-errormessage={
-										actionData?.fieldErrors?.device
-											? 'product-error' : undefined
-									}
-								/>
-							</label>
-							{actionData?.fieldErrors?.device ? (
-								<p
-									className='error-danger'
-									role='alert'
-									id='name-error'
-								>
-									{actionData.fieldErrors.device}
-								</p>
-							) : null}
-						</div>
-						<div>
-							{actionData?.formError ? (
-								<p className='error-danger' role='alert'>
-									{actionData.formError}
-								</p>
-							) : null}
-							{data.product ? (
-							<>
-								<div className='form-group inline'>
-									<label>Created at:&nbsp;
-										<input
-											type='text'
-											id='createdAt'
-											name='createdAt'
-											defaultValue={new Date(data.product.createdAt).toLocaleString()}
-										/>
-									</label>
-									<label>Updated at:&nbsp;
-										<input
-											type='text'
-											id='updatedAt'
-											name='updatedAt'
-											defaultValue={new Date(data.product.updatedAt).toLocaleString()}
-										/>
-									</label>
-								</div>
-							</>) : null
-						}
-							<div className='inline'>
-								<button
-									type='submit'
-									name='intent'
-									value={isNewProduct ? 'create' : 'update'}
-									className='btn form-btn'
-									disabled={isAdding || isUpdating}
-								>
-									{isNewProduct ? (isAdding ? 'Adding...' : 'Add'): null}
-									{isNewProduct ? null : (isUpdating ? 'Updating...' : 'Update')}
-								</button>
-								{isNewProduct ? null : <Link to='/board/admin/products/new-product'>
-									<button className='btn form-btn'>Back to New Product</button>
-								</Link>}
-								{isNewProduct ? null : <button type='submit' name='intent' value='delete' className='btn form-btn btn-danger' disabled={isDeleting}>
-								{isDeleting ? 'isDeleting...' : 'Delete'}
-								</button>}
+		<main className='form-container form-container-admin'>
+				<Form reloadDocument method='post' key={data.product?.productId ?? 'new-product'} className='form'>
+			<p>
+				{isNewProduct ? 'New' : null}&nbsp;Product from:<span className='capitalize'>&nbsp;{user?.username}&nbsp;</span> - Email:<span>&nbsp;{user?.email}</span>
+			</p>
+			<div className='form-content'>
+				<div className='form-group'>
+						<label htmlFor='device'>
+							{isNewProduct ? 'New' : null}&nbsp;Product:{' '}
+							<input
+								type='text'
+								defaultValue={data.product?.device}
+								name='device'
+								aria-invalid={Boolean(actionData?.fieldErrors?.device)}
+								aria-errormessage={
+									actionData?.fieldErrors?.device
+										? 'product-error' : undefined
+								}
+							/>
+						</label>
+						{actionData?.fieldErrors?.device ? (
+							<p
+								className='error-danger'
+								role='alert'
+								id='product-error'
+							>
+								{actionData.fieldErrors.device}
+							</p>
+						) : null}
+					</div>
+					<div>
+						{actionData?.formError ? (
+							<p className='error-danger' role='alert'>
+								{actionData.formError}
+							</p>
+						) : null}
+						{data.product ? (
+							<div className='form-group inline'>
+								<label>Created at:&nbsp;
+									<input
+										type='text'
+										id='createdAt'
+										name='createdAt'
+										defaultValue={new Date(data.product.createdAt).toLocaleString()}
+									/>
+								</label>
+								<label>Updated at:&nbsp;
+									<input
+										type='text'
+										id='updatedAt'
+										name='updatedAt'
+										defaultValue={new Date(data.product.updatedAt).toLocaleString()}
+									/>
+								</label>
 							</div>
+						) : null
+					}
+					</div>
+						<div className='inline'>
+							<button
+								type='submit'
+								name='intent'
+								value={isNewProduct ? 'create' : 'update'}
+								className='btn form-btn'
+								disabled={isAdding || isUpdating}
+							>
+								{isNewProduct ? (isAdding ? 'Adding...' : 'Add'): null}
+								{isNewProduct ? null : (isUpdating ? 'Updating...' : 'Update')}
+							</button>
+							{isNewProduct ? null : <Link to='/board/admin/products/new-product'>
+								<button className='btn form-btn'>Back to New Product</button>
+							</Link>}
+							{isNewProduct ? null : <button type='submit' name='intent' value='delete' className='btn form-btn btn-danger' disabled={isDeleting}>
+							{isDeleting ? 'isDeleting...' : 'Delete'}
+							</button>}
 						</div>
 					</div>
-				</Form>
-			</main>
-		</>
+			</Form>
+		</main>
 	);
 }
 

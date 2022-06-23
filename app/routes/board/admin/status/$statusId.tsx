@@ -1,186 +1,238 @@
-import type { LoaderFunction, ActionFunction, MetaFunction } from '@remix-run/node';
+import type { MetaFunction, LoaderFunction, ActionFunction } from '@remix-run/node';
+import { json, redirect } from '@remix-run/node';
 import {
-	json,
-	redirect
-} from '@remix-run/node';
-import {
+	Form,
 	Link,
 	useLoaderData,
+	useActionData,
 	useCatch,
-	useParams
+	useTransition
 } from '@remix-run/react';
-import { prisma } from '~/utils/db.server';
-import { getUserId, requireUserId } from '~/utils/session.server';
-import DeleteButton from '~/components/DeleteButton';
 
-export const meta: MetaFunction = ({
-	data
-}: {
-	data: LoaderData | undefined;
-}) => {
-	if (!data) {
-		return {
-			title: 'No status',
-			description: 'No status found'
-		};
-	}
+import { requireUserId, getUser } from '~/utils/session.server';
+import { prisma } from '~/utils/db.server';
+import { validateStatus } from '~/utils/functions';
+import {getStatus, deleteStatus} from '~/models/status.server';
+
+export const meta: MetaFunction = () => {
 	return {
-		title: `Support-Desk | Status | ${data.type}`,
-		description: `Here ist the "${data.type}" created by ${data?.username}`
+		title: 'Support-Desk | Status'
 	};
 };
 
 type LoaderData = {
-	id: string;
-	username: string;
-	type: string;
-	isOwner: boolean;
-	canDelete: boolean;
+	user: Awaited<ReturnType<typeof getUser>>;
+	status: Awaited<ReturnType<typeof getStatus>>;
 };
 
 export const loader: LoaderFunction = async ({ request, params }) => {
-	const userId = await getUserId(request);
-	const status = await prisma.status.findUnique({
-		where: { statusId: params.statusId }
-	});
-
-	const users = await prisma.user.findMany({
-		select: { id: true, username: true }
-	});
-
-	const user = users.filter((user) => user.id === status?.technicianId)[0];
-
-	const { id, username } = user;
-
-	if (!username || !id) {
-		throw new Response('User Not Found.', {
-			status: 404
-		});
+	const user = await getUser(request);
+	if (!user || user.service !== 'Information Technology') {
+		throw new Response('Unauthorized', { status: 401 });
 	}
 
-	if (!status) {
-		throw new Response('Status Not Found.', {
-			status: 404
-		});
-	}
+	if(params.statusId === 'new-status') {
+		const user = await getUser(request);
+		
+		const data: LoaderData = {
+			user,
+			status: null
+		}
 
-	if (!user) {
-		throw new Response('User Not Found.', {
-			status: 404
-		});
-	}
+		return data;
+		} else {
+		const status = await getStatus(params.statusId);
 
-	const data: LoaderData = {
-		id,
-		username,
-		type: status.type,
-		isOwner: userId === status.technicianId,
-		canDelete: true
+		const data: LoaderData = {
+			user,
+			status
+		}
+
+		return data;
+	}
+}
+
+type ActionData = {
+	formError?: string;
+	fieldErrors?: {
+		type: string | undefined;
 	};
-	return json(data);
+	fields?: {
+		type: string;
+	};
 };
 
+const badRequest = (data: ActionData) => json(data, { status: 400 });
+
 export const action: ActionFunction = async ({ request, params }) => {
+	const userId = await requireUserId(request);
+
 	const form = await request.formData();
-	if (form.get('_method') !== 'delete') {
-		throw new Response(`The _method ${form.get('_method')} is not supported`, {
-			status: 400
+	const type = form.get('type');
+
+	if (typeof type !== 'string') {
+		return badRequest({
+			formError: 'Type must be an at least 3 characters long string'
 		});
 	}
-	const userId = await requireUserId(request);
-	const status = await prisma.status.findUnique({
-		where: { statusId: params.statusId }
+
+	const intent = form.get('intent');
+
+	if(intent === 'delete') {
+		await deleteStatus(params.statusId)
+		return redirect('/board/admin/status');
+	}
+
+	const fieldErrors = {
+		type: validateStatus(type)
+	};
+
+	const fields = { type };
+
+	if (Object.values(fieldErrors).some(Boolean)) {
+		return badRequest({ fieldErrors, fields });
+	}
+
+	const typeExists = await prisma.status.findUnique({
+		where: { type }
 	});
 
-	if (!status) {
-		throw new Response("Can't delete what does not exist", {
-			status: 404
+	if (typeExists) {
+		return badRequest({
+			fields,
+			formError: `Status '${type}' already exists`
 		});
 	}
 
-	if (status.technicianId !== userId) {
-		throw new Response("Can't delete a status that is not yours", {
-			status: 401
-		});
-	}
-	await prisma.status.delete({ where: { statusId: params.statusId } });
+	if(params.statusId === 'new-status') {
+	await prisma.status.create({
+		data: { type, technicianId: userId }
+	})
+} else {
+	await prisma.status.update({
+		data: { type },
+		where: { statusId: params.statusId }
+	})
+}
 	return redirect('/board/admin/status/new-status');
 };
 
-export default function StatusRoute() {
+export default function NewStatusRoute() {
 	const data = useLoaderData() as LoaderData;
+	const user = data.user;
+
+	const actionData = useActionData() as ActionData;
+	const transition = useTransition();
+
+	const isNewStatus = !data.status?.type ;
+	const isAdding = Boolean(transition.submission?.formData.get('intent') === 'create');
+	const isUpdating = Boolean(transition.submission?.formData.get('intent') === 'update');
+	const isDeleting = Boolean(transition.submission?.formData.get('intent') === 'delete');
 
 	return (
-		<>
-			<main className='form-container form-container-admin'>
+		<main className='form-container form-container-admin'>
+			<Form reloadDocument method='post' key={data.status?.statusId ?? 'new-status'}className='form'>
 				<p>
-					{data?.username && (
-						<>
-							Status created by{' '}
-							<span className='capitalize'>{data.username}</span>
-						</>
-					)}
+				{isNewStatus ? 'New' : null}&nbsp;Status from:<span className='capitalize'>&nbsp;{user?.username}&nbsp;</span> - Email:<span>&nbsp;{user?.email}</span>
 				</p>
 				<div className='form-content'>
-					<p>{data.type}</p>
-					<DeleteButton isOwner={data.isOwner} canDelete={data.isOwner ? data.canDelete : false} />
+					<div className='form-group'>
+						<label htmlFor='type'>
+						{isNewStatus ? 'New' : null}&nbsp;Status:{' '}
+							<input
+								type='text'
+								defaultValue={data.status?.type}
+								name='type'
+								aria-invalid={Boolean(actionData?.fieldErrors?.type)}
+								aria-errormessage={
+									actionData?.fieldErrors?.type ? 'status-error' : undefined
+								}
+							/>
+						</label>
+						{actionData?.fieldErrors?.type ? (
+							<p
+								className='error-danger'
+								role='alert'
+								id='status-error'
+							>
+								{actionData.fieldErrors.type}
+							</p>
+						) : null}
+					</div>
+					<div>
+					{actionData?.formError ? (
+						<p className='error-danger' role='alert'>
+								{actionData.formError}
+						</p>
+						) : null}
+					{data.status ? (
+					<div className='form-group inline'>
+						<label>Created at:&nbsp;
+							<input
+								type='text'
+								id='createdAt'
+								name='createdAt'
+								defaultValue={new Date(data.status.createdAt).toLocaleString()}
+							/>
+						</label>
+						<label>Updated at:&nbsp;
+							<input
+								type='text'
+								id='updatedAt'
+								name='updatedAt'
+								defaultValue={new Date(data.status.updatedAt).toLocaleString()}
+							/>
+						</label>
+					</div>
+					) : null
+				}
 				</div>
-				<Link to='/board/admin/status/new-status'>
-					<button className='btn form-btn'>Back to Create Status</button>
-				</Link>
-			</main>
-		</>
+				<div className='inline'>
+					<button
+						type='submit'
+						name='intent'
+						value={isNewStatus ? 'create' : 'update'}
+						className='btn form-btn'
+						disabled={isAdding || isUpdating}
+					>
+						{isNewStatus ? (isAdding ? 'Adding...' : 'Add'): null}
+						{isNewStatus ? null : (isUpdating ? 'Updating...' : 'Update')}
+					</button>
+					{isNewStatus ? null : <Link to='/board/admin/status/new-status'>
+					<button className='btn form-btn'>Back to New Status</button></Link>}
+					{isNewStatus ? null : <button type='submit' name='intent' value='delete' className='btn form-btn btn-danger' disabled={isDeleting}>
+					{isDeleting ? 'isDeleting...' : 'Delete'}</button>}
+					</div>
+				</div>
+			</Form>
+		</main>
 	);
 }
 
 export function CatchBoundary() {
 	const caught = useCatch();
-	const params = useParams();
-	switch (caught.status) {
-		case 400: {
-			return (
-				<div className='error-container'>
-					<div className='form-container form-content'>
-						What you're trying to do is not allowed.
-					</div>
+
+	if (caught.status === 401) {
+		return (
+			<div className='error-container'>
+				<div className='form-container form-content'>
+					<p>You must be logged in with administrator rights to create a status.</p>
+					<Link to='/login?redirectTo=/status/new-status'>
+						<button className='btn form-btn'>Login</button>
+					</Link>
 				</div>
-			);
-		}
-		case 404: {
-			return (
-				<div className='error-container'>
-					<div className='form-container form-content'>
-						{params.statusId} does not exist.
-					</div>
-				</div>
-			);
-		}
-		case 401: {
-			return (
-				<div className='error-container'>
-					<div className='form-container form-content'>
-						Sorry, but {params.statusId} is not your status.
-					</div>
-				</div>
-			);
-		}
-		default: {
-			throw new Error(`Unhandled error: ${caught.status}`);
-		}
+			</div>
+		);
 	}
+	throw new Error(`Unexpected caught response with status: ${caught.status}`);
 }
 
 export function ErrorBoundary({ error }: { error: Error; }) {
-	const { statusId } = useParams();
+	console.error(error);
 	return (
 		<div className='error-container'>
 			<div className='form-container form-content'>
-				There was an error loading the status by the id:{' '}
-				<p>
-					{' '}
-					<span>{`${statusId}.`}</span>
-				</p>
-				<p>Sorry.</p>
+				Something unexpected went wrong. Sorry about that.
 			</div>
 		</div>
 	);
