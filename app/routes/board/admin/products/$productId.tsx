@@ -9,10 +9,10 @@ import {
 	useTransition
 } from '@remix-run/react';
 
-import { getUser, requireUserId } from '~/utils/session.server';
+import { requireUserId, getUser } from '~/utils/session.server';
 import { prisma } from '~/utils/db.server';
 import { validateProduct } from '~/utils/functions';
-import { deleteProduct, getProduct } from '~/models/products.server';
+import { getProduct, deleteProduct } from '~/models/products.server';
 
 export const meta: MetaFunction = () => {
 	return {
@@ -26,6 +26,11 @@ type LoaderData = {
 };
 
 export const loader: LoaderFunction = async ({ request, params }) => {
+	const user = await getUser(request);
+		if (!user || user.service !== 'Information Technology') {
+			throw new Response('Unauthorized', { status: 401 });
+		}
+
 	if(params.productId === 'new-product') {
 		const user = await getUser(request);
 		
@@ -36,11 +41,6 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 
 		return data;
 		} else {
-		const user = await getUser(request);
-		if (!user || user.service !== 'Information Technology') {
-			throw new Response('Unauthorized', { status: 401 });
-		}
-
 		const product = await getProduct(params.productId);
 
 		const data: LoaderData = {
@@ -48,7 +48,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 			product
 		}
 
-	return data;
+		return data;
 	}
 }
 
@@ -147,8 +147,7 @@ export default function NewProductRoute() {
 									aria-invalid={Boolean(actionData?.fieldErrors?.device)}
 									aria-errormessage={
 										actionData?.fieldErrors?.device
-											? 'product-error'
-											: undefined
+											? 'product-error' : undefined
 									}
 								/>
 							</label>
@@ -204,13 +203,13 @@ export default function NewProductRoute() {
 								{isNewProduct ? null : <Link to='/board/admin/products/new-product'>
 									<button className='btn form-btn'>Back to New Product</button>
 								</Link>}
-								{ isNewProduct ? null : <button type='submit' name='intent' value='delete' className='btn form-btn btn-danger' disabled={isDeleting}>
+								{isNewProduct ? null : <button type='submit' name='intent' value='delete' className='btn form-btn btn-danger' disabled={isDeleting}>
 								{isDeleting ? 'isDeleting...' : 'Delete'}
 								</button>}
 							</div>
-				</div>
-				</div>
-					</Form>
+						</div>
+					</div>
+				</Form>
 			</main>
 		</>
 	);

@@ -1,6 +1,6 @@
 import type { LoaderFunction } from '@remix-run/node';
 import { json } from '@remix-run/node';
-import { Outlet, Form, useLoaderData, Link, NavLink, useCatch } from '@remix-run/react';
+import { Outlet, useLoaderData, Link, NavLink, useCatch } from '@remix-run/react';
 import { getRoles } from '~/models/roles.server';
 import AdminNavBar from '~/components/AdminNavBar';
 import LogoutButton from '~/components/LogoutButton';
@@ -31,10 +31,17 @@ export default function RolesRoute() {
 			</header>
 			<main className='grid-container'>
 				{roles.length ? (
-					<>
-						<div>
+					<div>
+						<p className='inline-left'>
 							<MdMiscellaneousServices className='icon-size icon-container' />
-							<p>Available roles:&nbsp;<span>{roles.length}</span></p>
+							Available roles:&nbsp;<span>{roles.length}</span>
+						</p>
+						<p className='inline-left'>
+						{roles.length && (typeof roles !== 'string') 
+						? <em>To update a Role, click on its title</em>
+						: 'No role available yet'}
+					</p>
+						<div className='nav-ul-container'>
 							<ul>
 								{roles.map((role) => (
 									<li key={role.roleId}>
@@ -47,12 +54,10 @@ export default function RolesRoute() {
 								))}
 							</ul>
 						</div>
-					</>
+					</div>
 				) : "No role available yet."}
 				<div>
-					<div>
-						<Outlet />
-					</div>
+					<Outlet />
 				</div>
 			</main>
 		</>
@@ -66,7 +71,7 @@ export function CatchBoundary() {
 		return (
 			<div className='error-container'>
 				<div className='form-container form-content'>
-					<p>You must be logged in with administrator rights to create a role.</p>
+					<p>You must be logged in with administrator rights to create a new role.</p>
 					<Link to='/login?redirectTo=/board/admin/roles/new-role'>
 						<button className='btn form-btn'>Login</button>
 					</Link>

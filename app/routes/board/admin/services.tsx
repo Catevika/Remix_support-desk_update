@@ -1,6 +1,6 @@
 import type { LoaderFunction } from '@remix-run/node';
 import { json } from '@remix-run/node';
-import { Form, useLoaderData, Link, NavLink, useCatch, Outlet } from '@remix-run/react';
+import { useLoaderData, Link, NavLink, useCatch, Outlet } from '@remix-run/react';
 import { getServices } from '~/models/services.server';
 import AdminNavBar from '~/components/AdminNavBar';
 import LogoutButton from '~/components/LogoutButton';
@@ -46,7 +46,6 @@ export default function ServicesRoute() {
 										}>
 											{service.name}
 										</NavLink>
-										<Form method='post'></Form>
 									</li>
 								))}
 							</ul>

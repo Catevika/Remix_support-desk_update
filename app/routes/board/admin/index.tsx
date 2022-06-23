@@ -1,6 +1,6 @@
 import type { MetaFunction, LoaderFunction } from '@remix-run/node';
 import { json } from '@remix-run/node';
-import { useLoaderData, NavLink, Form, Outlet } from '@remix-run/react';
+import { useLoaderData, NavLink, Outlet } from '@remix-run/react';
 import { requireAdminUser } from '~/utils/session.server';
 import { getProducts } from '~/models/products.server';
 import LogoutButton from '~/components/LogoutButton';
@@ -14,19 +14,16 @@ export const meta: MetaFunction = () => {
 
 type LoaderData = {
   admin: Awaited<ReturnType<typeof requireAdminUser>>;
-  products: Awaited<ReturnType<typeof getProducts>> | null;
 };
 
 export const loader: LoaderFunction = async ({ request }) => {
   const admin = await requireAdminUser(request);
-  const products = await getProducts();
   
-  return json<LoaderData>({ admin, products });
+  return json<LoaderData>({ admin });
 };
 
 export default function adminBoardRoute() {
-  const { admin, products } = useLoaderData() as LoaderData;
-  const firstProduct = products ? products[0] : null;
+  const { admin } = useLoaderData() as LoaderData;
 
   return (
     <>
@@ -57,7 +54,7 @@ export default function adminBoardRoute() {
             </NavLink>
           </li>
           <li>
-            <NavLink to={(firstProduct && typeof firstProduct !== 'string') ? (`/board/admin/products/${firstProduct.productId}`) : ('/board/admin/products/new-product')}>
+            <NavLink to={'/board/admin/products/new-product'}>
               Products
             </NavLink>
           </li>

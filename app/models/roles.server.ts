@@ -1,12 +1,15 @@
 import { prisma } from "~/utils/db.server";
 
-export type Role = { roleId: string, roleType: string; authorId: string; createdAt: Date, updatedAt: Date; };
+export type Role = { roleId: string, roleType: string; authorId: string; createdAt: string, updatedAt: string; };
 
 export async function getRoles() {
-  const roles = await prisma.role.findMany({
-    select: { roleId: true, roleType: true, authorId: true, createdAt: true, updatedAt: true },
-    orderBy: { roleType: 'asc' }
-  });
+  return await prisma.role.findMany({});
+}
 
-  return roles;
+export async function getRole(roleId: string | undefined) {
+  return await prisma.role.findUnique({ where: { roleId } });
+}
+
+export async function deleteRole(roleId: string | undefined) {
+  return await prisma.role.delete({ where: { roleId } });
 }

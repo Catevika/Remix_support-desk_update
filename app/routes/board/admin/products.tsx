@@ -49,7 +49,6 @@ export default function ProductsRoute() {
 										}>
 											{product.device}
 										</NavLink>
-										<Form method='post'></Form>
 									</li>
 								))}
 							</ul>

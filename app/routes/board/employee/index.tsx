@@ -1,6 +1,6 @@
 import type { MetaFunction, LoaderFunction } from '@remix-run/node';
 import { json } from '@remix-run/node';
-import { useLoaderData, NavLink, Form } from '@remix-run/react';
+import { useLoaderData, NavLink } from '@remix-run/react';
 import { requireUser } from '~/utils/session.server';
 import { getTicketListingByUserId } from '~/models/tickets.server';
 import LogoutButton from '~/components/LogoutButton';

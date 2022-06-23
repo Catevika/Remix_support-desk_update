@@ -1,6 +1,6 @@
 import type { LoaderFunction } from '@remix-run/node';
 import { json } from '@remix-run/node';
-import { Form, Outlet, useLoaderData, Link, useCatch, useLocation } from '@remix-run/react';
+import { Outlet, useLoaderData, Link, useCatch } from '@remix-run/react';
 import { getUserId } from '~/utils/session.server';
 import { getTicketListingByUserId } from '~/models/tickets.server';
 import LogoutButton from '~/components/LogoutButton';
