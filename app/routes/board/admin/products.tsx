@@ -1,4 +1,5 @@
-import { json, LoaderFunction } from '@remix-run/node';
+import type { LoaderFunction } from '@remix-run/node';
+import { json } from '@remix-run/node';
 import { useLoaderData, Link, NavLink, useCatch, Outlet } from '@remix-run/react';
 import { getProducts } from '~/models/products.server';
 import AdminNavBar from '~/components/AdminNavBar';

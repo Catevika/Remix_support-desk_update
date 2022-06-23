@@ -166,47 +166,47 @@ export default function NewProductRoute() {
 								{actionData.formError}
 							</p>
 						) : null}
-						{data.product ? (
-							<div className='form-group inline'>
-								<label>Created at:&nbsp;
-									<input
-										type='text'
-										id='createdAt'
-										name='createdAt'
-										defaultValue={new Date(data.product.createdAt).toLocaleString()}
-									/>
-								</label>
-								<label>Updated at:&nbsp;
-									<input
-										type='text'
-										id='updatedAt'
-										name='updatedAt'
-										defaultValue={new Date(data.product.updatedAt).toLocaleString()}
-									/>
-								</label>
-							</div>
-						) : null
-					}
-					</div>
-						<div className='inline'>
-							<button
-								type='submit'
-								name='intent'
-								value={isNewProduct ? 'create' : 'update'}
-								className='btn form-btn'
-								disabled={isAdding || isUpdating}
-							>
-								{isNewProduct ? (isAdding ? 'Adding...' : 'Add'): null}
-								{isNewProduct ? null : (isUpdating ? 'Updating...' : 'Update')}
-							</button>
-							{isNewProduct ? null : <Link to='/board/admin/products/new-product'>
-								<button className='btn form-btn'>Back to New Product</button>
-							</Link>}
-							{isNewProduct ? null : <button type='submit' name='intent' value='delete' className='btn form-btn btn-danger' disabled={isDeleting}>
-							{isDeleting ? 'isDeleting...' : 'Delete'}
-							</button>}
+					{data.product ? (
+						<div className='form-group inline'>
+							<label>Created at:&nbsp;
+								<input
+									type='text'
+									id='createdAt'
+									name='createdAt'
+									defaultValue={new Date(data.product.createdAt).toLocaleString()}
+								/>
+							</label>
+							<label>Updated at:&nbsp;
+								<input
+									type='text'
+									id='updatedAt'
+									name='updatedAt'
+									defaultValue={new Date(data.product.updatedAt).toLocaleString()}
+								/>
+							</label>
 						</div>
+					) : null
+				}
+				</div>
+					<div className='inline'>
+						<button
+							type='submit'
+							name='intent'
+							value={isNewProduct ? 'create' : 'update'}
+							className='btn form-btn'
+							disabled={isAdding || isUpdating}
+						>
+							{isNewProduct ? (isAdding ? 'Adding...' : 'Add'): null}
+							{isNewProduct ? null : (isUpdating ? 'Updating...' : 'Update')}
+						</button>
+						{isNewProduct ? null : <Link to='/board/admin/products/new-product'>
+							<button className='btn form-btn'>Back to New Product</button>
+						</Link>}
+						{isNewProduct ? null : <button type='submit' name='intent' value='delete' className='btn form-btn btn-danger' disabled={isDeleting}>
+						{isDeleting ? 'isDeleting...' : 'Delete'}
+						</button>}
 					</div>
+				</div>
 			</Form>
 		</main>
 	);

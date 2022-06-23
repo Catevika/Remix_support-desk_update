@@ -14,7 +14,6 @@ type LoaderData = {
 
 export const loader: LoaderFunction = async () => {
 	const services = await getServices();
-
 	return json<LoaderData>({ services });
 };
 
@@ -32,12 +31,20 @@ export default function ServicesRoute() {
 			</header>
 			<main className='grid-container'>
 				{services.length ? (
-					<>
-						<div>
-							<IconContext.Provider
-								value={{ color: '#a9a5c0' }}
-							><MdAutoAwesome className='icon-size icon-container' /></IconContext.Provider>
-							<p>Available services:&nbsp;<span>{services.length}</span></p>
+					<div>
+						<p className='inline-left'>
+							<IconContext.Provider value={{ color: '#a9a5c0' }}
+						>
+							<MdAutoAwesome className='icon-size icon-container' />
+							</IconContext.Provider>
+							Available services:&nbsp;<span>{services.length}</span>
+						</p>
+						<p className='inline-left'>
+						{services.length && (typeof services !== 'string') 
+						? <em>To update a Service, click on its title</em>
+						: 'No service available yet'}
+						</p>
+						<div className='nav-ul-container'>
 							<ul>
 								{services.map((service) => (
 									<li key={service.serviceId}>
@@ -50,12 +57,10 @@ export default function ServicesRoute() {
 								))}
 							</ul>
 						</div>
-					</>
+					</div>
 				) : "No service available yet."}
 				<div>
-					<div>
-						<Outlet />
-					</div>
+					<Outlet />
 				</div>
 			</main>
 		</>
