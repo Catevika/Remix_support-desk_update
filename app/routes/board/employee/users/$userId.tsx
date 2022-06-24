@@ -70,6 +70,7 @@ export default function ProductRoute() {
 	const transition = useTransition();
 
 	const isDeleting = transition.submission?.formData.get('intent') === 'delete';
+	const isUpdating = transition.submission?.formData.get('intent') === 'update';
 
 	return (
 		<>
@@ -88,6 +89,19 @@ export default function ProductRoute() {
 			<main className='form-container form-container-center form-container-user'>
 				<p>User Profile</p>
 				<div className='form-content'>
+					<div className='form-group'>
+						<label htmlFor='userid-input'>User Id:&nbsp;
+							<span>
+								<input
+									type='text'
+									id='userid-input'
+									name='userid'
+									defaultValue={user.id}
+									disabled
+								/>
+							</span>
+						</label>
+					</div>
 					<div className='form-group'>
 						<label htmlFor='username-input'>Name:&nbsp;
 							<span>
@@ -144,6 +158,11 @@ export default function ProductRoute() {
 						</label>
 					</div>	
 					<div className='inline'>
+					<Form method='post' className='form'>
+							<button type='submit' name='intent' value='update' className='btn form-btn btn-danger' disabled={isUpdating}>
+							{isUpdating ? 'isUpdating...' : 'Update'}
+							</button>
+						</Form>
 						<Link to='/board/employee/'>
 							<button className='btn form-btn'>Back to Board</button>
 						</Link>
@@ -162,22 +181,32 @@ export default function ProductRoute() {
 
 export function CatchBoundary() {
 	const caught = useCatch();
-	const params = useParams();
-	switch (caught.status) {
+	const {userId} = useParams();
+	switch (caught.status) {		
 		case 400: {
 			return (
-				<div className='error-container'>
-					<div className='form-container form-content'>
-						What you're trying to do is not allowed.
-					</div>
-				</div>
+			<div className='error-container' style={{ fontSize: '1.5rem' }}>
+			<div className='form-container form-container-message form-content'>
+				<p>
+					To <span className='error-danger error-danger-big'>update or delete your Account</span>, please
+					send a{' '}
+					<Link to={`/board/employee/tickets/${userId}`}>
+						<span>Ticket</span>
+					</Link>{' '}
+					to the Support Desk.
+				</p>
+				<Link to={`/board/employee/users/${userId}`}>
+					<button className='btn form-btn'>Back to Profile</button>
+				</Link>
+			</div>
+			</div>
 			);
 		}
 		case 404: {
 			return (
 				<div className='error-container'>
 					<div className='form-container form-content'>
-						{params.userId} does not exist.
+						{userId} does not exist.
 					</div>
 				</div>
 			);
@@ -190,11 +219,12 @@ export function CatchBoundary() {
 
 export function ErrorBoundary({ error }: { error: Error; }) {
 	const { userId } = useParams();
+	console.log(error);
 	return (
 		<div className='error-container' style={{ fontSize: '1.5rem' }}>
 			<div className='form-container form-container-message form-content'>
 				<p>
-					To <span className='error-danger error-danger-big'>Delete your Account</span>, please
+					To <span className='error-danger error-danger-big'>update or delete your Account</span>, please
 					send a{' '}
 					<Link to={`/board/employee/tickets/${userId}`}>
 						<span>Ticket</span>
