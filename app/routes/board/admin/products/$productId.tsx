@@ -89,7 +89,7 @@ export const action: ActionFunction = async ({ request, params }) => {
 
 	if(intent === 'delete') {
 		await deleteProduct(params.productId)
-		return redirect('/board/admin/products');
+		return redirect('/board/admin/products/new-product');
 	}
 
 	const fieldErrors = {

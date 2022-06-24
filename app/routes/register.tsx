@@ -136,8 +136,8 @@ export default function Register() {
 	return (
 		<>
 			<header className='container header'>
-				<Link to='/' className='icon-header'>
-					<FaTools className='icon-size icon-shadow icon-linked icon-header' />&nbsp;Welcome
+				<Link to='/login' className='icon-header'>
+					<FaTools className='icon-size icon-shadow icon-linked icon-header' />&nbsp;Login
 				</Link>
 				<h1>Register to access the Support-Desk!</h1>
 			</header>

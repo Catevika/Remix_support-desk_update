@@ -82,7 +82,7 @@ export const action: ActionFunction = async ({ request, params }) => {
 
 	if(intent === 'delete') {
 		await deleteRole(params.roleId)
-		return redirect('/board/admin/roles');
+		return redirect('/board/admin/roles/new-role');
 	}
 
 	const fieldErrors = {

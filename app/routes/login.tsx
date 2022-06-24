@@ -83,8 +83,8 @@ export default function Login() {
 	return (
 		<>
 			<header className='container header'>
-				<Link to='/' className='icon-header'>
-					<FaTools className='icon-size icon-shadow icon-linked icon-header' />&nbsp;Welcome
+				<Link to='/register' className='icon-header'>
+					<FaTools className='icon-size icon-shadow icon-linked icon-header' />&nbsp;Register
 				</Link>
 				<h1>Login to access the Support-Desk!</h1>
 			</header>

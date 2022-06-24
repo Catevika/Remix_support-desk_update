@@ -90,7 +90,7 @@ export const action: ActionFunction = async ({ request, params }) => {
 
 	if(intent === 'delete') {
 		await deleteStatus(params.statusId)
-		return redirect('/board/admin/status');
+		return redirect('/board/admin/status/new-status');
 	}
 
 	const fieldErrors = {
