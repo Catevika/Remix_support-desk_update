@@ -7,10 +7,20 @@ import { prisma } from '~/utils/db.server';
 import { validateRole } from '~/utils/functions';
 import { deleteRole, getRole } from '~/models/roles.server';
 
-export const meta: MetaFunction = () => {
-	return {
-		title: 'Support-Desk | Roles'
-	};
+export const meta: MetaFunction = ({
+	data
+}: {
+	data: LoaderData | undefined;
+}) => {
+	if (!data) {
+		return {
+			title: 'No role'
+		};
+	} else {
+		return {
+			title: 'Support Desk | Roles'
+		};
+	}
 };
 
 type LoaderData = {

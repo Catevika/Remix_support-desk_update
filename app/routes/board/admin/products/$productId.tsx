@@ -14,10 +14,20 @@ import { prisma } from '~/utils/db.server';
 import { validateProduct } from '~/utils/functions';
 import { getProduct, deleteProduct } from '~/models/products.server';
 
-export const meta: MetaFunction = () => {
-	return {
-		title: 'Support-Desk | Products'
-	};
+export const meta: MetaFunction = ({
+	data
+}: {
+	data: LoaderData | undefined;
+}) => {
+	if (!data) {
+		return {
+			title: 'No product'
+		};
+	} else {
+		return {
+			title: 'Support Desk | Products'
+		};
+	}
 };
 
 type LoaderData = {
@@ -27,13 +37,12 @@ type LoaderData = {
 
 export const loader: LoaderFunction = async ({ request, params }) => {
 	const user = await getUser(request);
+
 		if (!user || user.service !== 'Information Technology') {
 			throw new Response('Unauthorized', { status: 401 });
 		}
 
-	if(params.productId === 'new-product') {
-		const user = await getUser(request);
-		
+	if(params.productId === 'new-product') {		
 		const data: LoaderData = {
 			user,
 			product: null

@@ -27,14 +27,14 @@ export default function TicketsRoute() {
 				<Link to='/board/employee' className='icon-header'>
 					<FaTools className='icon-size icon-shadow' /> Back to Board
 				</Link>
-				<h1>Manage your Tickets</h1>
+				<h1>My Tickets</h1>
 				<LogoutButton />
 			</header>
 			<main className='grid-container'>
 				<div>
 					<p className='inline-left'>
 					<MdMiscellaneousServices className='icon-size icon-container' />
-						Your tickets:&nbsp;<span>{ticketsByUserId.length}</span>
+						My tickets:&nbsp;<span>{ticketsByUserId.length}</span>
 					</p>
 					<p className='inline-left'>
 					{ticketsByUserId.length && (typeof ticketsByUserId !== 'string') 
@@ -59,7 +59,7 @@ export default function TicketsRoute() {
 								))
 							}
 						</div>
-					) : <p>No ticket available yet</p>}
+					) : null}
 				</div>
 				<div>
 					<Outlet />

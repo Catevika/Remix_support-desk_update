@@ -53,6 +53,16 @@ input:focus {
 	margin-top: -6.5rem;
 }
 
+.form-container-message {
+	height: auto;
+	width: auto;
+	margin: 0 auto;
+}
+
+.form-container-user {	
+	width: 50vw;
+}
+
 .form-content {
 	padding: 1em 1.5em 1em;
 	border: 2px solid rgba(255, 255, 255, 0.1);

@@ -54,13 +54,13 @@ export default function userBoardRoute(): JSX.Element {
                 className='btn btn-reverse btn-block nav-links'
               >
                 <FaQuestionCircle className='icon-size icon-space' />
-                &nbsp;Create New Ticket
+                &nbsp;New Ticket
               </NavLink>
             </li>
             <li>
             <NavLink to={(lastTicket && typeof lastTicket !== 'string') ? (`/board/employee/tickets/${lastTicket.ticketId}`) : ('/board/employee/tickets/new-ticket')} className='btn btn-block nav-links'>
             <FaTicketAlt className='icon-size icon-space' />
-                &nbsp;View my Tickets
+                &nbsp;Tickets
             </NavLink>
             </li>
             <li>
@@ -69,7 +69,7 @@ export default function userBoardRoute(): JSX.Element {
                 className='btn btn-block nav-links'
               >
                 <CgProfile className='icon-size icon-space' />
-                &nbsp;View my Profile
+                &nbsp;Profile
               </NavLink>
             </li>
           </ul>

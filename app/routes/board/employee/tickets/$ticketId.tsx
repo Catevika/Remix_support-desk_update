@@ -16,10 +16,20 @@ import { getStatuses } from '~/models/status.server';
 import { validateTitle, validateDescription } from '~/utils/functions';
 import { getTicket, getTicketStatusType, getTicketProductDevice, deleteTicket } from '~/models/tickets.server';
 
-export const meta: MetaFunction = () => {
-	return {
-		title: 'Support-Desk | Tickets'
-	};
+export const meta: MetaFunction = ({
+	data
+}: {
+	data: LoaderData | undefined;
+}) => {
+	if (!data) {
+		return {
+			title: 'No ticket'
+		};
+	} else {
+		return {
+			title: 'Support Desk | Tickets'
+		};
+	}
 };
 
 type LoaderData = {

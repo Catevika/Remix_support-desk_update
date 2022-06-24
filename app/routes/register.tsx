@@ -139,9 +139,10 @@ export default function Register() {
 				<Link to='/' className='icon-header'>
 					<FaTools className='icon-size icon-shadow icon-linked icon-header' />&nbsp;Welcome
 				</Link>
-				<h1>Register to access your Support-Desk!</h1>
+				<h1>Register to access the Support-Desk!</h1>
 			</header>
-			<div className='form-container form-container-center'>
+			<div className='form-container form-container-center form-container-login-register'>
+			<h2>Register</h2>
 				<div className='form-content'>
 					<fetcher.Form reloadDocument method='post' className='form'>
 						<input
@@ -149,7 +150,6 @@ export default function Register() {
 							name='redirectTo'
 							value={searchParams.get('redirectTo') ?? undefined}
 						/>
-						<h2>Register</h2>
 						<div className='form-group'>
 							<label htmlFor='username-input'>Username
 								<input

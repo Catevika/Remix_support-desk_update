@@ -14,10 +14,20 @@ import { prisma } from '~/utils/db.server';
 import { validateServiceName } from '~/utils/functions';
 import { getService, deleteService } from '~/models/services.server';
 
-export const meta: MetaFunction = () => {
-  return {
-    title: 'Support-Desk | Services'
-  };
+export const meta: MetaFunction = ({
+	data
+}: {
+	data: LoaderData | undefined;
+}) => {
+	if (!data) {
+		return {
+			title: 'No service'
+		};
+	} else {
+		return {
+			title: 'Support Desk | Services'
+		};
+	}
 };
 
 type LoaderData = {

@@ -63,7 +63,7 @@ export const action: ActionFunction = async ({ request }) => {
 	if (!user) {
 		return badRequest({
 			fields,
-			formError: 'Verify you email / password combination is incorrect.'
+			formError: 'Email / password combination is incorrect.'
 		});
 	}
 
@@ -86,9 +86,10 @@ export default function Login() {
 				<Link to='/' className='icon-header'>
 					<FaTools className='icon-size icon-shadow icon-linked icon-header' />&nbsp;Welcome
 				</Link>
-				<h1>Login to access your Support-Desk!</h1>
+				<h1>Login to access the Support-Desk!</h1>
 			</header>
 			<main className='form-container form-container-center'>
+				<h2>Login</h2>
 				<div className='form-content'>
 					<Form method='post' className='form'>
 						<input
@@ -96,7 +97,6 @@ export default function Login() {
 							name='redirectTo'
 							value={searchParams.get('redirectTo') ?? undefined}
 						/>
-						<h2>Login</h2>
 						<div className='form-group'>
 							<label htmlFor='email-input'>Email</label>
 							<input

@@ -13,7 +13,7 @@ export default function WelcomeRoute() {
   return (
     <>
       <header className='container header header-left'>
-        <h1>Welcome to your Support-Desk!</h1>
+        <h1>Welcome to the Support-Desk!</h1>
       </header>
       <main className='main'>
         <img src={url} alt='' className='background-image' />
@@ -22,7 +22,7 @@ export default function WelcomeRoute() {
             <button type='submit' className='btn'>
               Register
             </button>
-            &nbsp;to get your access for free!
+            &nbsp;to get an access for free!
           </p>
         </Form>
         <div className='icon-large-container'>

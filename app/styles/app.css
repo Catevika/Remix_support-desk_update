@@ -35,6 +35,10 @@ h1 {
 	line-height: 1.2;
 }
 
+h2 {
+	margin: 0.25em 1em;
+}
+
 a {
 	text-decoration: none;
 	color: var(--light);
@@ -155,6 +159,11 @@ em {
 	color: var(--danger);
 	font-size: 1rem;
 }
+
+.error-danger-big {
+	font-size: 1.2rem;
+}
+
 
 .container {
 	width: 100%;

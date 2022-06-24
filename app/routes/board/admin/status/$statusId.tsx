@@ -14,10 +14,20 @@ import { prisma } from '~/utils/db.server';
 import { validateStatus } from '~/utils/functions';
 import {getStatus, deleteStatus} from '~/models/status.server';
 
-export const meta: MetaFunction = () => {
-	return {
-		title: 'Support-Desk | Status'
-	};
+export const meta: MetaFunction = ({
+	data
+}: {
+	data: LoaderData | undefined;
+}) => {
+	if (!data) {
+		return {
+			title: 'No Status'
+		};
+	} else {
+		return {
+			title: 'Support Desk | Status'
+		};
+	}
 };
 
 type LoaderData = {
