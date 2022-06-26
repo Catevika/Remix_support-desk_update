@@ -14,7 +14,7 @@ import { prisma } from '~/utils/db.server';
 import { getProducts } from '~/models/products.server';
 import { getStatuses } from '~/models/status.server';
 import { validateTitle, validateDescription } from '~/utils/functions';
-import { getTicket, getTicketStatusType, getTicketProductDevice, deleteTicket } from '~/models/tickets.server';
+import { getTicket, deleteTicket } from '~/models/tickets.server';
 
 export const meta: MetaFunction = ({
 	data
@@ -34,49 +34,41 @@ export const meta: MetaFunction = ({
 
 type LoaderData = {
 	user: Awaited<ReturnType<typeof getUser>>;
-	products: Awaited<ReturnType<typeof getProducts>>;
 	statuses: Awaited<ReturnType<typeof getStatuses>>;
+	products: Awaited<ReturnType<typeof getProducts>>;
 	ticket: Awaited<ReturnType<typeof getTicket>>;
-	ticketStatus: Awaited<ReturnType<typeof getTicketStatusType>>;
-	ticketProduct: Awaited<ReturnType<typeof getTicketProductDevice>>;
 };
 
 export const loader: LoaderFunction = async ({ request, params }) => {
 	if (params.ticketId === 'new-ticket') {
-		const [user, products, statuses] = await Promise.all([
+		const [user, statuses, products] = await Promise.all([
 			getUser(request),
-			getProducts(),
-			getStatuses()
+			getStatuses(),
+			getProducts()
 		]);
 
 		const data: LoaderData = {
 			user,
-			products,
 			statuses,
-			ticket: null,
-			ticketStatus: null,
-			ticketProduct: null
+			products,
+			ticket: null
 		};
 
 	
 		return data;
 	} else {
-		const [user, products, statuses, ticket, ticketStatus, ticketProduct] = await Promise.all([
+		const [user, statuses, products, ticket] = await Promise.all([
 			getUser(request),
-			getProducts(),
 			getStatuses(),
-			getTicket(params.ticketId),
-			getTicketStatusType(params.ticketId),
-			getTicketProductDevice(params.ticketId)
+			getProducts(),
+			getTicket(params.ticketId)
 		]);
 	
 		const data: LoaderData = {
 			user,
 			products,
 			statuses,
-			ticket,
-			ticketStatus,
-			ticketProduct
+			ticket
 		};
 	
 		return data;
@@ -216,7 +208,7 @@ export default function NewTicketRoute() {
 	return (
 		<>
 			<main className='form-container'>
-				<fetcher.Form reloadDocument method='post' className='form' key={ data.ticket?.ticketId ?? 'new-ticket'}>
+				<fetcher.Form reloadDocument method='post' className='form' key={data.ticket?.ticketId ?? 'new-ticket'}>
 					<p>
 						{isNewTicket ? 'New' : null }&nbsp;Ticket from:<span className='capitalize'>&nbsp;{user?.username}&nbsp;</span> - Email:<span>&nbsp;{user?.email}</span>
 					</p>
@@ -275,6 +267,7 @@ export default function NewTicketRoute() {
 									<p className='error-danger'>'No status available'</p>
 								)}
 							</label>
+							{data.ticket ? <p><em>Old status: {`${data.ticket.ticketStatus?.type}`}</em></p> : null}
 						</div>
 						<div className='form-group'>
 							<label htmlFor='product'>Product:
@@ -307,6 +300,7 @@ export default function NewTicketRoute() {
 									<p className='error-danger'>'No product available'</p>
 								)}
 							</label>
+							{data.ticket ? <p><em>Old product: {`${data.ticket.ticketProduct?.device}`}</em></p> : null}
 						</div>
 						<div className='form-group'>
 							<label htmlFor='description'>Issue Description:
@@ -345,6 +339,7 @@ export default function NewTicketRoute() {
 											id='createdAt'
 											name='createdAt'
 											defaultValue={new Date(data.ticket.createdAt).toLocaleString()}
+											disabled
 										/>
 									</label>
 									<label>Updated at:&nbsp;
@@ -353,6 +348,7 @@ export default function NewTicketRoute() {
 											id='updatedAt'
 											name='updatedAt'
 											defaultValue={new Date(data.ticket.updatedAt).toLocaleString()}
+											disabled
 										/>
 									</label>
 								</div>

@@ -1,26 +1,15 @@
-import type { Note } from "@prisma/client";
 import { prisma } from "~/utils/db.server";
 
-export type Ticket = { author: string, authorId: string, ticketProduct: string; ticketProductId: string; ticketStatus: string; ticketStatusId: string; ticketId: string, createdAt: string; updatedAt: string; title: string, description: string; Notes: Note[]; };
-
 export async function getTickets() {
-  return await prisma.ticket.findMany();
+  return await prisma.ticket.findMany({
+    include: {ticketStatus: {select: {type: true}}, ticketProduct: {select: {device: true}}, Notes: true}
+  });
 }
 
 export async function getTicket(ticketId: string | undefined) {
-  return await prisma.ticket.findUnique({ where: { ticketId } });
-}
-
-export async function getTicketProductDevice(ticketProductId: string | undefined) {
-  return await prisma.product.findUnique({
-    where: { productId: ticketProductId }
-  });
-}
-
-export async function getTicketStatusType(ticketStatusId: string | undefined) {
-  return await prisma.status.findUnique({
-    where: { statusId: ticketStatusId }
-  });
+  return await prisma.ticket.findUnique({
+    include: {ticketStatus: {select: {type: true}}, ticketProduct: {select: {device: true}}, Notes: true}, where: { ticketId }
+})
 }
 
 export async function getTicketListingByUserId(userId: string | undefined) {
