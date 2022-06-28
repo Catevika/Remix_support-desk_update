@@ -231,7 +231,7 @@ export function CatchBoundary() {
       <div className='error-container'>
         <div className='form-container form-content'>
           <p>You must be logged in with administrator rights to add a new service.</p>
-          <Link to='/login?redirectTo=/services/new-service'>
+          <Link to='/login?redirectTo=/board/admin/services/new-service'>
             <button className='btn form-btn'>Login</button>
           </Link>
         </div>

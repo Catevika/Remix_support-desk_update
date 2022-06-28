@@ -128,6 +128,7 @@ export const action: ActionFunction = async ({ request, params }) => {
 
 export default function NewProductRoute() {
 	const data = useLoaderData() as LoaderData;
+	
 	const user = data.user;
 
 	const actionData = useActionData() as ActionData;
@@ -229,7 +230,7 @@ export function CatchBoundary() {
 			<div className='error-container'>
 				<div className='form-container form-content'>
 					<p>You must be logged in with administrator rights to add a new product.</p>
-					<Link to='/login?redirectTo=/products/new-product'>
+					<Link to='/login?redirectTo=/board/admin/products/new-product'>
 						<button className='btn form-btn'>Login</button>
 					</Link>
 				</div>

@@ -36,9 +36,9 @@ const badRequest = (data: ActionData) => json(data, { status: 400 });
 
 export const action: ActionFunction = async ({ request }) => {
 	const formData = await request.formData();
-	const email = formData.get("email");
-	const password = formData.get("password");
-	let redirectTo = safeRedirect(formData.get('redirectTo') || '/');
+	const email = formData.get('email');
+	const password = formData.get('password');
+	let redirectTo = formData.get('redirectTo');
 
 	if (!email && !password) {
 		return null;
@@ -49,6 +49,11 @@ export const action: ActionFunction = async ({ request }) => {
 	) {
 		return badRequest({ formError: 'Form not submitted correctly.' });
 	}
+
+	const isAdmin = await getUserByEmail(email);
+	(isAdmin && isAdmin.service === process.env.ADMIN_ROLE)
+	?	(redirectTo ? safeRedirect(redirectTo)	: redirectTo = safeRedirect('/board/admin'))
+	: (redirectTo ? safeRedirect(redirectTo) : redirectTo = safeRedirect('/board/employee'))
 
 	const fields = { email, password };
 	const fieldErrors = {
@@ -67,12 +72,6 @@ export const action: ActionFunction = async ({ request }) => {
 		});
 	}
 
-	const isAdmin = await getUserByEmail(email);
-	if (isAdmin?.service === process.env.ADMIN_ROLE) {
-		redirectTo = '/board/admin';
-	} else {
-		redirectTo = '/board/employee';
-	}
 	return createUserSession(user.id, redirectTo);
 };
 

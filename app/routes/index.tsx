@@ -22,7 +22,7 @@ export default function WelcomeRoute() {
             <button type='submit' className='btn'>
               Register
             </button>
-            &nbsp;to get an access for free!
+            &nbsp; to get an access for free!
           </p>
         </Form>
         <div className='icon-large-container'>

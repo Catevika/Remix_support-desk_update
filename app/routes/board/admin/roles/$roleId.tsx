@@ -224,7 +224,7 @@ export function CatchBoundary() {
 			<div className='error-container'>
 				<div className='form-container form-content'>
 					<p>You must be logged in with administrator rights to create a role.</p>
-					<Link to='/login?redirectTo=/roles/new-role'>
+					<Link to='/login?redirectTo=/board/admin/roles/new-role'>
 						<button className='btn form-btn'>Login</button>
 					</Link>
 				</div>
