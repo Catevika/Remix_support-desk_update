@@ -50,7 +50,7 @@ export const action: ActionFunction = async ({ request }) => {
 		return badRequest({ formError: 'Form not submitted correctly.' });
 	}
 
-	const isAdmin = await getUserByEmail(email);
+	const isAdmin = email !== null && await getUserByEmail(email);
 	(isAdmin && isAdmin.service === process.env.ADMIN_ROLE)
 	?	(redirectTo ? safeRedirect(redirectTo)	: redirectTo = safeRedirect('/board/admin'))
 	: (redirectTo ? safeRedirect(redirectTo) : redirectTo = safeRedirect('/board/employee'))
@@ -68,7 +68,7 @@ export const action: ActionFunction = async ({ request }) => {
 	if (!user) {
 		return badRequest({
 			fields,
-			formError: 'Email / password combination is incorrect.'
+			formError: 'Email / password combination not valid or need to register first'
 		});
 	}
 
@@ -89,6 +89,7 @@ export default function Login() {
 			</header>
 			<main className='form-container form-container-center'>
 				<h2>Login</h2>
+				<h3>Not registered yet? <Link to='/register'><span>Register</span></Link> first</h3>
 				<div className='form-content'>
 					<Form method='post' className='form'>
 						<input

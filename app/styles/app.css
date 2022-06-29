@@ -35,7 +35,7 @@ h1 {
 	line-height: 1.2;
 }
 
-h2 {
+h2, h3 {
 	margin: 0.25em 1em;
 }
 
@@ -54,10 +54,13 @@ a:hover {
 
 p,
 li {
-	font-size: 1.2rem;
 	line-height: 1.2;
 	margin: 20px;
 	list-style: none;
+}
+
+p {
+	font-size: 1.2rem;
 }
 
 select {
@@ -141,6 +144,10 @@ em {
 	align-items: center;
 }
 
+.btn-search {
+	margin: 0 20px;
+}
+
 .capitalize {
 	text-transform: capitalize;
 }
@@ -164,12 +171,18 @@ em {
 	font-size: 1.2rem;
 }
 
-
 .container {
 	width: 100%;
 	margin: 0 auto;
 	padding: 0 20px;
 	text-align: center;
+}
+
+.flex-container {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-around;
+	align-items: center;
 }
 
 .grid-container {
@@ -203,9 +216,6 @@ em {
 .separator-bottom {
 	padding-bottom: 20px;
 	border-bottom: 1px solid var(--light);
-}
-
-.separator-right {
 }
 
 .icon-shadow {
@@ -250,17 +260,33 @@ em {
 	margin: 0 10px;
 }
 
+.inline {
+	display: flex;
+	align-items: center;
+	justify-content: space-evenly;
+	margin: 20px 0 0;
+}
+
+.inline-left {
+	display: flex;
+	justify-content: flex-start;
+	align-items: center;
+	margin: 0;
+}
+
 .list {
 	display: flex;
 	justify-content: flex-start;
 	align-items: center;
+	width: 100%;
 }
 
 .column-list-container {
+	display: block;
 	flex-direction: column;
 	justify-content: center;
 	align-items: flex-start;
-	width: 100%;
+	width: 80%;
 	margin: 0 auto;
 	padding: 0 20px;
 }
@@ -311,18 +337,27 @@ em {
 	background: transparent;
 }
 
-.inline {
+.search-container {
 	display: flex;
-	justify-content: space-evenly;
-	align-items: center;
-	margin: 20px 0 0;
+	justify-content: center;
 }
 
-.inline-left {
+.search-label {
+	width: 40%;
+}
+
+.search-input {
+	margin: 0 1rem;
+}
+
+.search-icon {
+	margin: 5px 0 0;
+}
+
+.search-inline {
 	display: flex;
-	justify-content: flex-start;
 	align-items: center;
-	margin: 0;
+	margin: 20px 0 0;
 }
 
 .status {
@@ -374,4 +409,14 @@ em {
 
 .uppercase {
 	text-transform: uppercase;
+}
+
+.user-card {
+	text-align: left;
+	width: 25vw;
+	margin: 20px auto;
+	padding:10px 20px;
+	border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+	background-color: var(--dark);
+	box-shadow: 5px 5px 15px #211b36, -5px -5px 15px #372f5c;
 }

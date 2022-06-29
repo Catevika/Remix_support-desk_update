@@ -1,15 +1,14 @@
-import type { LoaderFunction, ActionFunction, MetaFunction } from '@remix-run/node';
-import { json, redirect } from '@remix-run/node';
+import { LoaderFunction, ActionFunction, MetaFunction, redirect } from '@remix-run/node';
+import { json } from '@remix-run/node';
 import {
 	Form,
 	Link,
 	useLoaderData,
 	useCatch,
 	useParams,
-	useTransition
 } from '@remix-run/react';
 import { User } from "@prisma/client";
-import { prisma } from '~/utils/db.server';
+import {deleteUserById} from '~/utils/session.server'
 import { getUserById } from '~/models/user.server';
 import { FaTools } from 'react-icons/fa';
 
@@ -54,23 +53,33 @@ export const loader: LoaderFunction = async ({ params }) => {
 
 export const action: ActionFunction = async ({ request, params }) => {
 	const formData = await request.formData();
-
-	if (formData.get('intent') !== 'delete') {
-		throw new Response(`The intent ${formData.get('intent')} is not supported`, {
-			status: 400
+	const userId = params.userId;
+	if(!userId) {
+		throw new Response('User Not Found.', {
+			status: 404
 		});
 	}
 
-	await prisma.user.delete({ where: { id: params.userId } });
-	return redirect('/');
+	if (formData.get('intent') !== ('update') && formData.get('intent') !== ('delete')) {
+		throw new Response(`The intent ${formData.get('intent')} is not supported`, {
+			status: 403
+		});
+	}
+
+	if (formData.get('intent') === ('update')) {
+		throw new Response(`The intent ${formData.get('intent')} requires administrator rights`, {
+			status: 401
+		});
+	}
+
+	if (formData.get('intent') === ('delete')) {
+		await deleteUserById(request, userId)
+		return redirect('/');
+	}
 };
 
 export default function ProductRoute() {
 	const {user} = useLoaderData() as LoaderData;
-	const transition = useTransition();
-
-	const isDeleting = transition.submission?.formData.get('intent') === 'delete';
-	const isUpdating = transition.submission?.formData.get('intent') === 'update';
 
 	return (
 		<>
@@ -158,17 +167,17 @@ export default function ProductRoute() {
 						</label>
 					</div>	
 					<div className='inline'>
-					<Form method='post' className='form'>
-							<button type='submit' name='intent' value='update' className='btn form-btn btn-danger' disabled={isUpdating}>
-							{isUpdating ? 'isUpdating...' : 'Update'}
-							</button>
+						<Form method='post' className='form'>
+							<button type='submit' name='intent' value='update' className='btn form-btn btn-danger'>
+								Update
+							</button>				
 						</Form>
 						<Link to='/board/employee/'>
 							<button className='btn form-btn'>Back to Board</button>
 						</Link>
 						<Form method='post' className='form'>
-							<button type='submit' name='intent' value='delete' className='btn form-btn btn-danger' disabled={isDeleting}>
-							{isDeleting ? 'isDeleting...' : 'Delete'}
+							<button type='submit' name='intent' value='delete' className='btn form-btn btn-danger'>
+								Delete
 							</button>
 						</Form>
 					</div>
@@ -182,13 +191,25 @@ export default function ProductRoute() {
 export function CatchBoundary() {
 	const caught = useCatch();
 	const {userId} = useParams();
-	switch (caught.status) {		
-		case 400: {
+	switch (caught.status) {
+		case 403: {
+			return (
+				<div className='error-container' style={{ fontSize: '1.5rem' }}>
+					<div className='form-container form-container-message form-content'>
+						<p>This action is not supported</p>
+						<Link to={`/board/employee/users/${userId}`}>
+							<button className='btn form-btn'>Back to Profile</button>
+						</Link>
+					</div>
+			</div>
+			)
+		}		
+		case 401: {
 			return (
 			<div className='error-container' style={{ fontSize: '1.5rem' }}>
 			<div className='form-container form-container-message form-content'>
 				<p>
-					To <span className='error-danger error-danger-big'>update or delete your Account</span>, please
+					To <span className='error-danger error-danger-big'>update your Account</span>, please
 					send a{' '}
 					<Link to={`/board/employee/tickets/${userId}`}>
 						<span>Ticket</span>
@@ -224,7 +245,7 @@ export function ErrorBoundary({ error }: { error: Error; }) {
 		<div className='error-container' style={{ fontSize: '1.5rem' }}>
 			<div className='form-container form-container-message form-content'>
 				<p>
-					To <span className='error-danger error-danger-big'>update or delete your Account</span>, please
+					To <span className='error-danger error-danger-big'>update your Account</span>, please
 					send a{' '}
 					<Link to={`/board/employee/tickets/${userId}`}>
 						<span>Ticket</span>

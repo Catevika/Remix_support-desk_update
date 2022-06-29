@@ -117,3 +117,18 @@ export async function logout(request: Request) {
   });
 }
 
+export async function deleteUserById(request: Request, userId: User['id']) {
+  await Promise.all([
+    prisma.ticket.deleteMany({where: {authorId: userId}}),
+    prisma.user.delete({where: {id: userId}})
+  ]);
+
+  const session = await getSession(request);
+
+  return redirect("/register", {
+    headers: {
+      "Set-Cookie": await sessionStorage.destroySession(session)
+    }
+  });
+}
+

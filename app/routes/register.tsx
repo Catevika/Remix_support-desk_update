@@ -8,12 +8,12 @@ import {
 	useFetcher
 } from '@remix-run/react';
 
-import { prisma } from '~/utils/db.server';
 import { safeRedirect, validateUsername, validateEmail, validatePassword, validateService } from '~/utils/functions';
 import { createUserSession, register } from '~/utils/session.server';
 import { FaTools } from 'react-icons/fa';
 import { getUserByEmail } from '~/models/user.server';
 import { getServices } from '~/models/services.server';
+import { prisma } from '~/utils/db.server';
 
 export const meta: MetaFunction = () => {
 	return {
@@ -84,10 +84,12 @@ export const action: ActionFunction = async ({ request }) => {
 	if (Object.values(fieldErrors).some(Boolean)) {
 		return badRequest({ fieldErrors, fields });
 	}
-
+	
 	const userExists = await prisma.user.findUnique({
-		where: { email }
-	});
+    where: {
+      email
+    },
+  });
 
 	if (userExists) {
 		return badRequest({
@@ -143,6 +145,7 @@ export default function Register() {
 			</header>
 			<div className='form-container form-container-center form-container-login-register'>
 			<h2>Register</h2>
+			<h3>Already registered? <Link to='/login'><span>Login</span></Link> instead!</h3>
 				<div className='form-content'>
 					<fetcher.Form reloadDocument method='post' className='form'>
 						<input

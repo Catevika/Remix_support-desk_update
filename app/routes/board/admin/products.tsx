@@ -63,32 +63,3 @@ export default function ProductsRoute() {
 		</>
 	);
 }
-
-export function CatchBoundary() {
-	const caught = useCatch();
-
-	if (caught.status === 401) {
-		return (
-			<div className='error-container'>
-				<div className='form-container form-content'>
-					<p>You must be logged in with administrator rights to add a new product.</p>
-					<Link to='/login?redirectTo=/board/admin/products/new-product'>
-						<button className='btn form-btn'>Login</button>
-					</Link>
-				</div>
-			</div>
-		);
-	}
-	throw new Error(`Unexpected caught response with status: ${caught.status}`);
-}
-
-export function ErrorBoundary({ error }: { error: Error; }) {
-	console.error(error);
-	return (
-		<div className='error-container'>
-			<div className='form-container form-content'>
-				Something unexpected went wrong. Sorry about that.
-			</div>
-		</div>
-	);
-}
