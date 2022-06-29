@@ -100,7 +100,7 @@ export async function requireAdminUser(request: Request) {
   throw await logout(request);
 }
 
-export async function createUserSession(userId: string, redirectTo: string) {
+export async function createUserSession(userId: User['id'], redirectTo: string) {
   const session = await sessionStorage.getSession();
   session.set('userId', userId);
   return redirect(redirectTo, {
@@ -118,10 +118,8 @@ export async function logout(request: Request) {
 }
 
 export async function deleteUserById(request: Request, userId: User['id']) {
-  await Promise.all([
-    prisma.ticket.deleteMany({where: {authorId: userId}}),
-    prisma.user.delete({where: {id: userId}})
-  ]);
+    await prisma.ticket.deleteMany({where: {authorId: userId}}),
+    await prisma.user.delete({where: {id: userId}})
 
   const session = await getSession(request);
 
