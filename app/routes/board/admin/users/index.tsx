@@ -1,6 +1,6 @@
 import type { MetaFunction, LoaderFunction } from '@remix-run/node';
 import { json } from '@remix-run/node';
-import { useLoaderData, NavLink, Outlet } from '@remix-run/react';
+import { useLoaderData, NavLink, Outlet, Link } from '@remix-run/react';
 import { requireAdminUser } from '~/utils/session.server';
 import LogoutButton from '~/components/LogoutButton';
 import { FaTools } from 'react-icons/fa';
@@ -27,8 +27,10 @@ export default function adminBoardRoute() {
   return (
     <>
       <header className='container header'>
-        <FaTools className='icon-size icon-shadow' />
-        <h1>Main Board</h1>
+        <Link to='/board/admin' className='icon-header'>
+					<FaTools className='icon-size icon-shadow' /> Back to Board
+				</Link>
+        <h1>User Board</h1>
         <LogoutButton />
       </header>
       <main>
@@ -37,34 +39,24 @@ export default function adminBoardRoute() {
           <span className='capitalize'>
             {admin?.username ? admin.username : null}
           </span>
-          , which database would you like to manage?
+          , which listing would you like to view?
         </p>
       </main>
       <nav className='nav'>
         <ul>
           <li>
-            <NavLink to={'/board/admin/users'}>
-              Users
+            <NavLink to={'/board/admin/users/userlist'}>
+              User List
             </NavLink>
           </li>
           <li>
-            <NavLink to={'/board/admin/services/new-service'}>
-              Services
+            <NavLink to={'/board/admin/users/tickets'}>
+              User Tickets
             </NavLink>
           </li>
           <li>
-            <NavLink to={'/board/admin/products/new-product'}>
-              Products
-            </NavLink>
-          </li>
-          <li>
-            <NavLink to={'/board/admin/roles/new-role'}>
-              Roles
-            </NavLink>
-          </li>
-          <li>
-            <NavLink to={'/board/admin/status/new-status'}>
-              Status
+            <NavLink to={'/board/admin/users/tickets/notes'}>
+              User Notes
             </NavLink>
           </li>
         </ul>
