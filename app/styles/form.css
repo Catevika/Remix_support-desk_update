@@ -45,8 +45,13 @@ input:focus {
 }
 
 .form-container-center {
-	width: 30vw;
-	margin: 0 auto;
+	display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-content: center;
+  margin: 7vh auto;
+  width: 30vw;
+  height: 80vh;
 }
 
 .form-container-admin {

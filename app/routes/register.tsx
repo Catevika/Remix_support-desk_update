@@ -143,9 +143,11 @@ export default function Register() {
 				</Link>
 				<h1>Register to access the Support-Desk!</h1>
 			</header>
-			<div className='form-container form-container-center form-container-login-register'>
+			<div className='form-container-center form-container-login-register'>
 			<h2>Register</h2>
-			<h3>Already registered? <Link to='/login'><span>Login</span></Link> instead!</h3>
+			<h3>
+				Already registered? <Link to='/login'><span>&nbsp;Login</span></Link>&nbsp;instead!
+			</h3>
 				<div className='form-content'>
 					<fetcher.Form reloadDocument method='post' className='form'>
 						<input
