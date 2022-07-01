@@ -1,26 +1,30 @@
 import type { LoaderFunction } from "@remix-run/node";
+import { json } from "@remix-run/node";
 import { Form, Link, useLoaderData, useLocation, useSearchParams } from "@remix-run/react";
 import { FaSearch, FaTools } from "react-icons/fa";
 import UserNavBar from "~/components/UserNavBar";
 import LogoutButton from "~/components/LogoutButton";
-import { getUsersBySearchTerm} from "~/models/user.server";
+
+import { getUsers, getUsersBySearchTerm } from "~/models/user.server";
+
 
 type LoaderData = {
-  users: Awaited<ReturnType<typeof getUsersBySearchTerm>>;
+  users: Awaited<ReturnType<typeof getUsers>>;
+  getUsersBySearchTerm: Awaited<ReturnType<typeof getUsersBySearchTerm>>;
 }
 
 export const loader: LoaderFunction = async ({request}) => {
   const url = new URL(request.url)
-  const search = new URLSearchParams(url.search);
-  return await getUsersBySearchTerm(search.get("query"))
-  }
+  const query = url.searchParams.get(("query").toLowerCase());
+  const users = query ? await getUsersBySearchTerm(query) : await getUsers();
+  return json({users});
+}
 
 export default function userListRoute() {
   const { users } = useLoaderData() as LoaderData;
   const [params] = useSearchParams();
   const location = useLocation();
-
-  console.log(users, [params], location)
+  const query = params.get(("query").toLowerCase());
 
   return (
     <>
@@ -33,23 +37,29 @@ export default function userListRoute() {
 				<h1>Manage User Lists</h1>
 			</header>
       <main>
-        <Form method="get" className='search-container'>
-          <label htmlFor="search-user" className='form-group search-inline search-label'>Search:&nbsp;
-            <input type="text" name="query" id="query" placeholder='Search user by username' defaultValue={params.get('query')} className="search-input"/>
-            <Link to='/board/admin/users/userlist'><button type="submit" className="btn btn-search"><FaSearch className='search-icon' /></button></Link>
+        <Form method="get" action='/board/admin/users/userlist' className='search-container'>
+          <label htmlFor="query" className='form-group search-inline'>Search:&nbsp;
+            <input type="search" name="query" id="query" placeholder='Search by username, email or service' aria-label="Search user by username" defaultValue={query ?? '' } className="search-input"/>
+            <button type="submit" className="btn btn-search btn-small">
+              <FaSearch className='search-icon' />
+            </button>
+            <Link to='/board/admin/users/userlist' className='link-search' >
+              Back to complete userlist
+            </Link>
           </label>
         </Form>
         <div className='flex-container'>
-          {users ? users.map(user => (
-            <ul key={user.id} className="user-card">
-              <li>UserId:&nbsp;<span><Link to={{ pathname: user.id, search: location.search }}>{user.id}</Link></span></li>
-              <li>Username:&nbsp;<span>{user.username}</span></li>
-              <li>Email:&nbsp;<span>{user.email}</span></li>
-              <li>Service:&nbsp;<span>{user.service}</span></li>
-              <li>CreatedAt:&nbsp;<span>{new Date(user.createdAt).toLocaleString()}</span></li>
-              <li>UpdatedAt:&nbsp;<span>{new Date(user.updatedAt).toLocaleString()}</span></li>
-            </ul>
-            )) : <p>No users yet.</p>
+          {
+            users.map(user => (
+              <ul key={user.id} className="user-card">
+                <li>UserId:&nbsp;<Link to={{ pathname: `/board/admin/users/userlist/${user.id}`, search: location.search }}><span>{user.id}</span></Link></li>
+                <li>Username:&nbsp;<span>{user.username}</span></li>
+                <li>Email:&nbsp;<span>{user.email}</span></li>
+                <li>Service:&nbsp;<span>{user.service}</span></li>
+                <li>CreatedAt:&nbsp;<span>{new Date(user.createdAt).toLocaleString()}</span></li>
+                <li>UpdatedAt:&nbsp;<span>{new Date(user.updatedAt).toLocaleString()}</span></li>
+              </ul>
+            ))
           } 
         </div>
       </main>

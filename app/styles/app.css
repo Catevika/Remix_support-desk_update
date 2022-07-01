@@ -149,7 +149,11 @@ em {
 }
 
 .btn-search {
-	margin: 0 20px;
+	margin: 0 10px 0 20px;
+}
+
+.btn-small {
+	padding: 5px 10px;
 }
 
 .capitalize {
@@ -295,6 +299,10 @@ em {
 	padding: 0 20px;
 }
 
+.link-search {
+	width: 40%;
+}
+
 .links {
 	display: flex;
 	flex-direction: column;
@@ -346,12 +354,8 @@ em {
 	justify-content: center;
 }
 
-.search-label {
-	width: 40%;
-}
-
 .search-input {
-	margin: 0 1rem;
+	margin: 0 0.5rem;
 }
 
 .search-icon {
@@ -361,7 +365,9 @@ em {
 .search-inline {
 	display: flex;
 	align-items: center;
+	justify-content: center;
 	margin: 20px 0 0;
+	width: 70%;
 }
 
 .status {
