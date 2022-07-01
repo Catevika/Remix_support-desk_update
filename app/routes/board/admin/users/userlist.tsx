@@ -1,30 +1,26 @@
 import type { LoaderFunction } from "@remix-run/node";
-import { json } from "@remix-run/node";
-import { Form, Link, Outlet, useLoaderData, useLocation, useSearchParams } from "@remix-run/react";
+import { Form, Link, useLoaderData, useLocation, useSearchParams } from "@remix-run/react";
 import { FaSearch, FaTools } from "react-icons/fa";
 import UserNavBar from "~/components/UserNavBar";
 import LogoutButton from "~/components/LogoutButton";
-import { getUsers } from "~/models/user.server";
-
-// TODO - Add search functionality
+import { getUsersBySearchTerm} from "~/models/user.server";
 
 type LoaderData = {
-  users: Awaited<ReturnType<typeof getUsers>>;
+  users: Awaited<ReturnType<typeof getUsersBySearchTerm>>;
 }
 
-export const loader: LoaderFunction = async () => {
-  const users = await getUsers();
-
-
-  const data: LoaderData = {
-    users
+export const loader: LoaderFunction = async ({request}) => {
+  const url = new URL(request.url)
+  const search = new URLSearchParams(url.search);
+  return await getUsersBySearchTerm(search.get("query"))
   }
-
-  return data;
-}
 
 export default function userListRoute() {
   const { users } = useLoaderData() as LoaderData;
+  const [params] = useSearchParams();
+  const location = useLocation();
+
+  console.log(users, [params], location)
 
   return (
     <>
@@ -37,16 +33,16 @@ export default function userListRoute() {
 				<h1>Manage User Lists</h1>
 			</header>
       <main>
-        <Form method="post" className='search-container'>
+        <Form method="get" className='search-container'>
           <label htmlFor="search-user" className='form-group search-inline search-label'>Search:&nbsp;
-            <input type="search" name="search-user" id="search-user" placeholder='Search user by username' className="search-input"/>
-            <button type="submit" className="btn btn-search"><FaSearch className='search-icon' /></button>
+            <input type="text" name="query" id="query" placeholder='Search user by username' defaultValue={params.get('query')} className="search-input"/>
+            <Link to='/board/admin/users/userlist'><button type="submit" className="btn btn-search"><FaSearch className='search-icon' /></button></Link>
           </label>
         </Form>
         <div className='flex-container'>
           {users ? users.map(user => (
             <ul key={user.id} className="user-card">
-              <li>UserId:&nbsp;<span><Link to={`/board/admin/users/userlist/${user.id}`}>{user.id}</Link></span></li>
+              <li>UserId:&nbsp;<span><Link to={{ pathname: user.id, search: location.search }}>{user.id}</Link></span></li>
               <li>Username:&nbsp;<span>{user.username}</span></li>
               <li>Email:&nbsp;<span>{user.email}</span></li>
               <li>Service:&nbsp;<span>{user.service}</span></li>
@@ -55,9 +51,6 @@ export default function userListRoute() {
             </ul>
             )) : <p>No users yet.</p>
           } 
-          <div>
-            <Outlet />
-          </div>
         </div>
       </main>
     </>

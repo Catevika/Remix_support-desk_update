@@ -54,7 +54,7 @@ export default function TicketsRoute() {
 												: undefined
 										}>{ticket?.ticketStatus?.type}</span></li>
 										<li className='list'>Product:&nbsp;<span>{ticket?.ticketProduct?.device}</span></li>
-										<li className='list'>Date:&nbsp;{new Date(ticket.createdAt).toLocaleString() !== new Date(ticket.updatedAt).toLocaleString() ? <span>{new Date(ticket.updatedAt).toLocaleString()}</span> : <span>{new Date(ticket.createdAt).toLocaleString()}</span>}</li>
+										<li className='list'>Date:&nbsp;{new Date(ticket.createdAt).toLocaleString('en-us') !== new Date(ticket.updatedAt).toLocaleString('en-us') ? <span>{new Date(ticket.updatedAt).toLocaleString('en-us')}</span> : <span>{new Date(ticket.createdAt).toLocaleString('en-us')}</span>}</li>
 									</ul>
 								))
 							}

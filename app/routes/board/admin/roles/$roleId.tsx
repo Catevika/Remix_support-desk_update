@@ -176,7 +176,7 @@ export default function NewRoleRoute() {
 											type='text'
 											id='createdAt'
 											name='createdAt'
-											defaultValue={new Date(data.role.createdAt).toLocaleString()}
+											defaultValue={new Date(data.role.createdAt).toLocaleString('en-us')}
 										/>
 									</label>
 									<label>Updated at:&nbsp;
@@ -184,7 +184,7 @@ export default function NewRoleRoute() {
 											type='text'
 											id='updatedAt'
 											name='updatedAt'
-											defaultValue={new Date(data.role.updatedAt).toLocaleString()}
+											defaultValue={new Date(data.role.updatedAt).toLocaleString('en-us')}
 										/>
 									</label>
 								</div>

@@ -184,7 +184,7 @@ export default function NewServiceRoute() {
 									type='text'
 									id='createdAt'
 									name='createdAt'
-									defaultValue={new Date(data.service.createdAt).toLocaleString()}
+									defaultValue={new Date(data.service.createdAt).toLocaleString('en-us')}
 								/>
 							</label>
 							<label>Updated at:&nbsp;
@@ -192,7 +192,7 @@ export default function NewServiceRoute() {
 									type='text'
 									id='updatedAt'
 									name='updatedAt'
-									defaultValue={new Date(data.service.updatedAt).toLocaleString()}
+									defaultValue={new Date(data.service.updatedAt).toLocaleString('en-us')}
 								/>
 							</label>
 						</div>

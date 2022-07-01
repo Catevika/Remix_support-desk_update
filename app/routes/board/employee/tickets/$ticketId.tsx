@@ -338,7 +338,7 @@ export default function NewTicketRoute() {
 											type='text'
 											id='createdAt'
 											name='createdAt'
-											defaultValue={new Date(data.ticket.createdAt).toLocaleString()}
+											defaultValue={new Date(data.ticket.createdAt).toLocaleString('en-us')}
 											disabled
 										/>
 									</label>
@@ -347,7 +347,7 @@ export default function NewTicketRoute() {
 											type='text'
 											id='updatedAt'
 											name='updatedAt'
-											defaultValue={new Date(data.ticket.updatedAt).toLocaleString()}
+											defaultValue={new Date(data.ticket.updatedAt).toLocaleString('en-us')}
 											disabled
 										/>
 									</label>

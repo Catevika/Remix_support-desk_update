@@ -182,7 +182,7 @@ export default function NewStatusRoute() {
 								type='text'
 								id='createdAt'
 								name='createdAt'
-								defaultValue={new Date(data.status.createdAt).toLocaleString()}
+								defaultValue={new Date(data.status.createdAt).toLocaleString('en-us')}
 							/>
 						</label>
 						<label>Updated at:&nbsp;
@@ -190,7 +190,7 @@ export default function NewStatusRoute() {
 								type='text'
 								id='updatedAt'
 								name='updatedAt'
-								defaultValue={new Date(data.status.updatedAt).toLocaleString()}
+								defaultValue={new Date(data.status.updatedAt).toLocaleString('en-us')}
 							/>
 						</label>
 					</div>

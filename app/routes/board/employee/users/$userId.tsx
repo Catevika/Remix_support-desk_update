@@ -154,7 +154,7 @@ export default function ProductRoute() {
 								type='text'
 								id='createdAt'
 								name='createdAt'
-								defaultValue={new Date(user.createdAt).toLocaleString()}
+								defaultValue={new Date(user.createdAt).toLocaleString('en-us')}
 							/>
 						</label>
 						<label>Updated at:&nbsp;
@@ -162,7 +162,7 @@ export default function ProductRoute() {
 								type='text'
 								id='updatedAt'
 								name='updatedAt'
-								defaultValue={new Date(user.updatedAt).toLocaleString()}
+								defaultValue={new Date(user.updatedAt).toLocaleString('en-us')}
 							/>
 						</label>
 					</div>	
