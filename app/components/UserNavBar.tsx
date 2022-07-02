@@ -5,7 +5,7 @@ function UserNavBar() {
     <nav>
       <ul className='nav-links'>
         <li>
-          <NavLink to={'/board/admin/users'} className={({ isActive }) =>
+          <NavLink to={'/board/admin/users/userlist'} className={({ isActive }) =>
             isActive ? 'active' : undefined
           }>
             User List

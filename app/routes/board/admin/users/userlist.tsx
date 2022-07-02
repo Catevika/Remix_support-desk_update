@@ -56,8 +56,8 @@ export default function userListRoute() {
                 <li>Username:&nbsp;<span>{user.username}</span></li>
                 <li>Email:&nbsp;<span>{user.email}</span></li>
                 <li>Service:&nbsp;<span>{user.service}</span></li>
-                <li>CreatedAt:&nbsp;<span>{new Date(user.createdAt).toLocaleString()}</span></li>
-                <li>UpdatedAt:&nbsp;<span>{new Date(user.updatedAt).toLocaleString()}</span></li>
+                <li>CreatedAt:&nbsp;<span>{new Date(user.createdAt).toLocaleString('en-us')}</span></li>
+                <li>UpdatedAt:&nbsp;<span>{new Date(user.updatedAt).toLocaleString('en-us')}</span></li>
               </ul>
             ))
           } 
