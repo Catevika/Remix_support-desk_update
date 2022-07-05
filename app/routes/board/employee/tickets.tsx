@@ -38,7 +38,7 @@ export default function TicketsRoute() {
 					</p>
 					<p className='inline-left'>
 					{ticketsByUserId.length && (typeof ticketsByUserId !== 'string') 
-						? <em>To update a Ticket, click on its title</em>
+						? <em>To update or delete a Ticket, click on its title</em>
 						: 'No ticket available yet'}
 					</p>
 					{ticketsByUserId.length && (typeof ticketsByUserId !== 'string') ? (

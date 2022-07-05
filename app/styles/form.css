@@ -34,12 +34,9 @@ input:focus {
 }
 
 .form-container {
-	display: flex;
 	flex-direction: column;
 	justify-content: center;
 	align-content: center;
-	width: 50vw;
-	margin-right: 10vw;
 	height: 85vh;
 	z-index: -1;
 }
@@ -66,6 +63,19 @@ input:focus {
 
 .form-container-user {	
 	width: 50vw;
+}
+
+.form-scroll {
+	overflow-y: scroll;
+	position: fixed;
+	top: 8rem;
+	height: calc(100vh - 8rem);
+	width: 60vw;
+}
+
+.form-scroll::-webkit-scrollbar {
+	width: 0;
+	background: transparent;
 }
 
 .form-content {
@@ -106,7 +116,7 @@ input:focus {
 
 .form-textarea {
 	width: 100%;
-	height: 6rem;
+	height: 5rem;
 	background-color: rgba(52, 46, 80);
 	border-radius: 0.5rem;
 	padding: 10px 20px;

@@ -1,5 +1,4 @@
 import type { User } from "@prisma/client";
-import userBoardRoute from "~/routes/board/employee";
 import { prisma } from "~/utils/db.server";
 
 export type { User } from "@prisma/client";

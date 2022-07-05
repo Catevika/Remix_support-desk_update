@@ -7,9 +7,9 @@ export async function getTickets() {
 }
 
 export async function getTicket(ticketId: string | undefined) {
-  return await prisma.ticket.findUnique({
+  return ticketId ? await prisma.ticket.findUnique({
     include: {ticketStatus: {select: {type: true}}, ticketProduct: {select: {device: true}}, Notes: true}, where: { ticketId }
-})
+  }) : undefined;
 }
 
 export async function getTicketListingByUserId(userId: string | undefined) {

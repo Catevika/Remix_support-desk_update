@@ -97,6 +97,12 @@ export function validateDescription(description: unknown) {
   }
 }
 
+export function validateText(text: unknown) {
+  if (!text || typeof text !== 'string' || text.length < 5) {
+    return 'Description must be at least 5 characters long';
+  }
+}
+
 // TODO: See if useMatchesData is usefull
 
 /**
