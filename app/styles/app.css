@@ -81,7 +81,7 @@ span {
 
 em {
 	font-size: 0.9em;
-	color: #e66533;
+	margin-left: 40px;
 }
 
 .active {
@@ -159,6 +159,11 @@ em {
 .btn-view {
 	font-size: 14px;
 	padding: 2px 4px;
+}
+
+.btn-note {
+	border: 1px solid var(--hover);
+	color: var(--hover);
 }
 
 .capitalize {
@@ -363,6 +368,10 @@ em {
 	background: transparent;
 }
 
+.paragraphe-title {
+	margin: 14px;
+}
+
 .search-container {
 	display: flex;
 	justify-content: center;
@@ -442,17 +451,17 @@ em {
 table {
 	width: 100%;
 	border-collapse: collapse;
-	border: 1px solid var(--light);
-	border-radius: 5px;
-	margin-top: 20px;
+	margin-top: 10px;
 }
 
 table td {
-  color: var(--light)
+  color: var(--light);
+	text-align: left;
+  padding: 5px 10px;
 }
 
-table td, table th {
-	text-align: left;
+table th {
+	text-align: center;
   border: 2px solid var(--dark);
   padding: 5px 10px;
 }
@@ -462,9 +471,14 @@ table th:last-of-type {
 }
 
 table thead {
-  background-color: var(--light);
+  background-color: var(--hover);
   color: var(--dark);
 }
+
+table thead:first-child th:first-child { border-top-left-radius: 7px; }
+table thead:first-child th:nth-child(4) { border-top-right-radius: 7px; }
+table thead:last-child th:first-child { border-bottom-left-radius: 7px; }
+table thead:last-child th:nth-child(4) { border-bottom-right-radius: 7px; }
 
 table span {
 	color: var(--light);

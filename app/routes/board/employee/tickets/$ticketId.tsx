@@ -10,7 +10,7 @@ import {
 	Outlet
 } from '@remix-run/react';
 
-import { getUser, getUserId, requireUserId } from '~/utils/session.server';
+import { getUser, requireUserId } from '~/utils/session.server';
 import { prisma } from '~/utils/db.server';
 import { getProducts } from '~/models/products.server';
 import { getStatuses } from '~/models/status.server';
@@ -217,7 +217,8 @@ export default function NewTicketRoute() {
 	return (
 		<>
 			<main className='form-container'>
-					<p>{isNewTicket ? 'New' : null }&nbsp;Ticket from:<span className='capitalize'>&nbsp;{user?.username}&nbsp;</span> - Email:<span>&nbsp;{user?.email}</span></p>
+				<p className='paragraphe-title'>{isNewTicket ? 'New' : null }&nbsp;Ticket from:<span className='capitalize'>&nbsp;{user?.username}&nbsp;</span> - Email:<span>&nbsp;{user?.email}</span></p>
+				{!isNewTicket && notesByTicketId?.length ? <em>&nbsp;Scroll to see your notes</em> : null}
 				<div className='form-scroll'>
 					<fetcher.Form reloadDocument method='post' className='form' key={ticket?.ticketId  ?? 'new-ticket'}>
 							<div className='form-content'>
@@ -364,30 +365,33 @@ export default function NewTicketRoute() {
 									<button
 										type='submit'
 										name='intent'
-										value={ticket ? 'update' : 'create'} className='btn form-btn'
+										value={ticket ? 'update' : 'create'} className='btn'
 										disabled={isCreating || isUpdating}
 									>
 									{isNewTicket ? (isCreating ? 'Sending...' : 'Send') : null}
 									{isNewTicket ? null : (isUpdating ? 'Updating...' : 'Update')}
 									</button>
 									{isNewTicket ? null : <Link to='/board/employee/tickets/new-ticket'>
-										<button className='btn form-btn'>Back to New Ticket</button>
+										<button className='btn'>Back to New Ticket</button>
 									</Link>}
-									{ isNewTicket ? null : <button type='submit' name='intent' value='delete' className='btn form-btn btn-danger' disabled={isDeleting}>
+									{ isNewTicket ? null : <button type='submit' name='intent' value='delete' className='btn  btn-danger' disabled={isDeleting}>
 									{isDeleting ? 'isDeleting...' : 'Delete'}
 									</button>}
+									{!isNewTicket ?
+									<>
+										<Outlet />
+										<Link to={`/board/employee/tickets/${ticket?.ticketId}/add`} className='btn btn-small btn-note'>Add Note</Link>
+									</> : null}
 								</div>
 						</div>
 					</fetcher.Form>
 					{!isNewTicket && notesByTicketId?.length ?
 						<>
-						<Outlet /><div className='table'>
-						<Link to={`/board/employee/tickets/${ticket?.ticketId}/add`} className='btn form-btn'>Add Note</Link><em>&nbsp;Scroll to see your notes in the table below</em>
+						<div className='table'>
 						<table>
 							<thead>
 								<tr>
 									<th>Title</th>
-									<th>Note Id</th>
 									<th>Author</th>
 									<th>Text</th>
 									<th>Date</th>
@@ -399,12 +403,11 @@ export default function NewTicketRoute() {
 									notesByTicketId.map((note) => (
 										<tr key={note.noteId}>
 											<td>{note.noteTicket.title}</td>
-											<td>{note.noteId}</td>
 											<td>{note.noteUser.username}</td>
 											<td>{note.text}</td>
 											<td>{new Date(note.createdAt).toLocaleString('en-us') !== new Date(note.updatedAt).toLocaleString('en-us') ? <span className='span-table'>{new Date(note.updatedAt).toLocaleString('en-us')}</span> : <span>{new Date(note.createdAt).toLocaleString('en-us')}</span>}</td>
 											<td>
-												<Link to={`/board/employee/tickets/${ticket?.ticketId}/note/edit`}>Edit</Link>
+												<Link to={`/board/employee/tickets/${ticket?.ticketId}/view`}>View</Link>
 											</td>
 										</tr>
 									))) : null}

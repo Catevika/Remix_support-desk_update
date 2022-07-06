@@ -51,9 +51,6 @@ input:focus {
   height: 80vh;
 }
 
-.form-container-admin {
-	margin-top: -6.5rem;
-}
 
 .form-container-message {
 	height: auto;
@@ -68,8 +65,8 @@ input:focus {
 .form-scroll {
 	overflow-y: scroll;
 	position: fixed;
-	top: 8rem;
-	height: calc(100vh - 8rem);
+	top: 10rem;
+	height: calc(100vh - 10rem);
 	width: 60vw;
 }
 
