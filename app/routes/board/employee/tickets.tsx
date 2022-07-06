@@ -36,18 +36,15 @@ export default function TicketsRoute() {
 					<MdMiscellaneousServices className='icon-size icon-container' />
 						My tickets:&nbsp;<span>{ticketsByUserId.length}</span>
 					</p>
-					<p className='inline-left'>
 					{ticketsByUserId.length && (typeof ticketsByUserId !== 'string') 
 						? <em>To update or delete a Ticket, click on its title</em>
 						: 'No ticket available yet'}
-					</p>
 					{ticketsByUserId.length && (typeof ticketsByUserId !== 'string') ? (
 						<div className='nav-ul-container'>
 							{
 								ticketsByUserId.map((ticket) => (
 									<ul key={ticket.ticketId}>
 										<li className='list border-bottom'>Title:&nbsp;<Link to={ticket.ticketId} prefetch='intent'><span>{ticket.title}</span></Link></li>
-										<li className='list'>Id:&nbsp;<span>{ticket.ticketId}</span></li>
 										<li className='list' >Status:&nbsp;<span className={
 											ticket?.ticketStatus?.type
 												? `status status-${ticket?.ticketStatus.type}`
