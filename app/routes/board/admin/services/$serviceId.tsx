@@ -140,85 +140,87 @@ export default function NewServiceRoute() {
 	const isDeleting = Boolean(transition.submission?.formData.get('intent') === 'delete');
 
   return (
-    <main className='form-container form-container-admin'>
-      <Form reloadDocument method='post' key={data.service?.serviceId ?? 'new-service'} className='form'>
-        <p>
-        {isNewService ? 'New' : null}&nbsp;Service from:<span className='capitalize'>&nbsp;{user?.username}&nbsp;</span> - Email:<span>&nbsp;{user?.email}</span>
-        </p>
-        <div className='form-content'>
-          <div className='form-group'>
-            <label htmlFor='name'>
-            {isNewService ? 'New' : null}&nbsp;Service:{' '}
-              <input
-                type='text'
-                defaultValue={data.service?.name}
-                name='name'
-                aria-invalid={Boolean(actionData?.fieldErrors?.name)}
-                aria-errormessage={
-                  actionData?.fieldErrors?.name
-                    ? 'service-error'
-                    : undefined
-                }
-              />
-            </label>
-            {actionData?.fieldErrors?.name ? (
-              <p
-                className='error-danger'
-                role='alert'
-                id='service-error'
-              >
-                {actionData.fieldErrors.name}
-              </p>
-            ) : null}
-          </div>
-          <div id='form-error-message'>
-            {actionData?.formError ? (
-              <p className='error-danger' role='alert'>
-                {actionData.formError}
-              </p>
-            ) : null}
-            {data.service ? (
-						<div className='form-group inline'>
-							<label>Created at:&nbsp;
-								<input
-									type='text'
-									id='createdAt'
-									name='createdAt'
-									defaultValue={new Date(data.service.createdAt).toLocaleString('en-us')}
-								/>
-							</label>
-							<label>Updated at:&nbsp;
-								<input
-									type='text'
-									id='updatedAt'
-									name='updatedAt'
-									defaultValue={new Date(data.service.updatedAt).toLocaleString('en-us')}
-								/>
-							</label>
-						</div>
-					) : null
-				}
-				</div>
-					<div className='inline'>
-						<button
-							type='submit'
-							name='intent'
-							value={isNewService ? 'create' : 'update'}
-							className='btn form-btn'
-							disabled={isAdding || isUpdating}
-						>
-							{isNewService ? (isAdding ? 'Adding...' : 'Add'): null}
-							{isNewService ? null : (isUpdating ? 'Updating...' : 'Update')}
-						</button>
-						{isNewService ? null : <Link to='/board/admin/services/new-service'>
-							<button className='btn form-btn'>Back to New Service</button>
-						</Link>}
-						{isNewService ? null : <button type='submit' name='intent' value='delete' className='btn form-btn btn-danger' disabled={isDeleting}>
-						{isDeleting ? 'isDeleting...' : 'Delete'}
-						</button>}
-					</div>
-				</div>
-      </Form>
+    <main className='form-container'>
+      <div className='form-scroll'>
+        <Form reloadDocument method='post' key={data.service?.serviceId ?? 'new-service'} className='form'>
+          <p>
+          {isNewService ? 'New' : null}&nbsp;Service from:<span className='capitalize'>&nbsp;{user?.username}&nbsp;</span> - Email:<span>&nbsp;{user?.email}</span>
+          </p>
+          <div className='form-content'>
+            <div className='form-group'>
+              <label htmlFor='name'>
+              {isNewService ? 'New' : null}&nbsp;Service:{' '}
+                <input
+                  type='text'
+                  defaultValue={data.service?.name}
+                  name='name'
+                  aria-invalid={Boolean(actionData?.fieldErrors?.name)}
+                  aria-errormessage={
+                    actionData?.fieldErrors?.name
+                      ? 'service-error'
+                      : undefined
+                  }
+                />
+              </label>
+              {actionData?.fieldErrors?.name ? (
+                <p
+                  className='error-danger'
+                  role='alert'
+                  id='service-error'
+                >
+                  {actionData.fieldErrors.name}
+                </p>
+              ) : null}
+            </div>
+            <div id='form-error-message'>
+              {actionData?.formError ? (
+                <p className='error-danger' role='alert'>
+                  {actionData.formError}
+                </p>
+              ) : null}
+              {data.service ? (
+  						<div className='form-group inline'>
+  							<label>Created at:&nbsp;
+  								<input
+  									type='text'
+  									id='createdAt'
+  									name='createdAt'
+  									defaultValue={new Date(data.service.createdAt).toLocaleString('en-us')}
+  								/>
+  							</label>
+  							<label>Updated at:&nbsp;
+  								<input
+  									type='text'
+  									id='updatedAt'
+  									name='updatedAt'
+  									defaultValue={new Date(data.service.updatedAt).toLocaleString('en-us')}
+  								/>
+  							</label>
+  						</div>
+  					) : null
+  				}
+  				</div>
+  					<div className='inline'>
+  						<button
+  							type='submit'
+  							name='intent'
+  							value={isNewService ? 'create' : 'update'}
+  							className='btn form-btn'
+  							disabled={isAdding || isUpdating}
+  						>
+  							{isNewService ? (isAdding ? 'Adding...' : 'Add'): null}
+  							{isNewService ? null : (isUpdating ? 'Updating...' : 'Update')}
+  						</button>
+  						{isNewService ? null : <Link to='/board/admin/services/new-service'>
+  							<button className='btn form-btn'>Back to New Service</button>
+  						</Link>}
+  						{isNewService ? null : <button type='submit' name='intent' value='delete' className='btn form-btn btn-danger' disabled={isDeleting}>
+  						{isDeleting ? 'isDeleting...' : 'Delete'}
+  						</button>}
+  					</div>
+  				</div>
+        </Form>
+      </div>
     </main>
   );
 }

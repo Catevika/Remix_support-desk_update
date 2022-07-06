@@ -141,80 +141,82 @@ export default function NewStatusRoute() {
 
 	return (
 		<main className='form-container form-container-admin'>
-			<Form reloadDocument method='post' key={data.status?.statusId ?? 'new-status'}className='form'>
-				<p>
-				{isNewStatus ? 'New' : null}&nbsp;Status from:<span className='capitalize'>&nbsp;{user?.username}&nbsp;</span> - Email:<span>&nbsp;{user?.email}</span>
-				</p>
-				<div className='form-content'>
-					<div className='form-group'>
-						<label htmlFor='type'>
-						{isNewStatus ? 'New' : null}&nbsp;Status:{' '}
-							<input
-								type='text'
-								defaultValue={data.status?.type}
-								name='type'
-								aria-invalid={Boolean(actionData?.fieldErrors?.type)}
-								aria-errormessage={
-									actionData?.fieldErrors?.type ? 'status-error' : undefined
-								}
-							/>
-						</label>
-						{actionData?.fieldErrors?.type ? (
-							<p
-								className='error-danger'
-								role='alert'
-								id='status-error'
-							>
-								{actionData.fieldErrors.type}
+			<div className='form-scroll'>
+				<Form reloadDocument method='post' key={data.status?.statusId ?? 'new-status'}className='form'>
+					<p>
+					{isNewStatus ? 'New' : null}&nbsp;Status from:<span className='capitalize'>&nbsp;{user?.username}&nbsp;</span> - Email:<span>&nbsp;{user?.email}</span>
+					</p>
+					<div className='form-content'>
+						<div className='form-group'>
+							<label htmlFor='type'>
+							{isNewStatus ? 'New' : null}&nbsp;Status:{' '}
+								<input
+									type='text'
+									defaultValue={data.status?.type}
+									name='type'
+									aria-invalid={Boolean(actionData?.fieldErrors?.type)}
+									aria-errormessage={
+										actionData?.fieldErrors?.type ? 'status-error' : undefined
+									}
+								/>
+							</label>
+							{actionData?.fieldErrors?.type ? (
+								<p
+									className='error-danger'
+									role='alert'
+									id='status-error'
+								>
+									{actionData.fieldErrors.type}
+								</p>
+							) : null}
+						</div>
+						<div>
+						{actionData?.formError ? (
+							<p className='error-danger' role='alert'>
+									{actionData.formError}
 							</p>
-						) : null}
+							) : null}
+						{data.status ? (
+						<div className='form-group inline'>
+							<label>Created at:&nbsp;
+								<input
+									type='text'
+									id='createdAt'
+									name='createdAt'
+									defaultValue={new Date(data.status.createdAt).toLocaleString('en-us')}
+								/>
+							</label>
+							<label>Updated at:&nbsp;
+								<input
+									type='text'
+									id='updatedAt'
+									name='updatedAt'
+									defaultValue={new Date(data.status.updatedAt).toLocaleString('en-us')}
+								/>
+							</label>
+						</div>
+						) : null
+					}
 					</div>
-					<div>
-					{actionData?.formError ? (
-						<p className='error-danger' role='alert'>
-								{actionData.formError}
-						</p>
-						) : null}
-					{data.status ? (
-					<div className='form-group inline'>
-						<label>Created at:&nbsp;
-							<input
-								type='text'
-								id='createdAt'
-								name='createdAt'
-								defaultValue={new Date(data.status.createdAt).toLocaleString('en-us')}
-							/>
-						</label>
-						<label>Updated at:&nbsp;
-							<input
-								type='text'
-								id='updatedAt'
-								name='updatedAt'
-								defaultValue={new Date(data.status.updatedAt).toLocaleString('en-us')}
-							/>
-						</label>
+					<div className='inline'>
+						<button
+							type='submit'
+							name='intent'
+							value={isNewStatus ? 'create' : 'update'}
+							className='btn form-btn'
+							disabled={isAdding || isUpdating}
+						>
+							{isNewStatus ? (isAdding ? 'Adding...' : 'Add'): null}
+							{isNewStatus ? null : (isUpdating ? 'Updating...' : 'Update')}
+						</button>
+						{isNewStatus ? null : <Link to='/board/admin/status/new-status'>
+						<button className='btn form-btn'>Back to New Status</button></Link>}
+						{isNewStatus ? null : <button type='submit' name='intent' value='delete' className='btn form-btn btn-danger' disabled={isDeleting}>
+						{isDeleting ? 'isDeleting...' : 'Delete'}</button>}
+						</div>
 					</div>
-					) : null
-				}
-				</div>
-				<div className='inline'>
-					<button
-						type='submit'
-						name='intent'
-						value={isNewStatus ? 'create' : 'update'}
-						className='btn form-btn'
-						disabled={isAdding || isUpdating}
-					>
-						{isNewStatus ? (isAdding ? 'Adding...' : 'Add'): null}
-						{isNewStatus ? null : (isUpdating ? 'Updating...' : 'Update')}
-					</button>
-					{isNewStatus ? null : <Link to='/board/admin/status/new-status'>
-					<button className='btn form-btn'>Back to New Status</button></Link>}
-					{isNewStatus ? null : <button type='submit' name='intent' value='delete' className='btn form-btn btn-danger' disabled={isDeleting}>
-					{isDeleting ? 'isDeleting...' : 'Delete'}</button>}
-					</div>
-				</div>
-			</Form>
+				</Form>
+			</div>
 		</main>
 	);
 }

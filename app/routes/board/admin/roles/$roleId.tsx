@@ -133,84 +133,86 @@ export default function NewRoleRoute() {
 
 	return (
 		<>
-			<main className='form-container form-container-admin'>
-				<Form reloadDocument method='post' key={data.role?.roleId ?? 'new-role'} className='form'>
-					<p className='list'>
-					{isNewRole ? 'New' : null }&nbsp;Role from:<span className='capitalize'>&nbsp;{user?.username}&nbsp;</span> - Email:<span>&nbsp;{user?.email}</span>
-					</p>
-					<div className='form-content'>
-						<div className='form-group'>
-							<label htmlFor='roleType'>
-								{isNewRole ? 'New' : null }&nbsp;Role:{' '}
-								<input
-									type='text'
-									defaultValue={data.role?.roleType}
-									name='roleType'
-									aria-invalid={Boolean(actionData?.fieldErrors?.roleType)}
-									aria-errormessage={
-										actionData?.fieldErrors?.roleType ? 'role-error' : undefined
-									}
-								/>
-							</label>
-							{actionData?.fieldErrors?.roleType ? (
-								<p
-									className='error-danger'
-									role='alert'
-									id='role-error'
-								>
-									{actionData.fieldErrors.roleType}
-								</p>
-							) : null}
-						</div>
-						<div>
-							{actionData?.formError ? (
-								<p className='error-danger' role='alert'>
-									{actionData.formError}
-								</p>
-							) : null}
-							{data.role ? (
-							<>
-								<div className='form-group inline'>
-									<label>Created at:&nbsp;
-										<input
-											type='text'
-											id='createdAt'
-											name='createdAt'
-											defaultValue={new Date(data.role.createdAt).toLocaleString('en-us')}
-										/>
-									</label>
-									<label>Updated at:&nbsp;
-										<input
-											type='text'
-											id='updatedAt'
-											name='updatedAt'
-											defaultValue={new Date(data.role.updatedAt).toLocaleString('en-us')}
-										/>
-									</label>
+			<main className='form-container'>
+				<div className='form-scroll'>
+					<Form reloadDocument method='post' key={data.role?.roleId ?? 'new-role'} className='form'>
+						<p className='list'>
+						{isNewRole ? 'New' : null }&nbsp;Role from:<span className='capitalize'>&nbsp;{user?.username}&nbsp;</span> - Email:<span>&nbsp;{user?.email}</span>
+						</p>
+						<div className='form-content'>
+							<div className='form-group'>
+								<label htmlFor='roleType'>
+									{isNewRole ? 'New' : null }&nbsp;Role:{' '}
+									<input
+										type='text'
+										defaultValue={data.role?.roleType}
+										name='roleType'
+										aria-invalid={Boolean(actionData?.fieldErrors?.roleType)}
+										aria-errormessage={
+											actionData?.fieldErrors?.roleType ? 'role-error' : undefined
+										}
+									/>
+								</label>
+								{actionData?.fieldErrors?.roleType ? (
+									<p
+										className='error-danger'
+										role='alert'
+										id='role-error'
+									>
+										{actionData.fieldErrors.roleType}
+									</p>
+								) : null}
+							</div>
+							<div>
+								{actionData?.formError ? (
+									<p className='error-danger' role='alert'>
+										{actionData.formError}
+									</p>
+								) : null}
+								{data.role ? (
+								<>
+									<div className='form-group inline'>
+										<label>Created at:&nbsp;
+											<input
+												type='text'
+												id='createdAt'
+												name='createdAt'
+												defaultValue={new Date(data.role.createdAt).toLocaleString('en-us')}
+											/>
+										</label>
+										<label>Updated at:&nbsp;
+											<input
+												type='text'
+												id='updatedAt'
+												name='updatedAt'
+												defaultValue={new Date(data.role.updatedAt).toLocaleString('en-us')}
+											/>
+										</label>
+									</div>
+								</>) : null
+							}
+								<div className='inline'>
+									<button
+										type='submit'
+										name='intent'
+										value={isNewRole ? 'create' : 'update'}
+										className='btn form-btn'
+										disabled={isAdding || isUpdating}
+									>
+										{isNewRole ? (isAdding ? 'Adding...' : 'Add'): null}
+										{isNewRole ? null : (isUpdating ? 'Updating...' : 'Update')}
+									</button>
+									{isNewRole ? null : <Link to='/board/admin/roles/new-role'>
+										<button className='btn form-btn'>Back to New Role</button>
+									</Link>}
+									{isNewRole ? null : <button type='submit' name='intent' value='delete' className='btn form-btn btn-danger' disabled={isDeleting}>
+									{isDeleting ? 'isDeleting...' : 'Delete'}
+									</button>}
 								</div>
-							</>) : null
-						}
-							<div className='inline'>
-								<button
-									type='submit'
-									name='intent'
-									value={isNewRole ? 'create' : 'update'}
-									className='btn form-btn'
-									disabled={isAdding || isUpdating}
-								>
-									{isNewRole ? (isAdding ? 'Adding...' : 'Add'): null}
-									{isNewRole ? null : (isUpdating ? 'Updating...' : 'Update')}
-								</button>
-								{isNewRole ? null : <Link to='/board/admin/roles/new-role'>
-									<button className='btn form-btn'>Back to New Role</button>
-								</Link>}
-								{isNewRole ? null : <button type='submit' name='intent' value='delete' className='btn form-btn btn-danger' disabled={isDeleting}>
-								{isDeleting ? 'isDeleting...' : 'Delete'}
-								</button>}
 							</div>
 						</div>
-					</div>
-				</Form>
+					</Form>
+				</div>
 			</main>
 		</>
 	);
