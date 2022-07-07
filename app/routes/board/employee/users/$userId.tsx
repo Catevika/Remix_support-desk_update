@@ -99,19 +99,6 @@ export default function ProductRoute() {
 				<p>User Profile</p>
 				<div className='form-content'>
 					<div className='form-group'>
-						<label htmlFor='userid-input'>User Id:&nbsp;
-							<span>
-								<input
-									type='text'
-									id='userid-input'
-									name='userid'
-									defaultValue={user.id}
-									disabled
-								/>
-							</span>
-						</label>
-					</div>
-					<div className='form-group'>
 						<label htmlFor='username-input'>Name:&nbsp;
 							<span>
 								<input
@@ -245,7 +232,7 @@ export function ErrorBoundary({ error }: { error: Error; }) {
 		<div className='error-container' style={{ fontSize: '1.5rem' }}>
 			<div className='form-container form-container-message form-content'>
 				<p>
-					To <span className='error-danger error-danger-big'>update your Account</span>, please
+					To <span className='error-danger error-danger-big'>update or delete your Account</span>, please
 					send a{' '}
 					<Link to={`/board/employee/tickets/${userId}`}>
 						<span>Ticket</span>
