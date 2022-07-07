@@ -7,7 +7,8 @@ import {
 	Link,
 	useFetcher,
 	useCatch,
-	Outlet
+	Outlet,
+	useParams
 } from '@remix-run/react';
 
 import { getUser, requireUserId } from '~/utils/session.server';
@@ -434,11 +435,21 @@ export function CatchBoundary() {
 }
 
 export function ErrorBoundary({ error }: { error: Error; }) {
-	console.error(error);
+	const { ticketId } = useParams();
+	console.log(error);
 	return (
-		<div className='error-container'>
-			<div className='form-container form-content'>
-				Something unexpected went wrong. Sorry about that.
+		<div className='error-container' style={{ fontSize: '1.5rem' }}>
+			<div className='form-container form-container-message form-content'>
+				<p>
+					To <span className='error-danger error-danger-big'>delete your Ticket</span>, please <span>delete its associated notes</span> or send a{' '}
+					<Link to='/board/employee/tickets/new-ticket'>
+						<span>Ticket</span>
+					</Link>{' '}
+					to the Support Desk.
+				</p>
+				<Link to={`/board/employee/tickets/${ticketId}`}>
+					<button className='btn form-btn'>Back to Ticket</button>
+				</Link>
 			</div>
 		</div>
 	);
