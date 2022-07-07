@@ -15,7 +15,7 @@ export async function getUserByEmail(email: User["email"]) {
   return prisma.user.findUnique({ where: { email } });
 }
 
-export async function getUsersBySearchTerm(query: string |null | undefined) {
+export async function getUsersBySearchTerm(query: string | undefined) {
   if(!query) {
     const users = getUsers();
     return users; 

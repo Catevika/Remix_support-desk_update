@@ -1,12 +1,12 @@
 import type { LoaderFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
-import { Form, Link, useLoaderData, useLocation, useSearchParams } from "@remix-run/react";
+import { Form, Link, useHref, useLoaderData, useLocation, useSearchParams } from "@remix-run/react";
 import { FaSearch, FaTools } from "react-icons/fa";
 import UserNavBar from "~/components/UserNavBar";
 import LogoutButton from "~/components/LogoutButton";
 
 import { getUsers, getUsersBySearchTerm } from "~/models/user.server";
-
+import { useEffect, useRef } from "react";
 
 type LoaderData = {
   users: Awaited<ReturnType<typeof getUsers>>;
@@ -26,6 +26,14 @@ export default function userListRoute() {
   const location = useLocation();
   const query = params.get(("query").toLowerCase());
 
+  const formRef = useRef<HTMLFormElement>(null);
+  
+  useEffect(() => {
+    if(query) {
+      formRef.current?.reset();
+    }
+  }, [query])
+
   return (
     <>
       <header className='container header'>
@@ -37,9 +45,9 @@ export default function userListRoute() {
 				<h1>Manage User Lists</h1>
 			</header>
       <main>
-        <Form method="get" action='/board/admin/users/userlist' className='search-container'>
+        <Form ref={formRef} method="get" action='/board/admin/users/userlist' className='search-container'>
           <label htmlFor="query" className='form-group search-inline'>Search:&nbsp;
-            <input type="search" name="query" id="query" placeholder='Search by username, email or service' aria-label="Search user by username" defaultValue={query ?? '' } className="search-input"/>
+            <input type="search" name="query" id="query" placeholder='Search by username, email or service' aria-label="Search user by username" defaultValue={query ?? undefined } className="search-input"/>
             <button type="submit" className="btn btn-search btn-small">
               <FaSearch className='search-icon' />
             </button>
