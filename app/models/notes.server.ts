@@ -2,6 +2,14 @@ import { prisma } from "~/utils/db.server";
 
 export type { Note } from "@prisma/client";
 
+export async function getNoteByNoteId(noteId: string) {
+  return prisma.note.findUnique({
+    where: {
+      noteId
+    }
+  });
+}
+
 export async function getNotes(ticketId: string) {
   return await prisma.note.findMany({
     include: {noteUser: {select: {username: true}}, noteTicket: {select: {title: true}}},
@@ -16,3 +24,7 @@ export async function getNoteListingByTicketId(ticketId: string | undefined) {
     orderBy: { updatedAt: 'desc' }
   }) : null;
 };
+
+export async function deleteNote(noteId: string | undefined) {
+  return await prisma.note.delete({ where: { noteId } });
+}

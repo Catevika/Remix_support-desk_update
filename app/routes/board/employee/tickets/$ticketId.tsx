@@ -190,13 +190,7 @@ export const action: ActionFunction = async ({ request, params }) => {
 };
 
 export default function NewTicketRoute() {
-	const data = useLoaderData() as LoaderData;
-	const user = data.user;
-	const ticket = data.ticket;
-	const notesByTicketId = data.notesByTicketId;
-	const statuses: Status[] = data.statuses;
-	const products: Product[] = data.products;
-
+	const {user, ticket, notesByTicketId, statuses, products} = useLoaderData() as LoaderData;
 	const actionData = useActionData() as ActionData;
 
 	const fetcher = useFetcher();
@@ -407,7 +401,7 @@ export default function NewTicketRoute() {
 											<td>{note.text}</td>
 											<td>{new Date(note.createdAt).toLocaleString('en-us') !== new Date(note.updatedAt).toLocaleString('en-us') ? <span className='span-table'>{new Date(note.updatedAt).toLocaleString('en-us')}</span> : <span>{new Date(note.createdAt).toLocaleString('en-us')}</span>}</td>
 											<td>
-												<Link to={`/board/employee/tickets/${ticket?.ticketId}/view`}>View</Link>
+												<Link to={`/board/employee/tickets/${ticket?.ticketId}/${note.noteId}`}>View</Link>
 											</td>
 										</tr>
 									))) : null}

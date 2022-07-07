@@ -34,14 +34,13 @@ type ActionData = {
 
 const badRequest = (data: ActionData) => json(data, { status: 400 });
 
-export let action: ActionFunction = async ({ request, params }) => {
+export const action: ActionFunction = async ({ request, params }) => {
   const userId = await requireUserId(request);
 
   if(!params.ticketId) {
     return 'Ticket not found';
   }
   const ticketId = params.ticketId;
-  console.log(ticketId)
 
   const form = await request.formData();
   const text = form.get("text");
