@@ -70,9 +70,17 @@ input:focus {
 	width: 60vw;
 }
 
-.form-scroll::-webkit-scrollbar {
+.form-scroll::-webkit-scrollbar, .form-scroll-ticket-admin::-webkit-scrollbar {
 	width: 0;
 	background: transparent;
+}
+
+.form-scroll-ticket-admin {
+	overflow-y: scroll;
+	position: fixed;
+	top: 7rem;
+	height: calc(100vh - 7rem);
+	width: 60vw;
 }
 
 .form-content {

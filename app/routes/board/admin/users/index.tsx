@@ -1,7 +1,8 @@
 import type { MetaFunction, LoaderFunction } from '@remix-run/node';
 import { json } from '@remix-run/node';
-import { useLoaderData, NavLink, Outlet, Link } from '@remix-run/react';
+import { useLoaderData, Outlet, Link } from '@remix-run/react';
 import { requireAdminUser } from '~/utils/session.server';
+import AdminUserNavBar from '~/components/AdminUserNavBar';
 import LogoutButton from '~/components/LogoutButton';
 import { FaTools } from 'react-icons/fa';
 
@@ -42,25 +43,7 @@ export default function adminBoardRoute() {
           , which listing would you like to view?
         </p>
       </main>
-      <nav className='nav'>
-        <ul>
-          <li>
-            <NavLink to={'/board/admin/users/userlist'}>
-              User List
-            </NavLink>
-          </li>
-          <li>
-            <NavLink to={'/board/admin/users/tickets'}>
-              User Tickets
-            </NavLink>
-          </li>
-          <li>
-            <NavLink to={'/board/admin/users/tickets/notes'}>
-              User Notes
-            </NavLink>
-          </li>
-        </ul>
-      </nav>
+      <AdminUserNavBar />
       <main>
         <div>
           <Outlet />
