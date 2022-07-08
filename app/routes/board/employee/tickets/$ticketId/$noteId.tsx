@@ -28,12 +28,16 @@ type LoaderData = {
 
 export const loader: LoaderFunction = async ({ params }) => {
   if(!params.noteId) {
-    return 'Params not found';
+    throw new Response('Note Not Found.', {
+			status: 404
+		});
   }
 
   const note = await getNoteByNoteId(params.noteId);
   if(!note) {
-    return 'Note not found';
+    throw new Response('Note Not Found.', {
+			status: 404
+		});
   }
 
   const data: LoaderData = {
@@ -83,7 +87,9 @@ export const action: ActionFunction = async ({ request, params }) => {
   const note = await prisma.note.findUnique({ where: { noteId } });
 
   if (!note) {
-		return badRequest({ formError: 'Note not found' });
+		throw new Response('Note Not Found.', {
+			status: 404
+		});
 	}
 
   if(intent === 'update') {

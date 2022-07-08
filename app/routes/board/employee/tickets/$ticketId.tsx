@@ -8,7 +8,8 @@ import {
 	useFetcher,
 	useCatch,
 	Outlet,
-	useParams
+	useParams,
+	Form
 } from '@remix-run/react';
 
 import { getUser, requireUserId } from '~/utils/session.server';
@@ -18,6 +19,7 @@ import { getStatuses } from '~/models/status.server';
 import { validateTitle, validateDescription } from '~/utils/functions';
 import { getTicket, deleteTicket } from '~/models/tickets.server';
 import { getNoteListingByTicketId } from '~/models/notes.server';
+import { FaTools } from 'react-icons/fa';
 
 export const meta: MetaFunction = ({
 	data
@@ -211,6 +213,17 @@ export default function NewTicketRoute() {
 	
 	return (
 		<>
+		<header className='container header'>
+				<Link to='/board/employee/' className='icon-header'>
+					<FaTools className='icon-size icon-shadow' /> Back to Board
+				</Link>
+				<h1>User Profile</h1>
+				<Form action='/logout' method='post'>
+					<button type='submit' className='btn'>
+						Logout
+					</button>
+				</Form>
+			</header>
 			<main className='form-container'>
 				<p className='paragraphe-title'>{isNewTicket ? 'New' : null }&nbsp;Ticket from:<span className='capitalize'>&nbsp;{user?.username}&nbsp;</span> - Email:<span>&nbsp;{user?.email}</span></p>
 				{!isNewTicket && notesByTicketId?.length ? <em>&nbsp;Scroll to see your notes</em> : null}

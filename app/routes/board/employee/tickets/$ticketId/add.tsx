@@ -38,7 +38,9 @@ export const action: ActionFunction = async ({ request, params }) => {
   const userId = await requireUserId(request);
 
   if(!params.ticketId) {
-    return 'Ticket not found';
+    throw new Response('Ticket Not Found.', {
+			status: 404
+		});
   }
   const ticketId = params.ticketId;
 
@@ -68,15 +70,17 @@ export const action: ActionFunction = async ({ request, params }) => {
   const ticket = await prisma.ticket.findUnique({ where: { ticketId } });
 
   if(!ticket) {
-    return 'Ticket not found';
+    throw new Response('Ticket Not Found.', {
+			status: 404
+		});
   }
 
   const authorId = ticket.authorId;
 
   if(!authorId) {
-    return badRequest({
-      formError: "Ticket author not found"
-    })
+    throw new Response('Status Not Found.', {
+			status: 404
+		});
   }
 
   await prisma.note.create({

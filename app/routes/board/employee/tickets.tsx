@@ -37,14 +37,15 @@ export default function TicketsRoute() {
 						My tickets:&nbsp;<span>{ticketsByUserId.length}</span>
 					</p>
 					{ticketsByUserId.length && (typeof ticketsByUserId !== 'string') 
-						? <em>To update or delete a Ticket, click on its title</em>
+						? <em>To view a Ticket, click on its title</em>
 						: 'No ticket available yet'}
 					{ticketsByUserId.length && (typeof ticketsByUserId !== 'string') ? (
-						<div className='nav-ul-container'>
+						<div className='nav-ul-container'> 
 							{
 								ticketsByUserId.map((ticket) => (
-									<ul key={ticket.ticketId}>
+									<ul key={ticket.ticketId} className='card'>
 										<li className='list border-bottom'>Title:&nbsp;<Link to={ticket.ticketId} prefetch='intent'><span>{ticket.title}</span></Link></li>
+										<li className='list' >Author:&nbsp;<span>{ticket?.author?.username}</span></li>
 										<li className='list' >Status:&nbsp;<span className={
 											ticket?.ticketStatus?.type
 												? `status status-${ticket?.ticketStatus.type}`
