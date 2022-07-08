@@ -5,21 +5,21 @@ function UserNavBar() {
     <nav>
       <ul className='nav-links'>
         <li>
-          <NavLink to={'/board/admin/users/userlist'} className={({ isActive }) =>
+          <NavLink to={'/board/employee/tickets/new-user'} className={({ isActive }) =>
             isActive ? 'active' : undefined
           }>
-            User List
+            New User
           </NavLink>
         </li>
         <li>
-          <NavLink to={'/board/admin/users/tickets'} className={({ isActive }) =>
+          <NavLink to={'/board/employee/tickets'} className={({ isActive }) =>
             isActive ? 'active' : undefined
           }>
             User Tickets
           </NavLink>
         </li>
         <li>
-          <NavLink to={'/board/admin/users/tickets/notes'} className={({ isActive }) =>
+          <NavLink to={'/board/employee/tickets/notes'} className={({ isActive }) =>
             isActive ? 'active' : undefined
           }>
             User Notes
