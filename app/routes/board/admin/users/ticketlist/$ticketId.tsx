@@ -197,11 +197,11 @@ export default function NewTicketRoute() {
 					</button>
 				</Form>
 			</header>
-			<main className='form-container'>
-				<p className='paragraphe-title'>Ticket from:<span className='capitalize'>&nbsp;{ticket?.author?.username}&nbsp;</span> - Email:<span>&nbsp;{ticket?.author?.email}</span></p>
-				{notesByTicketId?.length ? <em>&nbsp;Scroll to see this associated notes</em> : null}
+			<main className='form-container paragraphe-title'>
+				<p>Ticket from:<span className='capitalize'>&nbsp;{ticket?.author?.username}&nbsp;</span> - Email:<span>&nbsp;{ticket?.author?.email}</span></p>
+				{notesByTicketId?.length ? <em>&nbsp;Scroll to see its associated notes</em> : null}
 				<div className='form-container-ticket'>
-					<div className='form-scroll-ticket-admin'>
+					<div className='form-scroll'>
 						<fetcher.Form reloadDocument method='post' className='form' key={ticket?.ticketId}>
 								<div className='form-content'>
 									<div className='form-group'>

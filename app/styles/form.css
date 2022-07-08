@@ -79,14 +79,6 @@ input:focus {
 	background: transparent;
 }
 
-.form-scroll-ticket-admin {
-	overflow-y: scroll;
-	position: fixed;
-	top: 7rem;
-	height: calc(100vh - 7rem);
-	width: 60vw;
-}
-
 .form-content {
 	padding: 1em 1.5em 1em;
 	border: 2px solid rgba(255, 255, 255, 0.1);
@@ -165,4 +157,9 @@ input:focus {
 .form-textarea::placeholder {
 	font-family: 'Poppins', sans-serif;
 	color: var(--light, 50%);
+}
+
+.form-textarea::-webkit-scrollbar {
+	width: 0;
+	background: transparent;
 }
