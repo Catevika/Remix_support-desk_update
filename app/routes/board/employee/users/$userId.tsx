@@ -9,7 +9,7 @@ import {
 } from '@remix-run/react';
 import { User } from "@prisma/client";
 import {deleteUserById} from '~/utils/session.server'
-import { getUserById } from '~/models/user.server';
+import { getUserById } from '~/models/users.server';
 import { FaTools } from 'react-icons/fa';
 
 export const meta: MetaFunction = ({
