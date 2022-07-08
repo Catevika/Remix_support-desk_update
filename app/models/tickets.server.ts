@@ -20,6 +20,25 @@ export async function getTicketListingByUserId(userId: string | undefined) {
   }) : 'No ticket available';
 };
 
+export async function getTicketsBySearchTerm(query: string | undefined) {
+  if(!query) {
+    const tickets = getTickets();
+    return tickets; 
+  } else {
+    const tickets = await prisma.ticket.findMany({
+      include: {author: {select: {id: true, username: true, email: true}}, ticketStatus: {select: {type: true}}, ticketProduct: {select: {device: true}}},
+      where: {
+        OR: [
+        { title: { contains: query, mode: 'insensitive' }},     
+        { author: {username: { contains: query, mode: 'insensitive' }}},    
+        { ticketStatus: {type: { contains: query, mode: 'insensitive' }}},    
+        { ticketProduct: {device: { contains: query, mode: 'insensitive' }}}    
+      ]
+    }});
+  return tickets;
+  }
+}
+
 export async function deleteTicket(ticketId: string | undefined) {
   return await prisma.ticket.delete({ where: { ticketId } });
 }

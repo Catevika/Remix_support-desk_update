@@ -1,7 +1,7 @@
 import type { LoaderFunction } from '@remix-run/node';
 import { json } from '@remix-run/node';
 import { Outlet, useLoaderData, Link, useCatch, Form, useSearchParams, useLocation } from '@remix-run/react';
-import { getTickets } from '~/models/tickets.server';
+import { getTickets, getTicketsBySearchTerm } from '~/models/tickets.server';
 import AdminUserNavBar from "~/components/AdminUserNavBar";
 import LogoutButton from '~/components/LogoutButton';
 import { MdMiscellaneousServices } from 'react-icons/md';
@@ -10,12 +10,14 @@ import { useEffect, useRef } from 'react';
 
 type LoaderData = {
 	tickets: Awaited<ReturnType<typeof getTickets>>;
+	getTicketsBySearchTerm: Awaited<ReturnType<typeof getTicketsBySearchTerm>>;
 };
 
-export const loader: LoaderFunction = async () => {
-	const tickets = await getTickets();
-
-	return json<LoaderData>({ tickets });
+export const loader: LoaderFunction = async ({request}) => {
+	const url = new URL(request.url)
+  const query = url.searchParams.get(("query").toLowerCase());
+	const tickets = query ? await getTicketsBySearchTerm(query) : await getTickets();
+  return json({tickets});
 };
 
 export default function TicketsRoute() {
@@ -51,7 +53,7 @@ export default function TicketsRoute() {
 					</p>
 					<Form ref={formRef} method="get" action='/board/admin/users/ticketlist' className='search-container'>
 						<label htmlFor="query" className='form-group search-inline'>Search:&nbsp;
-							<input type="search" name="query" id="query" placeholder='Search by username, email or service' aria-label="Search user by username" defaultValue={query ?? undefined } className="search-input"/>
+							<input type="search" name="query" id="query" placeholder='Search by title, author, status or product' aria-label="Search user by username" defaultValue={query ?? undefined } className="search-input"/>
 							<button type="submit" className="btn btn-search btn-small">
 								<FaSearch className='search-icon' />
 							</button>
