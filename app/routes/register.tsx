@@ -11,7 +11,7 @@ import {
 import { safeRedirect, validateUsername, validateEmail, validatePassword, validateService } from '~/utils/functions';
 import { createUserSession, register } from '~/utils/session.server';
 import { FaTools } from 'react-icons/fa';
-import { getUserByEmail } from '~/models/user.server';
+import { getUserByEmail } from '~/models/users.server';
 import { getServices } from '~/models/services.server';
 import { prisma } from '~/utils/db.server';
 

@@ -12,7 +12,7 @@ import { safeRedirect, validateEmail, validatePassword } from '~/utils/functions
 import { createUserSession, login } from '~/utils/session.server';
 import { FaTools } from 'react-icons/fa';
 
-import { getUserByEmail } from '~/models/user.server';
+import { getUserByEmail } from '~/models/users.server';
 
 export const meta: MetaFunction = () => {
 	return {
