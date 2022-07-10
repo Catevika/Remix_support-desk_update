@@ -346,25 +346,7 @@ export function CatchBoundary() {
 			</div>
 			)
 		}		
-		case 401: {
-			return (
-			<div className='error-container' style={{ fontSize: '1.5rem' }}>
-			<div className='form-container form-container-message form-content'>
-				<p>
-					To <span className='error-danger error-danger-big'>update your Account</span>, please
-					send a{' '}
-					<Link to={`/board/employee/tickets/${userId}`}>
-						<span>Ticket</span>
-					</Link>{' '}
-					to the Support Desk.
-				</p>
-				<Link to={`/board/employee/users/${userId}`}>
-					<button className='btn form-btn'>Back to Profile</button>
-				</Link>
-			</div>
-			</div>
-			);
-		}
+		
 		case 404: {
 			return (
 				<div className='error-container'>
@@ -387,12 +369,25 @@ export function ErrorBoundary({ error }: { error: Error; }) {
 		<div className='error-container' style={{ fontSize: '1.5rem' }}>
 			<div className='form-container form-container-message form-content'>
 				<p>
-					To <span className='error-danger error-danger-big'>delete your Account</span>, please
-					send a{' '}
-					<Link to={`/board/employee/users/${userId}`}>
-						<span>Ticket</span>
-					</Link>{' '}
-					to the Support Desk.
+					To <span className='error-danger error-danger-big'>delete your Account:</span>
+				</p>
+				<p>
+					first delete your tickets and their associated notes,
+				</p>
+				<p>
+					then come back to your user profile
+				</p>
+				<p>and click the delete button.</p>
+				<p>
+					OR		
+				</p>	
+				<p>	
+					send a <Link to={`/board/employee/users/${userId}`}><span>Ticket</span></Link>	to the Support Desk.
+				</p>
+				<p>
+					<span className='error-danger error-danger-big'>
+						These actions are irreversible.
+					</span>
 				</p>
 				<Link to={`/board/employee/users/${userId}`}>
 					<button className='btn form-btn'>Back to Profile</button>
