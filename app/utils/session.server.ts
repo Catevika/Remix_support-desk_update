@@ -14,6 +14,14 @@ type RegisterForm = {
   service: string;
 };
 
+type UpdateForm = {
+  id: string;
+  username: string;
+  email: string;
+  password: string;
+  service: string;
+};
+
 type LoginForm = {
   email: string;
   password: string;
@@ -130,3 +138,8 @@ export async function deleteUserById(request: Request, userId: User['id']) {
   });
 }
 
+export async function updateUser({id, username, email, password, service }: UpdateForm) {
+  const passwordHash = await bcrypt.hash(password, 10);
+  const user = await prisma.user.update({ data: { username, email, passwordHash, service } , where: {id}});
+  return { id: user.id, data: user };
+}
