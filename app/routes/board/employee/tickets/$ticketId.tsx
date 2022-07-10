@@ -454,7 +454,7 @@ export function ErrorBoundary({ error }: { error: Error; }) {
 		<div className='error-container' style={{ fontSize: '1.5rem' }}>
 			<div className='form-container form-container-message form-content'>
 				<p>
-					To <span className='error-danger error-danger-big'>delete your Ticket</span>, please <span>delete its associated notes</span> or send a{' '}
+					To <span className='error-danger error-danger-big'>delete your Ticket</span>, <span>delete its associated notes</span> or send a{' '}
 					<Link to='/board/employee/tickets/new-ticket'>
 						<span>Ticket</span>
 					</Link>{' '}

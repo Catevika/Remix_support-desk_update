@@ -209,8 +209,8 @@ export function CatchBoundary() {
 			<div className='error-container' style={{ fontSize: '1.5rem' }}>
 			<div className='form-container form-container-message form-content'>
 				<p>
-					To <span className='error-danger error-danger-big'>update or delete your Account</span>, please
-					use Prisma Studio via 'npx prisma studio' in your Terminal. <em>Will be updated once Prisma + MongoDB managed the cascading deletion.</em>
+					To <span className='error-danger error-danger-big'>update or delete an Account</span>, please
+					<span>delete</span> the associated <span>notes</span> of its tickets then its <span>tickets</span>. <em>Will be updated once Prisma + MongoDB manage the cascading deletion.</em>
 				</p>
 				<Link to='/board/admin/users/userlist'>
 					<button className='btn form-btn'>Back to User List</button>
@@ -241,8 +241,8 @@ export function ErrorBoundary({ error }: { error: Error; }) {
 		<div className='error-container' style={{ fontSize: '1.5rem' }}>
 			<div className='form-container form-container-message form-content'>
 			<p>
-					To <span className='error-danger error-danger-big'>update or delete your Account</span>, please
-					use Prisma Studio via 'npx prisma studio' in your Terminal. <em>Will be updated once Prisma + MongoDB managed the cascading deletion.</em>
+			To <span className='error-danger error-danger-big'>update or delete an Account</span>, please
+					<span>delete</span> the associated <span>notes</span> of its tickets then its <span>tickets</span>. <em>Will be updated once Prisma + MongoDB manage the cascading deletion.</em>
 				</p>
 				<Link to='/board/admin/users/userlist'>
 					<button className='btn form-btn'>Back to User List</button>
