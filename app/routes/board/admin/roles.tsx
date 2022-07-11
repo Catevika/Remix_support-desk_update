@@ -17,7 +17,7 @@ export const loader: LoaderFunction = async () => {
 	return json<LoaderData>({ roles });
 };
 
-export default function RolesRoute() {
+export default function adminRoleRoute() {
 	const { roles } = useLoaderData() as LoaderData;
 	return (
 		<>

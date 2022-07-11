@@ -127,7 +127,7 @@ export const action: ActionFunction = async ({ request, params }) => {
 	return redirect('/board/admin/status/new-status');
 };
 
-export default function NewStatusRoute() {
+export default function adminStatusRoute() {
 	const data = useLoaderData() as LoaderData;
 	const user = data.user;
 

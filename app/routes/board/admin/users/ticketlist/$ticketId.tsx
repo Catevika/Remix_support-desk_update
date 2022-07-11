@@ -8,10 +8,11 @@ import {
 	useFetcher,
 	useCatch,
 	Outlet,
+	useParams,
 	Form
 } from '@remix-run/react';
 
-import { getUser } from '~/utils/session.server';
+import { getUser, requireUserId } from '~/utils/session.server';
 import { prisma } from '~/utils/db.server';
 import { getProducts } from '~/models/products.server';
 import { getStatuses } from '~/models/status.server';
@@ -45,24 +46,24 @@ type LoaderData = {
 };
 
 export const loader: LoaderFunction = async ({ request, params }) => {
-		const [user, statuses, products, ticket, notesByTicketId] = await Promise.all([
-			getUser(request),
-			getStatuses(),
-			getProducts(),
-			getTicket(params.ticketId),
-			getNoteListingByTicketId(params.ticketId)
-		]);
-	
-		const data: LoaderData = {
-			user,
-			products,
-			statuses,
-			ticket,
-			notesByTicketId
-		};
-	
-		return data;
-	}
+	const [user, statuses, products, ticket, notesByTicketId] = await Promise.all([
+		getUser(request),
+		getStatuses(),
+		getProducts(),
+		getTicket(params.ticketId),
+		getNoteListingByTicketId(params.ticketId)
+	]);
+
+	const data: LoaderData = {
+		user,
+		products,
+		statuses,
+		ticket,
+		notesByTicketId
+	};
+
+	return data;
+}
 
 type ActionData = {
 	formError?: string;
@@ -91,7 +92,7 @@ export const action: ActionFunction = async ({ request, params }) => {
 
 	if(intent === 'delete') {
 		await deleteTicket(params.ticketId)
-		return redirect('/board/admin/users/ticketlist');
+		return redirect('/board/employee/tickets');
 	}	
 
 	function onlyNumbers(str: string) {
@@ -124,21 +125,14 @@ export const action: ActionFunction = async ({ request, params }) => {
 		return badRequest({ fieldErrors, fields });
 	}
 
-	const user = await getUser(request);
-	if(!user) {
-		throw new Response('User Not Found.', {
-			status: 404
-		});
-	}
+	const userId = await requireUserId(request);
 
 	const ticketProduct = await prisma.product.findUnique({
 		where: { device: product }
 	});
 
 	if (!ticketProduct) {
-		throw new Response('Product Not Found.', {
-			status: 404
-		});
+		return badRequest({ formError: 'Product not found' });
 	}
 
 	const ticketProductId = ticketProduct.productId;
@@ -146,29 +140,28 @@ export const action: ActionFunction = async ({ request, params }) => {
 	const ticketStatus = await prisma.status.findUnique({ where: { type: status } });
 
 	if (!ticketStatus) {
-		throw new Response('Status Not Found.', {
-			status: 404
-		});
+		return badRequest({ formError: 'Status not found' });
 	}
 
 	const ticketStatusId = ticketStatus.statusId;
 
 	await prisma.ticket.update({
 		data: {
-			authorId: user.id,
+			authorId: userId,
 			ticketProductId,
 			ticketStatusId,
 			title,
 			description
 		},
 		where: { ticketId: params.ticketId }
-		});
+		}
+	);
 	
 	return redirect('/board/admin/users/ticketlist');
 };
 
-export default function NewTicketRoute() {
-	const {ticket, notesByTicketId, statuses, products} = useLoaderData() as LoaderData;
+export default function userTicketIdRoute() {
+	const {user, ticket, notesByTicketId, statuses, products} = useLoaderData() as LoaderData;
 	const actionData = useActionData() as ActionData;
 
 	const fetcher = useFetcher();
@@ -186,217 +179,211 @@ export default function NewTicketRoute() {
 	
 	return (
 		<>
-			<header className='container header'>
-				<Link to='/board/admin/users/ticketlist' className='icon-header'>
+		<header className='container header'>
+				<Link to='/board/employee/' className='icon-header'>
 					<FaTools className='icon-size icon-shadow' /> Back to Board
 				</Link>
-				<h1>User Ticket</h1>
+				<h1>User Profile</h1>
 				<Form action='/logout' method='post'>
 					<button type='submit' className='btn'>
 						Logout
 					</button>
 				</Form>
 			</header>
-			<main className='form-container paragraphe-title'>
-				<p>Ticket from:<span className='capitalize'>&nbsp;{ticket?.author?.username}&nbsp;</span> - Email:<span>&nbsp;{ticket?.author?.email}</span></p>
-				{notesByTicketId?.length ? <em>&nbsp;Scroll to see its associated notes</em> : null}
-				<div className='form-container-ticket'>
-					<div className='form-scroll'>
-						<fetcher.Form reloadDocument method='post' className='form' key={ticket?.ticketId}>
-								<div className='form-content'>
-									<div className='form-group'>
-										<label htmlFor="title">
-											Title:{''}
-											<input
-												type='text'
-												id='title'
-												name='title'
-												defaultValue={ticket?.title}
-												aria-invalid={Boolean(actionData?.fieldErrors?.title)}
-												aria-errormessage={actionData?.fieldErrors?.title ? 'title-error' : undefined}
-												disabled
-											/>
-										{actionData?.fieldErrors?.title ? (
-											<p
-											className='error-danger'
-											role='alert'
-											id='title-error'
-											>
-												{actionData.fieldErrors.title}
-											</p>
-										) : null}
-										</label>
-									</div>
-									<div className='form-group'>
-										<label htmlFor='status'>Status:
-											{statuses.length ? (
-												<select
-													id='status'
-													name='status'
-													defaultValue={ticket ? `${ticket.ticketStatus?.type}` : '-- Please select a status --'}
-													onSelect={(e) => handleSelectStatus}
-													className='form-select'
-												>
-													<option
-														defaultValue='-- Please select a status --'
-														disabled
-														className='form-option-disabled'
-													>
-														-- Please select a status --
-													</option>
-													{statuses.map((status: Status) => (
-														<option
-															key={status.statusId}
-															value={status.type}
-															className='form-option'
-														>
-															{status.type}
-														</option>
-													))}
-												</select>
-											) : (
-												<p className='error-danger'>'No status available'</p>
-											)}
-										</label>
-									</div>
-									<div className='form-group'>
-										<label htmlFor='product'>Product:
-											{products.length ? (
-												<select
-													id='product'
-													name='product'
-													defaultValue={ticket ? `${ticket.ticketProduct?.device}` : '-- Please select a product --'}
-													onSelect={(e) => handleSelectProduct}
-													className='form-select'
-												>
-													<option
-														defaultValue={'-- Please select a product --'}
-														disabled
-														className='form-option-disabled'
-													>
-														-- Please select a product --
-													</option>
-													{products.map((product: Product) => (
-														<option
-															key={product.productId}
-															value={product.device}
-															className='form-option'
-														>
-															{product.device}
-														</option>
-													))}
-												</select>
-											) : (
-												<p className='error-danger'>'No product available'</p>
-											)}
-										</label>
-									</div>
-									<div className='form-group'>
-										<label htmlFor='description'>Issue Description:
-											<textarea
-												defaultValue={ticket?.description}
-												id='description'
-												name='description'
-												aria-invalid={Boolean(actionData?.fieldErrors?.description)}
-												aria-errormessage={actionData?.fieldErrors?.description
-													? 'description-error'
-													: undefined}
-												className='form-textarea'
-												disabled
-											/>
-										</label>
-									</div>
-									{actionData?.fieldErrors?.description ? (
+			<main className='form-container'>
+				<p className='paragraph-title-left'>Ticket from:<span className='capitalize'>&nbsp;{user?.username}&nbsp;</span> - Email:<span>&nbsp;{user?.email}</span>{notesByTicketId?.length ? <em>&nbsp;-&nbsp;Scroll to see its associated notes</em> : null}</p>
+				<div className='form-scroll'>
+					<fetcher.Form reloadDocument method='post' className='form' key={ticket?.ticketId}>
+							<div className='form-content'>
+								<div className='form-group'>
+									<label htmlFor="title">
+										Title:{''}
+										<input
+											type='text'
+											id='title'
+											name='title'
+											defaultValue={ticket?.title}
+											aria-invalid={Boolean(actionData?.fieldErrors?.title)}
+											aria-errormessage={actionData?.fieldErrors?.title ? 'title-error' : undefined}
+											autoFocus
+										/>
+									{actionData?.fieldErrors?.title ? (
 										<p
-											className='error-danger'
-											role='alert'
-											id='description-error'
+										className='error-danger'
+										role='alert'
+										id='title-error'
 										>
-											{actionData.fieldErrors.description}
+											{actionData.fieldErrors.title}
 										</p>
 									) : null}
-									{actionData?.formError ? (
-										<p className='error-danger' role='alert'>
-											{actionData.formError}
-										</p>
-									) : null}
-									{ticket ? (
-										<>
-											<div className='form-group inline'>
-												<label>Created at:&nbsp;
-													<input
-														type='text'
-														id='createdAt'
-														name='createdAt'
-														defaultValue={new Date(ticket.createdAt).toLocaleString('en-us')}
-														disabled
-													/>
-												</label>
-												<label>Updated at:&nbsp;
-													<input
-														type='text'
-														id='updatedAt'
-														name='updatedAt'
-														defaultValue={new Date(ticket.updatedAt).toLocaleString('en-us')}
-														disabled
-													/>
-												</label>
-											</div>
-										</>) : null
-									}
-									<div className='inline'>
-										<button
-											type='submit'
-											name='intent'
-											value='update' className='btn'
-											disabled={isUpdating}
-										>
-										{isUpdating ? 'Updating...' : 'Update'}
-										</button>
-										<Link to='/board/admin/users/ticketlist'>
-											<button className='btn'>Back to Ticket List</button>
-										</Link>
-										<button type='submit' name='intent' value='delete' className='btn  btn-danger' disabled={isDeleting}>
-										{isDeleting ? 'isDeleting...' : 'Delete'}
-										</button>
-										<>
-											<Outlet />
-											<Link to={`/board/admin/users/ticketlist/${ticket?.ticketId}/add`} className='btn btn-small btn-note'>Add Note</Link>
-										</>
-									</div>
-							</div>
-						</fetcher.Form>
-						{notesByTicketId?.length ?
-							<>
-							<div className='table'>
-							<table>
-								<thead>
-									<tr>
-										<th>Title</th>
-										<th>Author</th>
-										<th>Text</th>
-										<th>Date</th>
-										<th></th>
-									</tr>
-								</thead>
-								<tbody>
-									{notesByTicketId?.length ? (
-										notesByTicketId.map((note) => (
-											<tr key={note.noteId}>
-												<td>{note.noteTicket.title}</td>
-												<td>{note.noteUser.username}</td>
-												<td>{note.text}</td>
-												<td>{new Date(note.createdAt).toLocaleString('en-us') !== new Date(note.updatedAt).toLocaleString('en-us') ? <span className='span-table'>{new Date(note.updatedAt).toLocaleString('en-us')}</span> : <span>{new Date(note.createdAt).toLocaleString('en-us')}</span>}</td>
-												<td>
-													<Link to={`/board/employee/tickets/${ticket?.ticketId}/${note.noteId}`}>View</Link>
-												</td>
-											</tr>
-										))) : null}
-								</tbody>
-							</table>
+									</label>
+								</div>
+								<div className='form-group'>
+									<label htmlFor='status'>Status:
+										{statuses.length ? (
+											<select
+												id='status'
+												name='status'
+												defaultValue={ticket?.ticketStatus?.type}
+												onSelect={(e) => handleSelectStatus}
+												className='form-select'
+											>
+												<option
+													defaultValue='-- Please select a status --'
+													disabled
+													className='form-option-disabled'
+												>
+													-- Please select a status --
+												</option>
+												{statuses.map((status: Status) => (
+													<option
+														key={status.statusId}
+														value={status.type}
+														className='form-option'
+													>
+														{status.type}
+													</option>
+												))}
+											</select>
+										) : (
+											<p className='error-danger'>'No status available'</p>
+										)}
+									</label>
+								</div>
+								<div className='form-group'>
+									<label htmlFor='product'>Product:
+										{products.length ? (
+											<select
+												id='product'
+												name='product'
+												defaultValue={ticket?.ticketProduct?.device}
+												onSelect={(e) => handleSelectProduct}
+												className='form-select'
+											>
+												<option
+													defaultValue={'-- Please select a product --'}
+													disabled
+													className='form-option-disabled'
+												>
+													-- Please select a product --
+												</option>
+												{products.map((product: Product) => (
+													<option
+														key={product.productId}
+														value={product.device}
+														className='form-option'
+													>
+														{product.device}
+													</option>
+												))}
+											</select>
+										) : (
+											<p className='error-danger'>'No product available'</p>
+										)}
+									</label>
+								</div>
+								<div className='form-group'>
+									<label htmlFor='description'>Issue Description:
+										<textarea
+											defaultValue={ticket?.description}
+											id='description'
+											name='description'
+											aria-invalid={Boolean(actionData?.fieldErrors?.description)}
+											aria-errormessage={actionData?.fieldErrors?.description
+												? 'description-error'
+												: undefined}
+											className='form-textarea'
+										/>
+									</label>
+								</div>
+								{actionData?.fieldErrors?.description ? (
+									<p
+										className='error-danger'
+										role='alert'
+										id='description-error'
+									>
+										{actionData.fieldErrors.description}
+									</p>
+								) : null}
+								{actionData?.formError ? (
+									<p className='error-danger' role='alert'>
+										{actionData.formError}
+									</p>
+								) : null}
+								{ticket ? (
+									<>
+										<div className='form-group inline'>
+											<label>Created at:&nbsp;
+												<input
+													type='text'
+													id='createdAt'
+													name='createdAt'
+													defaultValue={new Date(ticket.createdAt).toLocaleString('en-us')}
+													disabled
+												/>
+											</label>
+											<label>Updated at:&nbsp;
+												<input
+													type='text'
+													id='updatedAt'
+													name='updatedAt'
+													defaultValue={new Date(ticket.updatedAt).toLocaleString('en-us')}
+													disabled
+												/>
+											</label>
+										</div>
+									</>) : null
+								}
+								<div className='inline'>
+									<button
+										type='submit'
+										name='intent'
+										value='update' className='btn'
+										disabled={isUpdating}
+									>
+									{isUpdating ? 'Updating...' : 'Update'}
+									</button>
+									<Link to='/board/employee/tickets/new-ticket'>
+										<button className='btn'>Back to New Ticket</button>
+									</Link>
+									<button type='submit' name='intent' value='delete' className='btn  btn-danger' disabled={isDeleting}>
+									{isDeleting ? 'isDeleting...' : 'Delete'}
+									</button>
+									<Outlet />
+									<Link to={`/board/employee/tickets/${ticket?.ticketId}/add`} className='btn btn-small btn-note'>Add Note</Link>
+								</div>
 						</div>
-						</> : null}
+					</fetcher.Form>
+					{notesByTicketId?.length ?
+						<>
+						<div className='table'>
+						<table>
+							<thead>
+								<tr>
+									<th>Title</th>
+									<th>Author</th>
+									<th>Text</th>
+									<th>Date</th>
+									<th></th>
+								</tr>
+							</thead>
+							<tbody>
+								{notesByTicketId?.length ? (
+									notesByTicketId.map((note) => (
+										<tr key={note.noteId}>
+											<td>{note.noteTicket.title}</td>
+											<td>{note.noteUser.username}</td>
+											<td>{note.text}</td>
+											<td>{new Date(note.createdAt).toLocaleString('en-us') !== new Date(note.updatedAt).toLocaleString('en-us') ? <span className='span-table'>{new Date(note.updatedAt).toLocaleString('en-us')}</span> : <span>{new Date(note.createdAt).toLocaleString('en-us')}</span>}</td>
+											<td>
+												<Link to={`/board/employee/tickets/${ticket?.ticketId}/${note.noteId}`}>View</Link>
+											</td>
+										</tr>
+									))) : null}
+							</tbody>
+						</table>
 					</div>
+					</> : null}
 				</div>
 				</main>
 		</>
@@ -422,11 +409,21 @@ export function CatchBoundary() {
 }
 
 export function ErrorBoundary({ error }: { error: Error; }) {
-	console.error(error);
+	const { ticketId } = useParams();
+	console.log(error);
 	return (
-		<div className='error-container'>
+		<div className='error-container' style={{ fontSize: '1.5rem' }}>
 			<div className='form-container form-container-message form-content'>
-				Something unexpected went wrong. Sorry about that.
+				<p>
+					To <span className='error-danger error-danger-big'>delete your Ticket</span>, <span>delete its associated notes</span> or send a{' '}
+					<Link to='/board/employee/tickets/new-ticket'>
+						<span>Ticket</span>
+					</Link>{' '}
+					to the Support Desk.
+				</p>
+				<Link to={`/board/employee/tickets/${ticketId}`}>
+					<button className='btn form-btn'>Back to Ticket</button>
+				</Link>
 			</div>
 		</div>
 	);

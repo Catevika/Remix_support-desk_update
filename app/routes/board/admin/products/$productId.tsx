@@ -126,7 +126,7 @@ export const action: ActionFunction = async ({ request, params }) => {
 	return redirect('/board/admin/products/new-product');
 };
 
-export default function NewProductRoute() {
+export default function adminProductRoute() {
 	const data = useLoaderData() as LoaderData;
 	
 	const user = data.user;

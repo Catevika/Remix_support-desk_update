@@ -109,7 +109,7 @@ export const action: ActionFunction = async ({ request, params }) => {
   
 };
 
-export default function viewRoute() {
+export default function userNoteViewRoute() {
   const { note } = useLoaderData() as LoaderData;
   const navigate = useNavigate();
   const actionData = useActionData() as ActionData;

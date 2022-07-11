@@ -20,7 +20,7 @@ export const loader: LoaderFunction = async ({request}) => {
   return json({tickets});
 };
 
-export default function TicketsRoute() {
+export default function adminTicketListRoute() {
 	const { tickets } = useLoaderData() as LoaderData;
 	const [params] = useSearchParams();
   const location = useLocation();
@@ -42,14 +42,13 @@ export default function TicketsRoute() {
 				</Link>
 				<AdminUserNavBar />
 				<LogoutButton />
+				<h1>Manage Ticket List</h1>
 			</header>
 			<main>
 				<div>
 					<p className='inline-left'>
 					<MdMiscellaneousServices className='icon-size icon-container' />
-						Ticket List:&nbsp;<span>{tickets.length}</span>&nbsp;tickets - {tickets.length && (typeof tickets !== 'string') 
-						? <em>To view a Ticket, click on its title</em>
-						: 'No ticket available yet'}
+						Ticket List:&nbsp;<span>{tickets.length}</span>&nbsp;tickets
 					</p>
 					<Form ref={formRef} method="get" action='/board/admin/users/ticketlist' className='search-container'>
 						<label htmlFor="query" className='form-group search-inline'>Search:&nbsp;
@@ -57,7 +56,7 @@ export default function TicketsRoute() {
 							<button type="submit" className="btn btn-search btn-small">
 								<FaSearch className='search-icon' />
 							</button>
-						<Link to='/board/admin/users/ticketlist' className='link-search' >
+						<Link to='/board/admin/users/ticketlist' className='link-search'>
               Back to complete ticketlist
             </Link>
           </label>
@@ -67,7 +66,7 @@ export default function TicketsRoute() {
 							{
 								tickets.map((ticket) => (
 									<ul key={ticket.ticketId} className='card'>
-										<li className='list border-bottom'>Title:&nbsp;<Link to={{ pathname: `/board/admin/users/ticketlist/${ticket.ticketId}`, search: location.search }} prefetch='intent'><span>{ticket.title}</span></Link></li>
+										<li className='inline-between border-bottom'>Title:&nbsp;<Link to={{ pathname: `/board/admin/users/ticketlist/${ticket.ticketId}`, search: location.search }} prefetch='intent'><span>{ticket.title}</span></Link><Link to={{ pathname: `/board/admin/users/ticketlist/${ticket.ticketId}`, search: location.search }} prefetch='intent'>View</Link></li>
 										<li className='list' >Author:&nbsp;<span>{ticket?.author?.username}</span></li>
 										<li className='list' >Status:&nbsp;<span className={
 											ticket?.ticketStatus?.type
@@ -80,7 +79,7 @@ export default function TicketsRoute() {
 								))
 							}
 						</div>
-					) : null}
+					) : 'No ticket available yet'}
 				</div>
 				<div>
 					<Outlet />

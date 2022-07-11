@@ -94,7 +94,7 @@ export const action: ActionFunction = async ({ request, params }) => {
   return redirect(`/board/employee/tickets/${ticketId}`);
 };
 
-export default function Add() {
+export default function userAddTicketRoute() {
   const navigate = useNavigate();
   const actionData = useActionData() as ActionData;
 

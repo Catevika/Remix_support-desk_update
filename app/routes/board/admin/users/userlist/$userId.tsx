@@ -6,11 +6,15 @@ import {
 	useLoaderData,
 	useCatch,
 	useParams,
+	useActionData,
+	useSearchParams,
+	useFetcher,
 } from '@remix-run/react';
-import { User } from "@prisma/client";
-import {deleteUserById} from '~/utils/session.server'
+import {createUserSession, deleteUserById, updateUser} from '~/utils/session.server'
 import { getUserById } from '~/models/users.server';
 import { FaTools } from 'react-icons/fa';
+import { getServices } from '~/models/services.server';
+import { safeRedirect, validateEmail, validatePassword, validateService, validateUsername } from '~/utils/functions';
 
 export const meta: MetaFunction = ({
 	data
@@ -28,7 +32,8 @@ export const meta: MetaFunction = ({
 };
 
 type LoaderData = {
-	user: User;
+	user: Awaited<ReturnType<typeof getUserById>>;
+	services: Awaited<ReturnType<typeof getServices>>;
 };
 
 export const loader: LoaderFunction = async ({ params }) => {
@@ -48,11 +53,71 @@ export const loader: LoaderFunction = async ({ params }) => {
 		});
 	}
 
-	return json<LoaderData>({user});
+	const services = await getServices();
+
+	return json<LoaderData>({user, services});
 };
 
+type ActionData = {
+	formError?: string;
+	fieldErrors?: {
+		username: string | undefined;
+		email: string | undefined;
+		password: string | undefined;
+		service: string | undefined;
+	};
+	fields?: {
+		username: string;
+		email: string;
+		password: string;
+		service: string;
+	};
+};
+
+const badRequest = (data: ActionData) => json(data, { status: 400 });
+
+
 export const action: ActionFunction = async ({ request, params }) => {
-	const formData = await request.formData();
+	const form = await request.formData();
+	if(!params || !params.userId) {
+		return null;
+	}
+	const user = await getUserById(params.userId);
+
+	const username = form.get('username');
+	const email = form.get('email');
+	const password = form.get('password');
+	const service = form.get('service');
+
+	let redirectTo = safeRedirect(form.get('redirectTo') || `/board/admin/users/userlist`);
+
+	if (!username && !email && !password && !service) {
+		return null;
+	}
+
+	if (
+		typeof username !== 'string' ||
+		typeof email !== 'string' ||
+		typeof password !== 'string' ||
+		typeof service !== 'string' ||
+		typeof redirectTo !== 'string'
+	) {
+		return badRequest({ formError: 'Form not submitted correctly.' });
+	}
+
+	const fieldErrors = {
+		username: validateUsername(username),
+		email: validateEmail(email),
+		password: validatePassword(password),
+		service: validateService(service)
+	};
+
+	const fields = { username, email, password, service };
+
+	if (Object.values(fieldErrors).some(Boolean)) {
+		return badRequest({ fieldErrors, fields });
+	}
+
 	const userId = params.userId;
 	if(!userId) {
 		throw new Response('User Not Found.', {
@@ -60,32 +125,44 @@ export const action: ActionFunction = async ({ request, params }) => {
 		});
 	}
 
-	if (formData.get('intent') !== ('update') && formData.get('intent') !== ('delete')) {
-		throw new Response(`The intent ${formData.get('intent')} is not supported`, {
+	if (form.get('intent') !== ('update') && form.get('intent') !== ('delete')) {
+		throw new Response(`The intent ${form.get('intent')} is not supported`, {
 			status: 403
 		});
 	}
 
-	if (formData.get('intent') === ('update')) {
-		throw new Response(`The intent ${formData.get('intent')} requires administrator rights`, {
-			status: 401
-		});
+	if (form.get('intent') === ('update')) {
+		await updateUser({id: userId, username, email, password, service});
+		return createUserSession(userId, redirectTo);
 	}
 
-	if (formData.get('intent') === ('delete')) {
+	if (form.get('intent') === ('delete')) {
 		await deleteUserById(request, userId)
-		return redirect('/board/admin/users/userlist');
+		return redirect('/');
 	}
 };
 
-export default function ProductRoute() {
-	const {user} = useLoaderData() as LoaderData;
+export default function adminUserIdRoute() {
+	const {user, services} = useLoaderData() as LoaderData;
+	const actionData = useActionData() as ActionData;
+	const [searchParams] = useSearchParams();
+	const fetcher = useFetcher();
+
+	function handleSelect(selectedValue: string) {
+		fetcher.submit(
+			{ selected: selectedValue },
+			{ method: 'post', action: '/update' }
+		);
+	}
+
+	const isUpdating = Boolean(fetcher.submission?.formData.get('intent') === 'update');
+	const isDeleting = Boolean(fetcher.submission?.formData.get('intent') === 'delete');
 
 	return (
 		<>
 			<header className='container header'>
-				<Link to='/board/admin/users/userlist' className='icon-header'>
-					<FaTools className='icon-size icon-shadow' /> Back to User List
+				<Link to='/board/employee/' className='icon-header'>
+					<FaTools className='icon-size icon-shadow' /> Back to Board
 				</Link>
 				<h1>User Profile</h1>
 				<Form action='/logout' method='post'>
@@ -98,89 +175,154 @@ export default function ProductRoute() {
 			<main className='form-container form-container-center form-container-user'>
 				<p>User Profile</p>
 				<div className='form-content'>
-					<div className='form-group'>
-						<label htmlFor='userid-input'>User Id:&nbsp;
-							<span>
-								<input
-									type='text'
-									id='userid-input'
-									name='userid'
-									defaultValue={user.id}
-									disabled
-								/>
-							</span>
-						</label>
-					</div>
-					<div className='form-group'>
-						<label htmlFor='username-input'>Name:&nbsp;
-							<span>
+					<fetcher.Form reloadDocument method='post' className='form' key={user?.id}>
+						<input
+							type='hidden'
+							name='redirectTo'
+							value={searchParams.get('redirectTo') ?? undefined}
+						/>
+						<div className='form-group'>
+							<label htmlFor='username-input'>Username
 								<input
 									type='text'
 									id='username-input'
 									name='username'
+									autoComplete='name'
 									defaultValue={user.username}
-									disabled
+									aria-invalid={Boolean(actionData?.fieldErrors?.username)}
+									aria-errormessage={
+										actionData?.fieldErrors?.username
+											? 'username-error'
+											: undefined
+									}
+									autoFocus
 								/>
-							</span>
-						</label>
-					</div>
-					<div className='form-group'>
-					<label htmlFor='email-input'>Email:&nbsp;<span>
-						<input
-							type='email'
-							id='email-input'
-							name='email'
-							defaultValue={user.email}
-							disabled
-						/>
-						</span>
-					</label>
-					</div>
-					<div className='form-group'>
-						<label htmlFor='service-input'>Service:&nbsp;<span>
-							<input
-								type='service'
-								id='service-input'
-								name='service'
-								defaultValue={user.service}
-								disabled
-							/>
-							</span>
-						</label>
-					</div>
-					<div className='form-group inline'>
-						<label>Created at:&nbsp;
-							<input
-								type='text'
-								id='createdAt'
-								name='createdAt'
-								defaultValue={new Date(user.createdAt).toLocaleString('en-us')}
-							/>
-						</label>
-						<label>Updated at:&nbsp;
-							<input
-								type='text'
-								id='updatedAt'
-								name='updatedAt'
-								defaultValue={new Date(user.updatedAt).toLocaleString('en-us')}
-							/>
-						</label>
-					</div>	
-					<div className='inline'>
-						<Form method='post' className='form'>
-							<button type='submit' name='intent' value='update' className='btn form-btn btn-danger'>
-								Update
-							</button>				
-						</Form>
-						<Link to='/board/admin/users/userlist'>
-							<button className='btn form-btn'>Back to User List</button>
-						</Link>
-						<Form method='post' className='form'>
-							<button type='submit' name='intent' value='delete' className='btn form-btn btn-danger'>
-								Delete
+							</label>
+							{actionData?.fieldErrors?.username ? (
+								<p
+									className='error-danger'
+									role='alert'
+									id='username-error'
+								>
+									{actionData.fieldErrors.username}
+								</p>
+							) : null}
+						</div>
+						<div className='form-group'>
+							<label htmlFor='email-input'>Email
+								<input
+									type='email'
+									id='email-input'
+									name='email'
+									autoComplete='email'
+									defaultValue={user.email}
+									aria-invalid={Boolean(actionData?.fieldErrors?.email)}
+									aria-errormessage={
+										actionData?.fieldErrors?.email ? 'email-error' : undefined
+									}
+								/>
+							</label>
+							{actionData?.fieldErrors?.email ? (
+								<p
+									className='error-danger'
+									role='alert'
+									id='email-error'
+								>
+									{actionData.fieldErrors.email}
+								</p>
+							) : null}
+						</div>
+						<div className='form-group'>
+							<label htmlFor='password-input'>Password
+								<input
+									type='password'
+									id='password-input'
+									name='password'
+									defaultValue={''}
+									autoComplete='new-password'
+									aria-invalid={Boolean(actionData?.fieldErrors?.password)}
+									aria-errormessage={
+										actionData?.fieldErrors?.password
+											? 'password-error'
+											: undefined
+									}
+								/>
+							</label>
+							{actionData?.fieldErrors?.password ? (
+								<p
+									className='error-danger'
+									role='alert'
+									id='password-error'
+								>
+									{actionData.fieldErrors.password}
+								</p>
+							) : null}
+						</div>
+						<div className='form-group'>
+							<label htmlFor='service-select'>Service
+								{services.length ? (
+									<select
+										name='service'
+										id='service-select'
+										defaultValue={user.service}
+										onSelect={(e) => handleSelect}
+										className='form-select'
+									>
+										<option
+											defaultValue='-- Please select your service --'
+											disabled
+											className='form-option-disabled'
+										>
+											-- Please select your service --
+										</option>
+										{services.map((service) => (
+											<option
+												key={service.serviceId}
+												value={service.name}
+												className='form-option'
+											>
+												{service.name}
+											</option>
+										))}
+									</select>
+								) : (
+									'No service available'
+								)}
+							</label>
+							{actionData?.fieldErrors?.service ? (
+								<p
+									className='error-danger'
+									role='alert'
+									id='service-error'
+								>
+									{actionData.fieldErrors.service}
+								</p>
+							) : null}
+						</div>
+						<div id='form-error-message'>
+							{actionData?.formError ? (
+								<p className='error-danger' role='alert'>
+									{actionData.formError}
+								</p>
+							) : null}
+						</div>
+						<div className='inline'>
+							<button
+								type='submit'
+								name='intent'
+								value='update' className='btn'
+								disabled={isUpdating}
+							>
+							{isUpdating ? 'Updating...' : 'Update'}
 							</button>
-						</Form>
-					</div>
+							<Link to='/board/admin/users/userlist'>
+								<button className='btn'>Back to Board</button>
+							</Link>
+							<button type='submit' name='intent' value='delete' className='btn  btn-danger' disabled={isDeleting}>
+							{isDeleting ? 'isDeleting...' : 'Delete'}
+							</button>
+						</div>
+					</fetcher.Form>
 				</div>
 			</main>
 			) : null}
@@ -197,28 +339,14 @@ export function CatchBoundary() {
 				<div className='error-container' style={{ fontSize: '1.5rem' }}>
 					<div className='form-container form-container-message form-content'>
 						<p>This action is not supported</p>
-						<Link to='/board/admin/users/userlist'>
-							<button className='btn form-btn'>Back to User List</button>
+						<Link to={`/board/admin/users/userlist/${userId}`}>
+							<button className='btn form-btn'>Back to Profile</button>
 						</Link>
 					</div>
 			</div>
 			)
 		}		
-		case 401: {
-			return (
-			<div className='error-container' style={{ fontSize: '1.5rem' }}>
-			<div className='form-container form-container-message form-content'>
-				<p>
-					To <span className='error-danger error-danger-big'>update or delete an Account</span>, please
-					<span>delete</span> the associated <span>notes</span> of its tickets then its <span>tickets</span>. <em>Will be updated once Prisma + MongoDB manage the cascading deletion.</em>
-				</p>
-				<Link to='/board/admin/users/userlist'>
-					<button className='btn form-btn'>Back to User List</button>
-				</Link>
-			</div>
-			</div>
-			);
-		}
+		
 		case 404: {
 			return (
 				<div className='error-container'>
@@ -240,12 +368,29 @@ export function ErrorBoundary({ error }: { error: Error; }) {
 	return (
 		<div className='error-container' style={{ fontSize: '1.5rem' }}>
 			<div className='form-container form-container-message form-content'>
-			<p>
-			To <span className='error-danger error-danger-big'>update or delete an Account</span>, please
-					<span>delete</span> the associated <span>notes</span> of its tickets then its <span>tickets</span>. <em>Will be updated once Prisma + MongoDB manage the cascading deletion.</em>
+				<p>
+					To <span className='error-danger error-danger-big'>delete an Account:</span>
 				</p>
-				<Link to='/board/admin/users/userlist'>
-					<button className='btn form-btn'>Back to User List</button>
+				<p>
+					first delete its tickets and their associated notes,
+				</p>
+				<p>
+					then come back to the user profile
+				</p>
+				<p>and click the delete button.</p>
+				<p>
+					OR		
+				</p>	
+				<p>	
+					delete the user via the database.
+				</p>
+				<p>
+					<span className='error-danger error-danger-big'>
+						These actions are irreversible.
+					</span>
+				</p>
+				<Link to={`/board/admin/users/userlist/${userId}`}>
+					<button className='btn form-btn'>Back to Profile</button>
 				</Link>
 			</div>
 		</div>

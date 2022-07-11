@@ -17,7 +17,7 @@ export const loader: LoaderFunction = async () => {
 	return json<LoaderData>({ services });
 };
 
-export default function ServicesRoute() {
+export default function adminServiceRoute() {
 	const { services } = useLoaderData() as LoaderData;
 	return (
 		<>

@@ -21,7 +21,7 @@ export const loader: LoaderFunction = async ({request}) => {
   return json({users});
 }
 
-export default function userListRoute() {
+export default function adminUserListRoute() {
   const { users } = useLoaderData() as LoaderData;
   const [params] = useSearchParams();
   const location = useLocation();
@@ -43,14 +43,12 @@ export default function userListRoute() {
 				</Link>
 				<AdminUserNavBar />
 				<LogoutButton />
-				<h1>Manage User Lists</h1>
+				<h1>Manage User List</h1>
 			</header>
       <main>
         <p className='inline-left'>
 					<RiUserSearchLine className='icon-size icon-container' />
-						User List:&nbsp;<span>{users.length}</span>&nbsp;users - {users.length && (typeof users !== 'string') 
-						? <em>To view a User Profile, click on its title</em>
-						: 'No user available yet'}
+						User List:&nbsp;<span>{users.length}</span>&nbsp;users
         </p>
         <Form ref={formRef} method="get" action='/board/admin/users/userlist' className='search-container'>
           <label htmlFor="query" className='form-group search-inline'>Search:&nbsp;
@@ -63,12 +61,12 @@ export default function userListRoute() {
             </Link>
           </label>
         </Form>
+        {users.length && (typeof users !== 'string') ? (
         <div className='flex-container'>
           {
             users.map(user => (
               <ul key={user.id} className="card">
-                <li>UserId:&nbsp;<Link to={{ pathname: `/board/admin/users/userlist/${user.id}`, search: location.search }}><span>{user.id}</span></Link></li>
-                <li>Username:&nbsp;<span>{user.username}</span></li>
+                <li className='inline-between border-bottom'>Username:&nbsp;<Link to={{ pathname: `/board/admin/users/userlist/${user.id}`, search: location.search }}><span>{user.username}</span></Link><Link to={{ pathname: `/board/admin/users/userlist/${user.id}`, search: location.search }}>View</Link></li>
                 <li>Email:&nbsp;<span>{user.email}</span></li>
                 <li>Service:&nbsp;<span>{user.service}</span></li>
                 <li>CreatedAt:&nbsp;<span>{new Date(user.createdAt).toLocaleString('en-us')}</span></li>
@@ -77,6 +75,7 @@ export default function userListRoute() {
             ))
           } 
         </div>
+        ) : 'No user available yet'}
       </main>
     </>
   )

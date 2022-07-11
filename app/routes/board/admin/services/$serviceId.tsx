@@ -127,7 +127,7 @@ export const action: ActionFunction = async ({ request, params }) => {
   return redirect('/board/admin/services/new-service');
 };
 
-export default function NewServiceRoute() {
+export default function adminServiceRoute() {
   const data = useLoaderData() as LoaderData;
   const user = data.user;
 

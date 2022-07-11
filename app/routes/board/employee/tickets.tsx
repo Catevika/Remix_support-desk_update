@@ -18,7 +18,7 @@ export const loader: LoaderFunction = async ({ request }) => {
 	return json<LoaderData>({ ticketsByUserId });
 };
 
-export default function TicketsRoute() {
+export default function employeeTicketRoute() {
 	const { ticketsByUserId } = useLoaderData() as LoaderData;
 
 	return (
@@ -36,15 +36,12 @@ export default function TicketsRoute() {
 					<MdMiscellaneousServices className='icon-size icon-container' />
 						My tickets:&nbsp;<span>{ticketsByUserId.length}</span>
 					</p>
-					{ticketsByUserId.length && (typeof ticketsByUserId !== 'string') 
-						? <em>To view a Ticket, click on its title</em>
-						: 'No ticket available yet'}
 					{ticketsByUserId.length && (typeof ticketsByUserId !== 'string') ? (
 						<div className='nav-ul-container'> 
 							{
 								ticketsByUserId.map((ticket) => (
 									<ul key={ticket.ticketId} className='card'>
-										<li className='list border-bottom'>Title:&nbsp;<Link to={ticket.ticketId} prefetch='intent'><span>{ticket.title}</span></Link></li>
+										<li className='inline-between border-bottom'>Title:&nbsp;<Link to={ticket.ticketId} prefetch='intent'><span>{ticket.title}</span></Link><Link to={ticket.ticketId} prefetch='intent'>View</Link></li>
 										<li className='list' >Author:&nbsp;<span>{ticket?.author?.username}</span></li>
 										<li className='list' >Status:&nbsp;<span className={
 											ticket?.ticketStatus?.type
@@ -57,7 +54,7 @@ export default function TicketsRoute() {
 								))
 							}
 						</div>
-					) : null}
+					) : 'No ticket available yet'}
 				</div>
 				<div>
 					<Outlet />

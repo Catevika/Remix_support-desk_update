@@ -15,7 +15,7 @@ export const loader: LoaderFunction = async () => {
 	return json<LoaderData>({ statuses });
 };
 
-export default function StatusRoute() {
+export default function adminStatusRoute() {
 	const { statuses } = useLoaderData() as LoaderData;
 	return (
 		<>

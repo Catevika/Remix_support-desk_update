@@ -25,7 +25,7 @@ export const loader: LoaderFunction = async ({ request }) => {
   return json<LoaderData>({ user, tickets });
 }
 
-export default function userBoardRoute(): JSX.Element {
+export default function employeeUserBoardRoute() {
   const { user, tickets } = useLoaderData<LoaderData>();
   const lastTicket = tickets ? tickets[0] : null;
 

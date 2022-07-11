@@ -69,12 +69,12 @@ input:focus {
 .form-scroll {
 	overflow-y: scroll;
 	position: fixed;
-	top: 10rem;
-	height: calc(100vh - 10rem);
+	top: 7rem;
+	height: calc(100vh - 7rem);
 	width: 60vw;
 }
 
-.form-scroll::-webkit-scrollbar, .form-scroll-ticket-admin::-webkit-scrollbar {
+.form-scroll::-webkit-scrollbar {
 	width: 0;
 	background: transparent;
 }

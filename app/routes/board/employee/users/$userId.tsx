@@ -142,7 +142,7 @@ export const action: ActionFunction = async ({ request, params }) => {
 	}
 };
 
-export default function ProductRoute() {
+export default function employeeUserIdRoute() {
 	const {user, services} = useLoaderData() as LoaderData;
 	const actionData = useActionData() as ActionData;
 	const [searchParams] = useSearchParams();

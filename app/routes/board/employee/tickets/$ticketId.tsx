@@ -51,7 +51,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 		const [user, statuses, products] = await Promise.all([
 			getUser(request),
 			getStatuses(),
-			getProducts(),
+			getProducts()
 		]);
 
 		const data: LoaderData = {
@@ -192,7 +192,7 @@ export const action: ActionFunction = async ({ request, params }) => {
 	return redirect('/board/employee/tickets/new-ticket');
 };
 
-export default function NewTicketRoute() {
+export default function userTicketIdRoute() {
 	const {user, ticket, notesByTicketId, statuses, products} = useLoaderData() as LoaderData;
 	const actionData = useActionData() as ActionData;
 
@@ -225,8 +225,7 @@ export default function NewTicketRoute() {
 				</Form>
 			</header>
 			<main className='form-container'>
-				<p className='paragraphe-title'>{isNewTicket ? 'New' : null }&nbsp;Ticket from:<span className='capitalize'>&nbsp;{user?.username}&nbsp;</span> - Email:<span>&nbsp;{user?.email}</span></p>
-				{!isNewTicket && notesByTicketId?.length ? <em>&nbsp;Scroll to see your notes</em> : null}
+				<p className='paragraph-title-left'>{isNewTicket ? 'New' : null }&nbsp;Ticket from:<span className='capitalize'>&nbsp;{user?.username}&nbsp;</span> - Email:<span>&nbsp;{user?.email}</span>{notesByTicketId?.length ? <em>&nbsp;-&nbsp;Scroll to see its associated notes</em> : null}</p>
 				<div className='form-scroll'>
 					<fetcher.Form reloadDocument method='post' className='form' key={ticket?.ticketId  ?? 'new-ticket'}>
 							<div className='form-content'>

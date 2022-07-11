@@ -119,7 +119,7 @@ export const action: ActionFunction = async ({ request, params }) => {
 	return redirect('/board/admin/roles/new-role');
 };
 
-export default function NewRoleRoute() {
+export default function adminRoleRoute() {
 	const data = useLoaderData() as LoaderData;
 	const user = data.user;
 

@@ -300,6 +300,14 @@ em {
 	align-items: center;
 }
 
+.inline-between {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	color: var(--light);
+	width: calc(100% - 40px);
+}
+
 .list {
 	display: flex;
 	justify-content: flex-start;
@@ -355,8 +363,8 @@ em {
 	justify-content: flex-start;
 	align-items: flex-start;
 	position: fixed;
-	top: 10rem;
-	height: calc(100% - 10rem);
+	top: 7rem;
+	height: calc(100% - 7rem);
 	min-width: 400px;
 	overflow-y: scroll;
 }
@@ -366,7 +374,12 @@ em {
 	background: transparent;
 }
 
-.paragraphe-title {
+.paragraph-title {
+	margin: 14px;
+	text-align: left;
+}
+
+.paragraph-title-center {
 	margin: 14px;
 	text-align: center;
 }
@@ -389,7 +402,7 @@ em {
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	margin: 20px 0 0;
+	margin: 0;
 	width: 70%;
 }
 
