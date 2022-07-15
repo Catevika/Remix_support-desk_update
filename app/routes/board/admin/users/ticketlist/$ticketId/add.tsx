@@ -1,10 +1,10 @@
 import Dialog from "@reach/dialog";
-import type { ActionFunction, LinksFunction } from "@remix-run/node";
+import type { ActionFunction, LinksFunction, LoaderFunction } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import { Form, useActionData, useNavigate, useParams } from "@remix-run/react";
 import { prisma } from "~/utils/db.server";
 import { validateText } from '~/utils/functions';
-import { requireUserId } from "~/utils/session.server";
+import { getUser } from "~/utils/session.server";
 
 import styles from "@reach/dialog/styles.css";
 import stylesUrl from "~/styles/dialog.css";
@@ -22,6 +22,19 @@ export let links: LinksFunction = () => {
   ];
 };
 
+type LoaderData = {
+	user: Awaited<ReturnType<typeof getUser>>;
+}
+
+export const loader: LoaderFunction = async ({ request }) => {
+  const user = await getUser(request);
+
+  const data: LoaderData = {
+		user
+}
+  return data;
+}
+
 type ActionData = {
   formError?: string;
   fieldErrors?: {
@@ -35,7 +48,14 @@ type ActionData = {
 const badRequest = (data: ActionData) => json(data, { status: 400 });
 
 export const action: ActionFunction = async ({ request, params }) => {
-  const userId = await requireUserId(request);
+  const user = await getUser(request);
+  if(!user) {
+    throw new Response('User Not Found.', {
+      status: 404
+    })
+  }
+
+  const userId = user.id;
 
   if(!params.ticketId) {
     throw new Response('Ticket Not Found.', {
@@ -75,17 +95,17 @@ export const action: ActionFunction = async ({ request, params }) => {
 		});
   }
 
-  const authorId = ticket.authorId;
+  const authorId = userId;
 
   if(!authorId) {
-    throw new Response('Status Not Found.', {
+    throw new Response('Author Not Found.', {
 			status: 404
 		});
   }
 
   await prisma.note.create({
     data: {
-      noteUserId: authorId,
+      noteUserId: userId,
       noteTicketId: ticketId,
       text
     }

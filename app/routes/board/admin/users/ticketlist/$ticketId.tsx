@@ -161,7 +161,7 @@ export const action: ActionFunction = async ({ request, params }) => {
 };
 
 export default function userTicketIdRoute() {
-	const {user, ticket, notesByTicketId, statuses, products} = useLoaderData() as LoaderData;
+	const {ticket, notesByTicketId, statuses, products} = useLoaderData() as LoaderData;
 	const actionData = useActionData() as ActionData;
 
 	const fetcher = useFetcher();
@@ -193,7 +193,7 @@ export default function userTicketIdRoute() {
 			<main className='form-container form-container-admin'>
 				<p className='paragraph-title-left'>Ticket from:<span className='capitalize'>&nbsp;{ticket?.author?.username}&nbsp;</span> - Email:<span>&nbsp;{ticket?.author?.email}</span>{notesByTicketId?.length ? <em>&nbsp;-&nbsp;Scroll to see its associated notes</em> : null}</p>
 				<div className='form-scroll'>
-					<fetcher.Form reloadDocument method='post' className='form' key={ticket?.ticketId}>
+					<fetcher.Form replace method='post' className='form' key={ticket?.ticketId}>
 							<div className='form-content'>
 								<div className='form-group'>
 									<label htmlFor="title">
