@@ -62,6 +62,10 @@ input:focus {
 	width: 50vw;
 }
 
+.form-container-admin {
+	margin-left: 20vw;
+}
+
 .form-container-ticket {
 	margin-left: 20%;
 }

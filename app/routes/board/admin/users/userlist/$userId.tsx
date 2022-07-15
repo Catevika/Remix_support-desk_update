@@ -161,8 +161,8 @@ export default function adminUserIdRoute() {
 	return (
 		<>
 			<header className='container header'>
-				<Link to='/board/employee/' className='icon-header'>
-					<FaTools className='icon-size icon-shadow' /> Back to Board
+				<Link to='/board/admin/users/userlist' className='icon-header'>
+					<FaTools className='icon-size icon-shadow' /> Back to User List
 				</Link>
 				<h1>User Profile</h1>
 				<Form action='/logout' method='post'>
@@ -316,7 +316,7 @@ export default function adminUserIdRoute() {
 							{isUpdating ? 'Updating...' : 'Update'}
 							</button>
 							<Link to='/board/admin/users/userlist'>
-								<button className='btn'>Back to Board</button>
+								<button className='btn'>Back to User List</button>
 							</Link>
 							<button type='submit' name='intent' value='delete' className='btn  btn-danger' disabled={isDeleting}>
 							{isDeleting ? 'isDeleting...' : 'Delete'}
@@ -389,8 +389,8 @@ export function ErrorBoundary({ error }: { error: Error; }) {
 						These actions are irreversible.
 					</span>
 				</p>
-				<Link to={`/board/admin/users/userlist/${userId}`}>
-					<button className='btn form-btn'>Back to Profile</button>
+				<Link to='/board/admin/users/userlist'>
+					<button className='btn form-btn'>Back to User List</button>
 				</Link>
 			</div>
 		</div>

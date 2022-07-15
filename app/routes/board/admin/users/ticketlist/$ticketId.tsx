@@ -92,7 +92,7 @@ export const action: ActionFunction = async ({ request, params }) => {
 
 	if(intent === 'delete') {
 		await deleteTicket(params.ticketId)
-		return redirect('/board/employee/tickets');
+		return redirect('/board/admin/users/ticketlist');
 	}	
 
 	function onlyNumbers(str: string) {
@@ -180,18 +180,18 @@ export default function userTicketIdRoute() {
 	return (
 		<>
 		<header className='container header'>
-				<Link to='/board/employee/' className='icon-header'>
-					<FaTools className='icon-size icon-shadow' /> Back to Board
+				<Link to='/board/admin/users/ticketlist' className='icon-header'>
+					<FaTools className='icon-size icon-shadow' /> Back to Ticket List
 				</Link>
-				<h1>User Profile</h1>
+				<h1>Ticket</h1>
 				<Form action='/logout' method='post'>
 					<button type='submit' className='btn'>
 						Logout
 					</button>
 				</Form>
 			</header>
-			<main className='form-container'>
-				<p className='paragraph-title-left'>Ticket from:<span className='capitalize'>&nbsp;{user?.username}&nbsp;</span> - Email:<span>&nbsp;{user?.email}</span>{notesByTicketId?.length ? <em>&nbsp;-&nbsp;Scroll to see its associated notes</em> : null}</p>
+			<main className='form-container form-container-admin'>
+				<p className='paragraph-title-left'>Ticket from:<span className='capitalize'>&nbsp;{ticket?.author?.username}&nbsp;</span> - Email:<span>&nbsp;{ticket?.author?.email}</span>{notesByTicketId?.length ? <em>&nbsp;-&nbsp;Scroll to see its associated notes</em> : null}</p>
 				<div className='form-scroll'>
 					<fetcher.Form reloadDocument method='post' className='form' key={ticket?.ticketId}>
 							<div className='form-content'>
@@ -343,14 +343,14 @@ export default function userTicketIdRoute() {
 									>
 									{isUpdating ? 'Updating...' : 'Update'}
 									</button>
-									<Link to='/board/employee/tickets/new-ticket'>
-										<button className='btn'>Back to New Ticket</button>
+									<Link to='/board/admin/users/ticketlist/'>
+										<button className='btn'>Back to Ticket List</button>
 									</Link>
 									<button type='submit' name='intent' value='delete' className='btn  btn-danger' disabled={isDeleting}>
 									{isDeleting ? 'isDeleting...' : 'Delete'}
 									</button>
 									<Outlet />
-									<Link to={`/board/employee/tickets/${ticket?.ticketId}/add`} className='btn btn-small btn-note'>Add Note</Link>
+									<Link to={`/board/admin/users/ticketlist/${ticket?.ticketId}/add`} className='btn btn-small btn-note'>Add Note</Link>
 								</div>
 						</div>
 					</fetcher.Form>
@@ -376,7 +376,7 @@ export default function userTicketIdRoute() {
 											<td>{note.text}</td>
 											<td>{new Date(note.createdAt).toLocaleString('en-us') !== new Date(note.updatedAt).toLocaleString('en-us') ? <span className='span-table'>{new Date(note.updatedAt).toLocaleString('en-us')}</span> : <span>{new Date(note.createdAt).toLocaleString('en-us')}</span>}</td>
 											<td>
-												<Link to={`/board/employee/tickets/${ticket?.ticketId}/${note.noteId}`}>View</Link>
+												<Link to={`/board/admin/users/ticketlist/${ticket?.ticketId}/${note.noteId}`}>View</Link>
 											</td>
 										</tr>
 									))) : null}
@@ -385,44 +385,40 @@ export default function userTicketIdRoute() {
 					</div>
 					</> : null}
 				</div>
-				</main>
+			</main>
 		</>
 	);
 }
 
-export function CatchBoundary() {
-	const caught = useCatch();
-
-	if (caught.status === 401) {
-		return (
-			<div className='error-container'>
-				<div className='form-container form-content'>
-					<p>You must be logged in to create a ticket.</p>
-					<Link to='/login?redirectTo=/board/employee/tickets/new-ticket'>
-						<button className='btn form-btn'>Login</button>
-					</Link>
-				</div>
-			</div>
-		);
-	}
-	throw new Error(`Unexpected caught response with status: ${caught.status}`);
-}
-
 export function ErrorBoundary({ error }: { error: Error; }) {
-	const { ticketId } = useParams();
+	const { userId } = useParams();
 	console.log(error);
 	return (
 		<div className='error-container' style={{ fontSize: '1.5rem' }}>
 			<div className='form-container form-container-message form-content'>
 				<p>
-					To <span className='error-danger error-danger-big'>delete your Ticket</span>, <span>delete its associated notes</span> or send a{' '}
-					<Link to='/board/employee/tickets/new-ticket'>
-						<span>Ticket</span>
-					</Link>{' '}
-					to the Support Desk.
+					To <span className='error-danger error-danger-big'>delete a ticket:</span>
 				</p>
-				<Link to={`/board/employee/tickets/${ticketId}`}>
-					<button className='btn form-btn'>Back to Ticket</button>
+				<p>
+					first delete its associated notes,
+				</p>
+				<p>
+					then come back to the ticket
+				</p>
+				<p>and click the delete button.</p>
+				<p>
+					OR		
+				</p>	
+				<p>	
+					delete the ticket via the database.
+				</p>
+				<p>
+					<span className='error-danger error-danger-big'>
+						These actions are irreversible.
+					</span>
+				</p>
+				<Link to={`/board/admin/users/ticketlist`}>
+					<button className='btn form-btn'>Back to Ticket List</button>
 				</Link>
 			</div>
 		</div>
