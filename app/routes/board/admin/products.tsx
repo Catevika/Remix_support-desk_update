@@ -36,20 +36,15 @@ export default function adminProductRoute() {
 							<MdOutlineDevicesOther className='icon-size icon-container' />
 							Available products:&nbsp;<span>{products.length}</span>
 						</p>
-						<p className='inline-left'>
-						{products.length && (typeof products !== 'string') 
-						? <em>To update a Product, click on its title</em>
-						: 'No product available yet'}
-						</p>
 						<div className='nav-ul-container'>
 							<ul>
 								{products.map((product) => (
-									<li key={product.productId}>
+									<li key={product.productId} className='inline-between'>
 										<NavLink to={product.productId} prefetch='intent' className={({ isActive }) =>
 											isActive ? 'active' : undefined
 										}>
-											{product.device}
-										</NavLink>
+											<span>{product.device}</span>
+										</NavLink>&nbsp;<Link to={`/board/admin/products/${product.productId}`}>View</Link>
 									</li>
 								))}
 							</ul>

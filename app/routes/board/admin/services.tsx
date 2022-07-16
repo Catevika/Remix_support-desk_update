@@ -39,20 +39,15 @@ export default function adminServiceRoute() {
 							</IconContext.Provider>
 							Available services:&nbsp;<span>{services.length}</span>
 						</p>
-						<p className='inline-left'>
-						{services.length && (typeof services !== 'string') 
-						? <em>To update a Service, click on its title</em>
-						: 'No service available yet'}
-						</p>
 						<div className='nav-ul-container'>
 							<ul>
 								{services.map((service) => (
-									<li key={service.serviceId}>
+									<li key={service.serviceId} className='inline-between'>
 										<NavLink to={service.serviceId} prefetch='intent' className={({ isActive }) =>
-											isActive ? 'active' : undefined
+											isActive ? 'active inline-between' : undefined
 										}>
-											{service.name}
-										</NavLink>
+											<span>{service.name}</span>
+										</NavLink>&nbsp;<Link to={`/board/admin/services/${service.serviceId}`}>View</Link>
 									</li>
 								))}
 							</ul>

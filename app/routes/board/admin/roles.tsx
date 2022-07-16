@@ -36,20 +36,15 @@ export default function adminRoleRoute() {
 							<MdMiscellaneousServices className='icon-size icon-container' />
 							Available roles:&nbsp;<span>{roles.length}</span>
 						</p>
-						<p className='inline-left'>
-						{roles.length && (typeof roles !== 'string') 
-						? <em>To update a Role, click on its title</em>
-						: 'No role available yet'}
-					</p>
 						<div className='nav-ul-container'>
 							<ul>
 								{roles.map((role) => (
-									<li key={role.roleId}>
+									<li key={role.roleId} className='inline-between'>
 										<NavLink to={role.roleId} prefetch='intent' className={({ isActive }) =>
 											isActive ? 'active' : undefined
 										}>
-											{role.roleType}
-										</NavLink>
+											<span>{role.roleType}</span>
+										</NavLink>&nbsp;<Link to={`/board/admin/roles/${role.roleId}`}>View</Link>
 									</li>
 								))}
 							</ul>

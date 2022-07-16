@@ -140,7 +140,7 @@ export default function adminStatusRoute() {
 	const isDeleting = Boolean(transition.submission?.formData.get('intent') === 'delete');
 
 	return (
-		<main className='form-container form-container-admin'>
+		<main className='form-container'>
 			<div className='form-scroll'>
 				<Form reloadDocument method='post' key={data.status?.statusId ?? 'new-status'}className='form'>
 					<p>

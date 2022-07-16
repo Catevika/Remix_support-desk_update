@@ -34,20 +34,15 @@ export default function adminStatusRoute() {
 						<SiStatuspage className='icon-size icon-container' />
 							Available status:&nbsp;<span>{statuses.length}</span>
 						</p>
-						<p className='inline-left'>
-						{statuses.length && (typeof statuses !== 'string') 
-						? <em>To update a Status, click on its title</em>
-						: 'No status available yet'}
-						</p>
 						<div className='nav-ul-container'>
 							<ul>
 								{statuses.map((status) => (
-									<li key={status.statusId}>
+									<li key={status.statusId} className='inline-between'>
 										<NavLink to={status.statusId} prefetch='intent' className={({ isActive }) =>
 											isActive ? 'active' : undefined
 										}>
-											{status.type}
-										</NavLink>
+											<span>{status.type}</span>
+										</NavLink>&nbsp;<Link to={`/board/admin/status/${status.statusId}`}>View</Link>
 									</li>
 								))}
 							</ul>
