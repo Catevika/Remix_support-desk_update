@@ -499,8 +499,8 @@ table span {
 
 .card {
 	text-align: left;
-	width: 25vw;
-	margin: 0 auto 20px;
+	width: 20vw;
+	margin: 0 10px 10px;
 	padding:1em 1.5em 1em;
 	border: 2px solid rgba(255, 255, 255, 0.1);
 	background-color: var(--dark);

@@ -52,12 +52,12 @@ export default function adminUserListRoute() {
         </p>
         <Form ref={formRef} method="get" action='/board/admin/users/userlist' className='search-container'>
           <label htmlFor="query" className='form-group search-inline'>Search:&nbsp;
-            <input type="search" name="query" id="query" placeholder='Search by username, email or service' aria-label="Search user by username" defaultValue={query ?? undefined } className="search-input"/>
+            <input type="search" name="query" id="query" placeholder='Search by username, email or service' aria-label="Search user by username, email or service" defaultValue={query ?? undefined } className="search-input"/>
             <button type="submit" className="btn btn-search btn-small">
               <FaSearch className='search-icon' />
             </button>
             <Link to='/board/admin/users/userlist' className='link-search' >
-              Back to complete userlist
+              Back to complete user list
             </Link>
           </label>
         </Form>

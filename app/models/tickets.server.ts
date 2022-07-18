@@ -34,7 +34,7 @@ export async function getTicketsBySearchTerm(query: string | undefined) {
         { ticketStatus: {type: { contains: query, mode: 'insensitive' }}},    
         { ticketProduct: {device: { contains: query, mode: 'insensitive' }}}    
       ]
-    }});
+    }, orderBy: { updatedAt: 'desc' }});
   return tickets;
   }
 }

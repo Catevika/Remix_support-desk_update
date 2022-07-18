@@ -11,12 +11,12 @@ function AdminNavBar() {
         </li>
         <li>
           <NavLink to={'/board/admin/users/ticketlist'}>
-            User Tickets
+            Ticket List
           </NavLink>
         </li>
         <li>
-          <NavLink to={'/board/admin/users/tickets/notes'}>
-            User Notes
+          <NavLink to={'/board/admin/users/notelist'}>
+            Note List
           </NavLink>
         </li>
       </ul>

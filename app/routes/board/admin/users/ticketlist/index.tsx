@@ -52,12 +52,12 @@ export default function adminTicketListRoute() {
 					</p>
 					<Form ref={formRef} method="get" action='/board/admin/users/ticketlist' className='search-container'>
 						<label htmlFor="query" className='form-group search-inline'>Search:&nbsp;
-							<input type="search" name="query" id="query" placeholder='Search by title, author, status or product' aria-label="Search user by username" defaultValue={query ?? undefined } className="search-input"/>
+							<input type="search" name="query" id="query" placeholder='Search by title, author, status or product' aria-label="Search ticket by by title, author, status or product" defaultValue={query ?? undefined } className="search-input"/>
 							<button type="submit" className="btn btn-search btn-small">
 								<FaSearch className='search-icon' />
 							</button>
 						<Link to='/board/admin/users/ticketlist' className='link-search'>
-              Back to complete ticketlist
+              Back to complete ticket list
             </Link>
           </label>
 					</Form>

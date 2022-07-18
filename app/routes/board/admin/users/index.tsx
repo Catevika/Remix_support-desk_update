@@ -51,12 +51,12 @@ export default function adminUserBoardRoute() {
           </li>
           <li>
             <NavLink to='/board/admin/users/ticketlist'>
-              User Tickets
+              Ticket List
             </NavLink>
           </li>
           <li>
-            <NavLink to='/board/admin/users/notes'>
-              User Notes
+            <NavLink to='/board/admin/users/notelist'>
+              Note List
             </NavLink>
           </li>
         </ul>
