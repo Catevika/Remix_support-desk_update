@@ -36,7 +36,7 @@ export default function adminRoleRoute() {
 					<div>
 						<p className='inline-left'>
 							<MdMiscellaneousServices className='icon-size icon-container' />
-							Available roles:&nbsp;<span>{roles.length}</span>
+							Role List:&nbsp;<span>{roles.length}</span>&nbsp;roles
 						</p>
 						<nav className='nav-ul-container'>
 							<ul>

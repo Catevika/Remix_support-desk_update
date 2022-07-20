@@ -34,7 +34,7 @@ export default function adminStatusRoute() {
 					<div>
 						<p className='inline-left'>
 						<SiStatuspage className='icon-size icon-container' />
-							Available status:&nbsp;<span>{statuses.length}</span>
+							Status List:&nbsp;<span>{statuses.length}</span>&nbsp;status
 						</p>
 						<nav className='nav-ul-container'>
 							<ul>

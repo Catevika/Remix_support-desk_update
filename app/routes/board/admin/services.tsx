@@ -39,7 +39,7 @@ export default function adminServiceRoute() {
 						>
 							<MdAutoAwesome className='icon-size icon-container' />
 							</IconContext.Provider>
-							Available services:&nbsp;<span>{services.length}</span>
+							Service List:&nbsp;<span>{services.length}</span>&nbsp;services
 						</p>
 						<nav className='nav-ul-container'>
 							<ul>

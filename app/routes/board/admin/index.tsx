@@ -42,29 +42,39 @@ export default function adminBoardRoute() {
       </main>
       <nav className='nav'>
         <ul>
+        <li>
+            <NavLink to='/board/admin/users/userlist'>
+              User List
+            </NavLink>
+          </li>
           <li>
-            <NavLink to={'/board/admin/users'}>
-              Users
+            <NavLink to='/board/admin/users/ticketlist'>
+              Ticket List
+            </NavLink>
+          </li>
+          <li className='border-bottom'>
+            <NavLink to='/board/admin/users/notelist'>
+              Note List
             </NavLink>
           </li>
           <li>
             <NavLink to={'/board/admin/services/new-service'}>
-              Services
+              Service List
             </NavLink>
           </li>
           <li>
             <NavLink to={'/board/admin/products/new-product'}>
-              Products
+              Product List
             </NavLink>
           </li>
           <li>
             <NavLink to={'/board/admin/roles/new-role'}>
-              Roles
+              Role List
             </NavLink>
           </li>
           <li>
             <NavLink to={'/board/admin/status/new-status'}>
-              Status
+              Status List
             </NavLink>
           </li>
         </ul>

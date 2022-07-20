@@ -2,7 +2,7 @@ import type { LoaderFunction } from '@remix-run/node';
 import { json } from '@remix-run/node';
 import { Outlet, useLoaderData, Link, useCatch, Form, useSearchParams, useLocation } from '@remix-run/react';
 import { getTickets, getTicketsBySearchTerm } from '~/models/tickets.server';
-import AdminUserNavBar from "~/components/AdminUserNavBar";
+import AdminNavBar from "~/components/AdminNavBar";
 import LogoutButton from '~/components/LogoutButton';
 import { MdMiscellaneousServices } from 'react-icons/md';
 import { FaSearch, FaTools } from 'react-icons/fa';
@@ -37,10 +37,10 @@ export default function adminTicketListRoute() {
 	return (
 		<>
 			<header className='container header'>
-				<Link to='/board/admin/users' className='icon-header'>
-					<FaTools className='icon-size icon-shadow' /> Back to User Board
+				<Link to='/board/admin' className='icon-header'>
+					<FaTools className='icon-size icon-shadow' /> Back to Board
 				</Link>
-				<AdminUserNavBar />
+				<AdminNavBar />
 				<div className='header-flex'>
 					<h1>Manage Ticket List</h1>
 					<LogoutButton />

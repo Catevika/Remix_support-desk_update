@@ -36,7 +36,7 @@ export default function adminProductRoute() {
 					<div>
 						<p className='inline-left'>
 							<MdOutlineDevicesOther className='icon-size icon-container' />
-							Available products:&nbsp;<span>{products.length}</span>
+							Product List:&nbsp;<span>{products.length}</span>&nbsp;products
 						</p>
 						<nav className='nav-ul-container'>
 							<ul>

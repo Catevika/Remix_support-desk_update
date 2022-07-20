@@ -2,7 +2,7 @@ import type { LoaderFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { Form, Link, useLoaderData, useLocation, useSearchParams } from "@remix-run/react";
 import { FaSearch, FaTools } from "react-icons/fa";
-import AdminUserNavBar from "~/components/AdminUserNavBar";
+import AdminNavBar from "~/components/AdminNavBar";
 import LogoutButton from "~/components/LogoutButton";
 import { RiUserSearchLine } from "react-icons/ri";
 
@@ -38,10 +38,10 @@ export default function adminUserListRoute() {
   return (
     <>
       <header className='container header'>
-				<Link to='/board/admin/users' className='icon-header'>
-					<FaTools className='icon-size icon-shadow' /> Back to User Board
+				<Link to='/board/admin' className='icon-header'>
+					<FaTools className='icon-size icon-shadow' /> Back to Board
 				</Link>
-				<AdminUserNavBar />
+				<AdminNavBar />
 				<div className="header-flex">
           <h1>Manage User List</h1>
           <LogoutButton />
