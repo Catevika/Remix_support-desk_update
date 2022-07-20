@@ -24,8 +24,10 @@ export default function adminStatusRoute() {
 					<FaTools className='icon-size icon-shadow' /> Back to Board
 				</Link>
 				<AdminNavBar />
-				<LogoutButton />
-				<h1>Manage Status List</h1>
+				<div className='header-flex'>
+					<h1>Manage Status List</h1>
+					<LogoutButton />
+				</div>
 			</header>
 			<main className='grid-container'>
 				{statuses.length ? (
@@ -34,7 +36,7 @@ export default function adminStatusRoute() {
 						<SiStatuspage className='icon-size icon-container' />
 							Available status:&nbsp;<span>{statuses.length}</span>
 						</p>
-						<div className='nav-ul-container'>
+						<nav className='nav-ul-container'>
 							<ul>
 								{statuses.map((status) => (
 									<li key={status.statusId} className='inline-between'>
@@ -46,9 +48,9 @@ export default function adminStatusRoute() {
 									</li>
 								))}
 							</ul>
-						</div>
+						</nav>
 					</div>
-				) : "No status available yet."}
+				) : <p className='form-container form-content'>No status available yet</p>}
 				<div>
 					<Outlet />
 				</div>

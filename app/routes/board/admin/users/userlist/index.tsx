@@ -42,8 +42,10 @@ export default function adminUserListRoute() {
 					<FaTools className='icon-size icon-shadow' /> Back to User Board
 				</Link>
 				<AdminUserNavBar />
-				<LogoutButton />
-				<h1>Manage User List</h1>
+				<div className="header-flex">
+          <h1>Manage User List</h1>
+          <LogoutButton />
+				</div>
 			</header>
       <main>
         <p className='inline-left'>
@@ -75,7 +77,7 @@ export default function adminUserListRoute() {
             ))
           } 
         </div>
-        ) : 'No user available yet'}
+        ) : <p className='form-container form-content'>No user available yet</p>}
       </main>
     </>
   )

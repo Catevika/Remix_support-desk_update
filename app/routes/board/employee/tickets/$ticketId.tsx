@@ -8,8 +8,7 @@ import {
 	useFetcher,
 	useCatch,
 	Outlet,
-	useParams,
-	Form
+	useParams
 } from '@remix-run/react';
 
 import { getUser, requireUserId } from '~/utils/session.server';
@@ -20,6 +19,7 @@ import { validateTitle, validateDescription } from '~/utils/functions';
 import { getTicket, deleteTicket } from '~/models/tickets.server';
 import { getNoteListingByTicketId } from '~/models/notes.server';
 import { FaTools } from 'react-icons/fa';
+import LogoutButton from '~/components/LogoutButton';
 
 export const meta: MetaFunction = ({
 	data
@@ -108,12 +108,6 @@ export const action: ActionFunction = async ({ request, params }) => {
 	const status = form.get('status');
 	const product = form.get('product');
 	const description = form.get('description');
-	const intent = form.get('intent');
-
-	if(intent === 'delete') {
-		await deleteTicket(params.ticketId)
-		return redirect('/board/employee/tickets');
-	}	
 
 	function onlyNumbers(str: string) {
 		return /^[0-9]+$/.test(str);
@@ -207,9 +201,9 @@ export default function userTicketIdRoute() {
 	}
 
 	const isNewTicket = !ticket ;
+	const hasNotes = notesByTicketId && notesByTicketId.length > 1;
 	const isCreating = Boolean(fetcher.submission?.formData.get('intent') === 'create');
 	const isUpdating = Boolean(fetcher.submission?.formData.get('intent') === 'update');
-	const isDeleting = Boolean(fetcher.submission?.formData.get('intent') === 'delete');
 	
 	return (
 		<>
@@ -218,11 +212,7 @@ export default function userTicketIdRoute() {
 					<FaTools className='icon-size icon-shadow' /> Back to Board
 				</Link>
 				<h1>User Profile</h1>
-				<Form action='/logout' method='post'>
-					<button type='submit' className='btn'>
-						Logout
-					</button>
-				</Form>
+				<LogoutButton />
 			</header>
 			<main className='form-container'>
 				<p className='paragraph-title-left'>{isNewTicket ? 'New' : null }&nbsp;Ticket from:<span className='capitalize'>&nbsp;{user?.username}&nbsp;</span> - Email:<span>&nbsp;{user?.email}</span>{notesByTicketId?.length ? <em>&nbsp;-&nbsp;Scroll to see its associated notes</em> : null}</p>
@@ -381,14 +371,15 @@ export default function userTicketIdRoute() {
 									{isNewTicket ? null : <Link to='/board/employee/tickets/new-ticket'>
 										<button className='btn'>Back to New Ticket</button>
 									</Link>}
-									{ isNewTicket ? null : <button type='submit' name='intent' value='delete' className='btn  btn-danger' disabled={isDeleting}>
-									{isDeleting ? 'isDeleting...' : 'Delete'}
-									</button>}
 									{!isNewTicket ?
 									<>
 										<Outlet />
 										<Link to={`/board/employee/tickets/${ticket?.ticketId}/add`} className='btn btn-small btn-note'>Add Note</Link>
 									</> : null}
+								</div>
+								<div className='inline'>	
+								{isNewTicket ? null : (hasNotes ? <Link to={`/board/employee/tickets/${ticket?.ticketId}/deleteNote`} className='btn btn-small btn-danger'>Delete all Notes</Link> : null)}
+								{ isNewTicket ? null : <Link to={`/board/employee/tickets/${ticket?.ticketId}/deleteTicket`} className='btn btn-small btn-danger'>Delete Ticket</Link>}
 								</div>
 						</div>
 					</fetcher.Form>
@@ -400,6 +391,7 @@ export default function userTicketIdRoute() {
 								<tr>
 									<th>Title</th>
 									<th>Author</th>
+									<th>Product</th>
 									<th>Text</th>
 									<th>Date</th>
 									<th></th>
@@ -411,6 +403,7 @@ export default function userTicketIdRoute() {
 										<tr key={note.noteId}>
 											<td>{note.noteTicket.title}</td>
 											<td>{note.noteUser.username}</td>
+											<td>{note.noteTicket.ticketProduct?.device}</td>
 											<td>{note.text}</td>
 											<td>{new Date(note.createdAt).toLocaleString('en-us') !== new Date(note.updatedAt).toLocaleString('en-us') ? <span className='span-table'>{new Date(note.updatedAt).toLocaleString('en-us')}</span> : <span>{new Date(note.createdAt).toLocaleString('en-us')}</span>}</td>
 											<td>

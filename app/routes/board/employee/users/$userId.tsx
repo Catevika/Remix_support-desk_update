@@ -15,6 +15,7 @@ import { getUserById } from '~/models/users.server';
 import { FaTools } from 'react-icons/fa';
 import { getServices } from '~/models/services.server';
 import { safeRedirect, validateEmail, validatePassword, validateService, validateUsername } from '~/utils/functions';
+import LogoutButton from '~/components/LogoutButton';
 
 export const meta: MetaFunction = ({
 	data
@@ -165,11 +166,7 @@ export default function employeeUserIdRoute() {
 					<FaTools className='icon-size icon-shadow' /> Back to Board
 				</Link>
 				<h1>User Profile</h1>
-				<Form action='/logout' method='post'>
-					<button type='submit' className='btn'>
-						Logout
-					</button>
-				</Form>
+				<LogoutButton />
 			</header>
 			{user ? (
 			<main className='form-container form-container-center form-container-user'>
@@ -386,7 +383,7 @@ export function ErrorBoundary({ error }: { error: Error; }) {
 				</p>
 				<p>
 					<span className='error-danger error-danger-big'>
-						These actions are irreversible.
+						These actions are permanent.
 					</span>
 				</p>
 				<Link to={`/board/employee/users/${userId}`}>

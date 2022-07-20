@@ -41,8 +41,10 @@ export default function adminNoteListRoute() {
 					<FaTools className='icon-size icon-shadow' /> Back to User Board
 				</Link>
 				<AdminUserNavBar />
-				<LogoutButton />
-				<h1>Manage Note List</h1>
+				<div className='header-flex'>
+					<h1>Manage Note List</h1>
+					<LogoutButton />
+				</div>
 			</header>
 			<main>
 				<div>
@@ -75,7 +77,7 @@ export default function adminNoteListRoute() {
 								))
 							}
 						</div>
-					) : 'No note available yet'}
+					) : <p className='form-container form-content'>No note available yet</p>}
 				</div>
 				<div>
 					<Outlet />

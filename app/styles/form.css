@@ -94,6 +94,10 @@ input:focus {
 	margin-top: 20px;
 }
 
+.form-logout {
+	margin-left: 20px;
+}
+
 .form-option-disabled {
 	color: var(--hover);
 }

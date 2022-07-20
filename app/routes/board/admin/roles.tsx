@@ -26,8 +26,10 @@ export default function adminRoleRoute() {
 					<FaTools className='icon-size icon-shadow' /> Back to Board
 				</Link>
 				<AdminNavBar />
-				<LogoutButton />
-				<h1>Manage Role List</h1>
+				<div className='header-flex'>
+					<h1>Manage Role List</h1>
+					<LogoutButton />
+				</div>
 			</header>
 			<main className='grid-container'>
 				{roles.length ? (
@@ -36,7 +38,7 @@ export default function adminRoleRoute() {
 							<MdMiscellaneousServices className='icon-size icon-container' />
 							Available roles:&nbsp;<span>{roles.length}</span>
 						</p>
-						<div className='nav-ul-container'>
+						<nav className='nav-ul-container'>
 							<ul>
 								{roles.map((role) => (
 									<li key={role.roleId} className='inline-between'>
@@ -48,9 +50,9 @@ export default function adminRoleRoute() {
 									</li>
 								))}
 							</ul>
-						</div>
+						</nav>
 					</div>
-				) : "No role available yet."}
+				) : <p className='form-container form-content'>No role available yet</p>}
 				<div>
 					<Outlet />
 				</div>

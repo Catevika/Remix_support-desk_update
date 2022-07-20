@@ -20,6 +20,7 @@ import { validateTitle, validateDescription } from '~/utils/functions';
 import { getTicket, deleteTicket } from '~/models/tickets.server';
 import { getNoteListingByTicketId } from '~/models/notes.server';
 import { FaTools } from 'react-icons/fa';
+import LogoutButton from '~/components/LogoutButton';
 
 export const meta: MetaFunction = ({
 	data
@@ -90,8 +91,10 @@ export const action: ActionFunction = async ({ request, params }) => {
 	const description = form.get('description');
 	const intent = form.get('intent');
 
+	const ticketId = params.ticketId
+
 	if(intent === 'delete') {
-		await deleteTicket(params.ticketId)
+		await deleteTicket(ticketId)
 		return redirect('/board/admin/users/ticketlist');
 	}	
 
@@ -125,7 +128,16 @@ export const action: ActionFunction = async ({ request, params }) => {
 		return badRequest({ fieldErrors, fields });
 	}
 
-	const userId = await requireUserId(request);
+	// const userId = await requireUserId(request);
+	const ticket = await prisma.ticket.findUnique({
+		where: {ticketId}
+	})
+
+	const authorId = ticket?.authorId;
+
+	if(!authorId) {
+		return badRequest({ formError: 'Author not found'});
+	}
 
 	const ticketProduct = await prisma.product.findUnique({
 		where: { device: product }
@@ -147,7 +159,7 @@ export const action: ActionFunction = async ({ request, params }) => {
 
 	await prisma.ticket.update({
 		data: {
-			authorId: userId,
+			authorId,
 			ticketProductId,
 			ticketStatusId,
 			title,
@@ -184,11 +196,7 @@ export default function userTicketIdRoute() {
 					<FaTools className='icon-size icon-shadow' /> Back to Ticket List
 				</Link>
 				<h1>Ticket</h1>
-				<Form action='/logout' method='post'>
-					<button type='submit' className='btn'>
-						Logout
-					</button>
-				</Form>
+				<LogoutButton />
 			</header>
 			<main className='form-container form-container-admin'>
 				<p className='paragraph-title-left'>Ticket from:<span className='capitalize'>&nbsp;{ticket?.author?.username}&nbsp;</span> - Email:<span>&nbsp;{ticket?.author?.email}</span>{notesByTicketId?.length ? <em>&nbsp;-&nbsp;Scroll to see its associated notes</em> : null}</p>
@@ -414,7 +422,7 @@ export function ErrorBoundary({ error }: { error: Error; }) {
 				</p>
 				<p>
 					<span className='error-danger error-danger-big'>
-						These actions are irreversible.
+						These actions are permanent.
 					</span>
 				</p>
 				<Link to={`/board/admin/users/ticketlist`}>

@@ -152,7 +152,7 @@ em {
 }
 
 .btn-small {
-	padding: 5px 10px;
+	padding: 8px 10px;
 }
 
 .btn-view {
@@ -227,6 +227,12 @@ em {
 	background-color: var(--dark);
 	box-shadow: 5px 5px 15px #211b36, -5px -5px 15px #372f5c;
 	z-index: 100;
+}
+
+.header-flex {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
 }
 
 .main-text {

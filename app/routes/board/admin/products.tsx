@@ -26,8 +26,10 @@ export default function adminProductRoute() {
 					<FaTools className='icon-size icon-shadow' /> Back to Board
 				</Link>
 				<AdminNavBar />
-				<LogoutButton />
-				<h1>Manage Product List</h1>
+				<div className='header-flex'>
+					<h1>Manage Product List </h1>
+					<LogoutButton />
+				</div>
 			</header>
 			<main className='grid-container'>
 				{products.length ? (
@@ -36,7 +38,7 @@ export default function adminProductRoute() {
 							<MdOutlineDevicesOther className='icon-size icon-container' />
 							Available products:&nbsp;<span>{products.length}</span>
 						</p>
-						<div className='nav-ul-container'>
+						<nav className='nav-ul-container'>
 							<ul>
 								{products.map((product) => (
 									<li key={product.productId} className='inline-between'>
@@ -48,9 +50,9 @@ export default function adminProductRoute() {
 									</li>
 								))}
 							</ul>
-						</div>
+						</nav>
 					</div>
-				) : "No product available yet."}
+				) : <p className='form-container form-content'>No product available yet</p>}
 				<div>
 					<Outlet />
 				</div>
