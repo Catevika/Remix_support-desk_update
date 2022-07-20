@@ -14,7 +14,7 @@ export async function getTicket(ticketId: string | undefined) {
 
 export async function getTicketListingByUserId(userId: string | undefined) {
   return userId ? await prisma.ticket.findMany({
-    select: { author: {select: {id: true, username: true, email: true}}, authorId: true, ticketId: true, title: true, createdAt: true, updatedAt: true, ticketStatus: true, ticketProduct: true },
+    select: { author: {select: {id: true, username: true, email: true}}, authorId: true, ticketId: true, title: true, createdAt: true, updatedAt: true, ticketStatus: true, ticketProduct: true, Notes: true },
     where: { authorId: userId },
     orderBy: { updatedAt: 'desc' }
   }) : 'No ticket available';
@@ -42,3 +42,7 @@ export async function getTicketsBySearchTerm(query: string | undefined) {
 export async function deleteTicket(ticketId: string | undefined) {
   return await prisma.ticket.delete({ where: { ticketId } });
 }
+
+export async function deleteAllTicketsByUserId(userId: string | undefined) {
+  return userId ? await prisma.ticket.deleteMany({ where: { authorId: userId }}) : null
+} 
