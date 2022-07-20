@@ -49,12 +49,13 @@ export default function employeeTicketRoute() {
 												: undefined
 										}>{ticket?.ticketStatus?.type}</span></li>
 										<li className='list'>Product:&nbsp;<span>{ticket?.ticketProduct?.device}</span></li>
+										<li className='list'>Notes:&nbsp;<span>{ticket?.Notes.length}</span></li>
 										<li className='list'>Date:&nbsp;{new Date(ticket.createdAt).toLocaleString('en-us') !== new Date(ticket.updatedAt).toLocaleString('en-us') ? <span>{new Date(ticket.updatedAt).toLocaleString('en-us')}</span> : <span>{new Date(ticket.createdAt).toLocaleString('en-us')}</span>}</li>
 									</ul>
 								))
 							}
 						</div>
-					) : 'No ticket available yet'}
+					) : <p className='form-container form-content'>No ticket available yet</p>}
 				</div>
 				<div>
 					<Outlet />
