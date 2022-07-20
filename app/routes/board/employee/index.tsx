@@ -60,7 +60,7 @@ export default function employeeUserBoardRoute() {
             <li>
             <NavLink to={(lastTicket && typeof lastTicket !== 'string') ? (`/board/employee/tickets/${lastTicket.ticketId}`) : ('/board/employee/tickets/new-ticket')} className='btn btn-block nav-links'>
             <FaTicketAlt className='icon-size icon-space' />
-                &nbsp;Tickets
+                &nbsp;View Tickets
             </NavLink>
             </li>
             <li>
@@ -69,7 +69,7 @@ export default function employeeUserBoardRoute() {
                 className='btn btn-block nav-links'
               >
                 <CgProfile className='icon-size icon-space' />
-                &nbsp;Profile
+                &nbsp;View Profile
               </NavLink>
             </li>
           </ul>
