@@ -5,13 +5,6 @@ function AdminNavBar() {
     <nav>
       <ul className='nav-links'>
         <li>
-          <NavLink to={'/board/admin/users/new-user'} className={({ isActive }) =>
-            isActive ? 'active' : undefined
-          }>
-            Users
-          </NavLink>
-        </li>
-        <li>
           <NavLink to={'/board/admin/services/new-service'} className={({ isActive }) =>
             isActive ? 'active' : undefined
           }>
