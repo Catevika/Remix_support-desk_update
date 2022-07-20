@@ -111,7 +111,7 @@ export default function userAddTicketRoute() {
       onDismiss={onDismiss}
     >
       <p>New Note:</p>
-      <Form className="form" method="post" replace>
+      <Form className="form" method="post" reloadDocument>
         <div className="form-group">
           <label className="label" htmlFor="text">
             Text:
