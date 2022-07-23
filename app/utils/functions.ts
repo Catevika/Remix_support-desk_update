@@ -44,7 +44,7 @@ export function validatePassword(password: unknown) {
 }
 
 export function validateService(service: unknown) {
-  if (service === '-- Please select your service --') {
+  if (service === '-- Select your service --') {
     return 'A service must be selected';
   }
 }

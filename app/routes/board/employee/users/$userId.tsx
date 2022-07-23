@@ -165,12 +165,11 @@ export default function employeeUserIdRoute() {
 				<Link to='/board/employee/' className='icon-header'>
 					<FaTools className='icon-size icon-shadow' /> Back to Board
 				</Link>
-				<h1>User Profile</h1>
+				<p>User Profile</p>
 				<LogoutButton />
 			</header>
 			{user ? (
-			<main className='form-container form-container-center form-container-user'>
-				<p>User Profile</p>
+			<main className='form-container-center'>
 				<div className='form-content'>
 					<fetcher.Form reloadDocument method='post' className='form' key={user?.id}>
 						<input
@@ -266,11 +265,11 @@ export default function employeeUserIdRoute() {
 										className='form-select'
 									>
 										<option
-											defaultValue='-- Please select your service --'
+											defaultValue='-- Select your service --'
 											disabled
 											className='form-option-disabled'
 										>
-											-- Please select your service --
+											-- Select your service --
 										</option>
 										{services.map((service) => (
 											<option

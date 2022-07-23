@@ -86,9 +86,7 @@ export const action: ActionFunction = async ({ request }) => {
 	}
 	
 	const userExists = await prisma.user.findUnique({
-    where: {
-      email
-    },
+    where: { email }
   });
 
 	if (userExists) {
@@ -139,15 +137,13 @@ export default function Register() {
 		<>
 			<header className='container header'>
 				<Link to='/login' className='icon-header'>
-					<FaTools className='icon-size icon-shadow icon-linked icon-header' />&nbsp;Login
+					<FaTools className='icon-size icon-shadow icon-linked icon-header' />Login
 				</Link>
-				<h1>Register to access the Support-Desk!</h1>
+				<p>Register to get support!</p>
 			</header>
-			<div className='form-container-center form-container-login-register'>
-			<h2>Register</h2>
-			<h3>
-				Already registered? <Link to='/login'><span>&nbsp;Login</span></Link>&nbsp;instead!
-			</h3>
+			<div className='form-container-center'>
+				<h1>Register</h1>
+				<em>Already registered? <Link to='/login'><span>Login</span></Link></em>
 				<div className='form-content'>
 					<fetcher.Form reloadDocument method='post' className='form'>
 						<input
@@ -238,16 +234,16 @@ export default function Register() {
 									<select
 										name='service'
 										id='service-select'
-										defaultValue='-- Please select your service --'
+										defaultValue='-- Select your service --'
 										onSelect={(e) => handleSelect}
 										className='form-select'
 									>
 										<option
-											defaultValue='-- Please select your service --'
+											defaultValue='-- Select your service --'
 											disabled
 											className='form-option-disabled'
 										>
-											-- Please select your service --
+											-- Select your service --
 										</option>
 										{services.map((service) => (
 											<option

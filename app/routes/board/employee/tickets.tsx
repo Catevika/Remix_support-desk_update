@@ -27,39 +27,72 @@ export default function employeeTicketRoute() {
 				<Link to='/board/employee' className='icon-header'>
 					<FaTools className='icon-size icon-shadow' /> Back to Board
 				</Link>
-				<h1>My Tickets</h1>
+				<p>My Tickets</p>
 				<LogoutButton />
 			</header>
-			<main className='grid-container'>
-				<div>
-					<p className='inline-left'>
-					<MdMiscellaneousServices className='icon-size icon-container' />
+			<main className='flex-container-2-col'>
+				<div className='flex-center'>
+					<h1 className='inline-left'>
+						<MdMiscellaneousServices className='icon-size icon-container' />
 						My tickets:&nbsp;<span>{ticketsByUserId.length}</span>
-					</p>
-					{ticketsByUserId.length && (typeof ticketsByUserId !== 'string') ? (
-						<div className='nav-ul-container'> 
-							{
-								ticketsByUserId.map((ticket) => (
-									<ul key={ticket.ticketId} className='card'>
-										<li className='inline-between border-bottom'>Title:&nbsp;<Link to={ticket.ticketId} prefetch='intent'><span>{ticket.title}</span></Link><Link to={ticket.ticketId} prefetch='intent'>View</Link></li>
-										<li className='list' >Author:&nbsp;<span>{ticket?.author?.username}</span></li>
-										<li className='list' >Status:&nbsp;<span className={
-											ticket?.ticketStatus?.type
-												? `status status-${ticket?.ticketStatus.type}`
-												: undefined
-										}>{ticket?.ticketStatus?.type}</span></li>
-										<li className='list'>Product:&nbsp;<span>{ticket?.ticketProduct?.device}</span></li>
-										<li className='list'>Notes:&nbsp;<span>{ticket?.Notes.length}</span></li>
-										<li className='list'>Date:&nbsp;{new Date(ticket.createdAt).toLocaleString('en-us') !== new Date(ticket.updatedAt).toLocaleString('en-us') ? <span>{new Date(ticket.updatedAt).toLocaleString('en-us')}</span> : <span>{new Date(ticket.createdAt).toLocaleString('en-us')}</span>}</li>
-									</ul>
-								))
-							}
+					</h1>
+					{ticketsByUserId.length && typeof ticketsByUserId !== 'string' ? (
+						<div className='nav-ul-container'>
+							{ticketsByUserId.map((ticket) => (
+								<ul key={ticket.ticketId} className='card'>
+									<li className='inline-between border-bottom'>
+										Title:&nbsp;
+										<Link to={ticket.ticketId} prefetch='intent'>
+											<span>{ticket.title}</span>
+										</Link>
+										<Link to={ticket.ticketId} prefetch='intent'>
+											View
+										</Link>
+									</li>
+									<li className='list'>
+										Author:&nbsp;<span>{ticket?.author?.username}</span>
+									</li>
+									<li className='list'>
+										Status:&nbsp;
+										<span
+											className={
+												ticket?.ticketStatus?.type
+													? `status status-${ticket?.ticketStatus.type}`
+													: undefined
+											}
+										>
+											{ticket?.ticketStatus?.type}
+										</span>
+									</li>
+									<li className='list'>
+										Product:&nbsp;<span>{ticket?.ticketProduct?.device}</span>
+									</li>
+									<li className='list'>
+										Notes:&nbsp;<span>{ticket?.Notes.length}</span>
+									</li>
+									<li className='list'>
+										Date:&nbsp;
+										{new Date(ticket.createdAt).toLocaleString('en-us') !==
+										new Date(ticket.updatedAt).toLocaleString('en-us') ? (
+											<span>
+												{new Date(ticket.updatedAt).toLocaleString('en-us')}
+											</span>
+										) : (
+											<span>
+												{new Date(ticket.createdAt).toLocaleString('en-us')}
+											</span>
+										)}
+									</li>
+								</ul>
+							))}
 						</div>
-					) : <p className='form-container form-content'>No ticket available yet</p>}
+					) : (
+						<p className='form-container form-content'>
+							No ticket available yet
+						</p>
+					)}
 				</div>
-				<div>
-					<Outlet />
-				</div>
+				<Outlet />
 			</main>
 		</>
 	);
@@ -83,7 +116,7 @@ export function CatchBoundary() {
 	throw new Error(`Unexpected caught response with status: ${caught.status}`);
 }
 
-export function ErrorBoundary({ error }: { error: Error; }) {
+export function ErrorBoundary({ error }: { error: Error }) {
 	console.error(error);
 	return (
 		<div className='error-container'>

@@ -1,19 +1,30 @@
+[data-reach-dialog-overlay] {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	z-index: 5;
+}
+
+[data-reach-dialog-content] {
+	width: 90vw;
+}
+
 .dialog {
-  background: var(--dark);
-  padding: 1em 1.5em 1em;
+	background: var(--dark);
+	padding: 1em 1.5em 1em;
 	border: 2px solid rgba(255, 255, 255, 0.1);
 	border-radius: 0.5rem;
 	box-shadow: 5px 5px 15px #211b36, -5px -5px 15px #372f5c;
 }
 
 .label {
-  color: var;(--light)
-  padding: 20px 0;
+	color: var;
+	(--light)padding: 20px 0;
 }
 
 .actions {
-  display: flex;
-  justify-content: flex-end;
-  margin-top: 10px;
-  gap: 10px;
+	display: flex;
+	justify-content: flex-end;
+	margin-top: 10px;
+	gap: 10px;
 }

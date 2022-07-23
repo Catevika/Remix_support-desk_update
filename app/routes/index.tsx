@@ -13,27 +13,27 @@ export default function WelcomeRoute() {
   return (
     <>
       <header className='container header header-left'>
-        <h1>Welcome to the Support-Desk!</h1>
+        <p>Welcome to the Support-Desk!</p>
       </header>
-      <main className='main'>
+      <main className='flex-container-column'>
         <img src={url} alt='' className='background-image' />
-        <Form action='/register' method='post' className='form container'>
-          <p>
+        <Form action='/register' method='post' className='form'>
             <button type='submit' className='btn'>
               Register
             </button>
-            &nbsp; to get an access for free!
+          <p>
+            to get your access for free!
           </p>
         </Form>
         <div className='icon-large-container'>
           <FaTools className='icon-large' />
         </div>
-        <Form action='/login' method='post' className='form container'>
-          <p>
+        <Form action='/login' method='post' className='form'>
             <button type='submit' className='btn'>
               Login
             </button>
-            &nbsp; with email and password
+          <p>
+            with email and password
           </p>
         </Form>
       </main>

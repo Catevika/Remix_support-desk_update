@@ -1,6 +1,6 @@
 import type { LoaderFunction } from '@remix-run/node';
 import { json } from '@remix-run/node';
-import { Outlet, useLoaderData, Link, useCatch, Form, useSearchParams, useLocation } from '@remix-run/react';
+import { Outlet, useLoaderData, Link, Form, useSearchParams, useLocation } from '@remix-run/react';
 import { getAllNotes, getNotesBySearchTerm } from '~/models/notes.server';
 import AdminNavBar from "~/components/AdminNavBar";
 import LogoutButton from '~/components/LogoutButton';
@@ -55,7 +55,7 @@ export default function adminNoteListRoute() {
 					<Form ref={formRef} method="get" action='/board/admin/users/notelist' className='search-container'>
 						<label htmlFor="query" className='form-group search-inline'>Search:&nbsp;
 							<input type="search" name="query" id="query" placeholder='Search by title, author or text note' aria-label="Search note by title, author or text note" defaultValue={query ?? undefined } className="search-input"/>
-							<button type="submit" className="btn btn-search btn-small">
+							<button type="submit" className="btn btn-search">
 								<FaSearch className='search-icon' />
 							</button>
 						<Link to='/board/admin/users/notelist' className='link-search'>

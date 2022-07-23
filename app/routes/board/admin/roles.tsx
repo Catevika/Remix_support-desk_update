@@ -1,6 +1,6 @@
 import type { LoaderFunction } from '@remix-run/node';
 import { json } from '@remix-run/node';
-import { Outlet, useLoaderData, Link, NavLink, useCatch } from '@remix-run/react';
+import { Outlet, useLoaderData, Link, NavLink } from '@remix-run/react';
 import { getRoles } from '~/models/roles.server';
 import AdminNavBar from '~/components/AdminNavBar';
 import LogoutButton from '~/components/LogoutButton';
@@ -31,7 +31,7 @@ export default function adminRoleRoute() {
 					<LogoutButton />
 				</div>
 			</header>
-			<main className='grid-container'>
+			<main className='flex-container-2-col'>
 				{roles.length ? (
 					<div>
 						<p className='inline-left'>
@@ -42,17 +42,25 @@ export default function adminRoleRoute() {
 							<ul>
 								{roles.map((role) => (
 									<li key={role.roleId} className='inline-between'>
-										<NavLink to={role.roleId} prefetch='intent' className={({ isActive }) =>
-											isActive ? 'active' : undefined
-										}>
+										<NavLink
+											to={role.roleId}
+											prefetch='intent'
+											className={({ isActive }) =>
+												isActive ? 'active' : undefined
+											}
+										>
 											<span>{role.roleType}</span>
-										</NavLink>&nbsp;<Link to={`/board/admin/roles/${role.roleId}`}>View</Link>
+										</NavLink>
+										&nbsp;
+										<Link to={`/board/admin/roles/${role.roleId}`}>View</Link>
 									</li>
 								))}
 							</ul>
 						</nav>
 					</div>
-				) : <p className='form-container form-content'>No role available yet</p>}
+				) : (
+					<p className='form-container form-content'>No role available yet</p>
+				)}
 				<div>
 					<Outlet />
 				</div>
@@ -61,25 +69,7 @@ export default function adminRoleRoute() {
 	);
 }
 
-export function CatchBoundary() {
-	const caught = useCatch();
-
-	if (caught.status === 401) {
-		return (
-			<div className='error-container'>
-				<div className='form-container form-content'>
-					<p>You must be logged in with administrator rights to create a new role.</p>
-					<Link to='/login?redirectTo=/board/admin/roles/new-role'>
-						<button className='btn form-btn'>Login</button>
-					</Link>
-				</div>
-			</div>
-		);
-	}
-	throw new Error(`Unexpected caught response with status: ${caught.status}`);
-}
-
-export function ErrorBoundary({ error }: { error: Error; }) {
+export function ErrorBoundary({ error }: { error: Error }) {
 	console.error(error);
 	return (
 		<div className='error-container'>

@@ -7,20 +7,20 @@ input {
 	padding: 0 1.5em;
 	font-size: 1.1rem;
 	font-weight: 300;
-	color: var(--hover);
+	color: var(--gold);
 	border: none;
 	box-shadow: 3px 3px 3px #211b36 inset, -3px -3px 3px #372f5c inset;
 }
 
 input:-webkit-autofill {
 	-webkit-box-shadow: 0 0 0 30px rgba(52, 46, 80) inset !important;
-	-webkit-text-fill-color: var(--hover) !important;
+	-webkit-text-fill-color: var(--gold) !important;
 	border-radius: 0.5rem !important;
 	color-scheme: dark;
 }
 
 input:focus {
-	outline: 1px solid var(--hover);
+	outline: 1px solid var(--gold);
 }
 
 .form {
@@ -34,23 +34,21 @@ input:focus {
 }
 
 .form-container {
+	display: flex;
 	flex-direction: column;
 	justify-content: center;
 	align-content: center;
-	height: 85vh;
-	z-index: -1;
+	z-index: 1;
 }
 
 .form-container-center {
 	display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-content: center;
-  margin: 7vh auto;
-  width: 30vw;
-  height: 80vh;
+	flex-direction: column;
+	justify-content: center;
+	align-content: center;
+	margin: calc(2rem + 20px) auto 0;
+	width: 95vw;
 }
-
 
 .form-container-message {
 	height: auto;
@@ -58,7 +56,7 @@ input:focus {
 	margin: 0 auto;
 }
 
-.form-container-user {	
+.form-container-user {
 	width: 50vw;
 }
 
@@ -71,16 +69,23 @@ input:focus {
 }
 
 .form-scroll {
-	overflow-y: scroll;
-	position: fixed;
-	top: 7rem;
-	height: calc(100vh - 7rem);
-	width: 60vw;
+	/* overflow-y: scroll; */
+	/* position: fixed; */
+	/* top: 7rem; */
+	/* height: calc(100vh - 7rem); */
+	width: 100%;
+	/* margin: 0 20px; */
 }
 
 .form-scroll::-webkit-scrollbar {
 	width: 0;
 	background: transparent;
+}
+
+@media screen and (max-width: 678px) {
+	.form-scroll {
+		margin: 0;
+	}
 }
 
 .form-content {
@@ -95,11 +100,11 @@ input:focus {
 }
 
 .form-logout {
-	margin-left: 20px;
+	margin: 0 20px;
 }
 
 .form-option-disabled {
-	color: var(--hover);
+	color: var(--gold);
 }
 
 .form-option-disabled:active {
@@ -114,13 +119,13 @@ input:focus {
 	padding: 0 1.5em;
 	font-size: 1.1rem;
 	font-weight: 300;
-	color: var(--hover);
+	color: var(--gold);
 	border: none;
 	box-shadow: 3px 3px 3px #211b36 inset, -3px -3px 3px #372f5c inset;
 }
 
 .form-select:focus-visible {
-	outline: 1px solid var(--hover);
+	outline: 1px solid var(--gold);
 }
 
 .form-textarea {
@@ -132,14 +137,14 @@ input:focus {
 	font-family: 'Poppins', sans-serif;
 	font-weight: 300;
 	font-size: 1rem;
-	color: var(--hover);
+	color: var(--gold);
 	border: none;
 	box-shadow: 3px 3px 3px #211b36 inset, -3px -3px 3px #372f5c inset;
 	resize: none;
 }
 
 .form-textarea:focus-visible {
-	outline: 1px solid var(--hover);
+	outline: 1px solid var(--gold);
 }
 
 .form-textarea::-webkit-input-placeholder {

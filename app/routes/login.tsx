@@ -83,13 +83,13 @@ export default function Login() {
 		<>
 			<header className='container header'>
 				<Link to='/register' className='icon-header'>
-					<FaTools className='icon-size icon-shadow icon-linked icon-header' />&nbsp;Register
+					<FaTools className='icon-size icon-shadow icon-linked icon-header' />Register
 				</Link>
-				<h1>Login to access the Support-Desk!</h1>
+				<p>Login to the Support-Desk!</p>
 			</header>
-			<main className='form-container form-container-center'>
-				<h2>Login</h2>
-				<h3>Not registered yet? <Link to='/register'><span>Register</span></Link> first</h3>
+			<main className='form-container-center'>
+				<h1>Login</h1>
+				<em>Not registered yet? <Link to='/register'><span>Register</span></Link></em>
 				<div className='form-content'>
 					<Form method='post' className='form'>
 						<input
@@ -153,15 +153,9 @@ export default function Login() {
 								</p>
 							) : null}
 						</div>
-						{transition.submission ? (
-							<button type='submit' className='btn form-btn'>
-								Logging in...
-							</button>
-						) : (
-							<button type='submit' className='btn form-btn'>
-								Log in
-							</button>
-						)}
+						<button type='submit' className='btn form-btn btn-center'>
+						{transition.submission ? 'Logging in...' : 'Log in'}
+						</button>
 					</Form>
 				</div>
 			</main>

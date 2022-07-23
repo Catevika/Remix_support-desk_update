@@ -33,16 +33,13 @@ export default function employeeUserBoardRoute() {
     <>
       <header className='container header'>
         <FaTools className='icon-size icon-shadow' />
-        <h1>Main Board</h1>
+        <p>Main Board</p>
         <LogoutButton />
       </header>
       <main>
         <p className='main-text'>
-          Hi&nbsp;
-          <span className='capitalize'>
-            {user?.username ? user.username : null}
-          </span>
-          , what do you need help with?
+          Hi <span className='capitalize'>{user?.username ? user.username : null}</span>,
+          <br />what do you need help with?
         </p>
       </main>
       {user ? (

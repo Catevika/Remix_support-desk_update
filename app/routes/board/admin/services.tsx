@@ -1,6 +1,6 @@
 import type { LoaderFunction } from '@remix-run/node';
 import { json } from '@remix-run/node';
-import { useLoaderData, Link, NavLink, useCatch, Outlet } from '@remix-run/react';
+import { useLoaderData, Link, NavLink, Outlet } from '@remix-run/react';
 import { getServices } from '~/models/services.server';
 import AdminNavBar from '~/components/AdminNavBar';
 import LogoutButton from '~/components/LogoutButton';
@@ -31,13 +31,12 @@ export default function adminServiceRoute() {
 					<LogoutButton />
 				</div>
 			</header>
-			<main className='grid-container'>
+			<main className='flex-container-2-col'>
 				{services.length ? (
 					<div>
 						<p className='inline-left'>
-							<IconContext.Provider value={{ color: '#a9a5c0' }}
-						>
-							<MdAutoAwesome className='icon-size icon-container' />
+							<IconContext.Provider value={{ color: '#a9a5c0' }}>
+								<MdAutoAwesome className='icon-size icon-container' />
 							</IconContext.Provider>
 							Service List:&nbsp;<span>{services.length}</span>&nbsp;services
 						</p>
@@ -45,17 +44,29 @@ export default function adminServiceRoute() {
 							<ul>
 								{services.map((service) => (
 									<li key={service.serviceId} className='inline-between'>
-										<NavLink to={service.serviceId} prefetch='intent' className={({ isActive }) =>
-											isActive ? 'active inline-between' : undefined
-										}>
+										<NavLink
+											to={service.serviceId}
+											prefetch='intent'
+											className={({ isActive }) =>
+												isActive ? 'active inline-between' : undefined
+											}
+										>
 											<span>{service.name}</span>
-										</NavLink>&nbsp;<Link to={`/board/admin/services/${service.serviceId}`}>View</Link>
+										</NavLink>
+										&nbsp;
+										<Link to={`/board/admin/services/${service.serviceId}`}>
+											View
+										</Link>
 									</li>
 								))}
 							</ul>
 						</nav>
 					</div>
-				) : <p className='form-container form-content'>No service available yet</p>}
+				) : (
+					<p className='form-container form-content'>
+						No service available yet
+					</p>
+				)}
 				<div>
 					<Outlet />
 				</div>
@@ -64,25 +75,7 @@ export default function adminServiceRoute() {
 	);
 }
 
-export function CatchBoundary() {
-	const caught = useCatch();
-
-	if (caught.status === 401) {
-		return (
-			<div className='error-container'>
-				<div className='form-container form-content'>
-					<p>You must be logged in with administrator rights to add a new service.</p>
-					<Link to='/login?redirectTo=/board/admin/services/new-service'>
-						<button className='btn form-btn'>Login</button>
-					</Link>
-				</div>
-			</div>
-		);
-	}
-	throw new Error(`Unexpected caught response with status: ${caught.status}`);
-}
-
-export function ErrorBoundary({ error }: { error: Error; }) {
+export function ErrorBoundary({ error }: { error: Error }) {
 	console.error(error);
 	return (
 		<div className='error-container'>
