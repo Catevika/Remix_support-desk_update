@@ -19,10 +19,15 @@
 }
 
 body {
-	height: calc(100vh - 70px);
+	height: calc(100% - 70px);
 	margin-top: 70px;
 	background-color: var(--dark);
 	color: var(--light);
+}
+
+body::-webkit-scrollbar {
+	width: 0;
+	background: transparent;
 }
 
 h1,
@@ -78,10 +83,6 @@ span {
 em {
 	font-size: 0.9em;
 	margin-bottom: 10px;
-}
-
-main {
-	overflow: auto;
 }
 
 .active {
@@ -183,7 +184,8 @@ main {
 
 @media screen and (max-width: 810px) {
 	.card {
-		margin: 0 5px 5px;
+		width: calc(100vw - 10px);
+		margin: 0 0 5px;
 		padding: 0;
 	}
 }
@@ -323,7 +325,7 @@ main {
 	display: flex;
 	flex-wrap: wrap;
 	align-items: center;
-	justify-content: space-evenly;
+	justify-content: space-between;
 	margin: 20px 0 0;
 }
 
@@ -334,10 +336,10 @@ main {
 	margin: 0;
 }
 
-.inline-right {
+.inline-center {
 	display: flex;
-	justify-self: flex-end;
-	align-items: center;
+	justify-content: center;
+	margin: 20px 0 0;
 }
 
 .inline-between {
@@ -402,9 +404,6 @@ main {
 	flex-direction: column;
 	justify-content: flex-start;
 	align-items: flex-start;
-	/* position: fixed; */
-	/* top: 7rem; */
-	/* height: calc(100% - 7rem); */
 	min-width: 25%;
 	overflow-y: scroll;
 }

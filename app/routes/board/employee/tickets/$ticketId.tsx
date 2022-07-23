@@ -360,7 +360,7 @@ export default function userTicketIdRoute() {
 						) : null}
 						{ticket ? (
 							<>
-								<div className='form-group inline'>
+								<div className='form-group inline-center'>
 									<label>
 										Created at:&nbsp;
 										<input
@@ -405,7 +405,7 @@ export default function userTicketIdRoute() {
 								</Link>
 							)}
 						</div>
-						<div className='inline'>
+						<div className='inline-center'>
 							{!isNewTicket ? (
 								<>
 									<Link
