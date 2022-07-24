@@ -184,7 +184,7 @@ em {
 
 @media screen and (max-width: 810px) {
 	.card {
-		width: calc(100vw - 10px);
+		width: 100%;
 		margin: 0 0 5px;
 		padding: 0;
 	}
@@ -195,6 +195,10 @@ em {
 	margin: 0 auto;
 	padding: 0 20px;
 	text-align: center;
+}
+
+.date {
+	height: 2.5rem;
 }
 
 .error-container {
@@ -234,20 +238,21 @@ em {
 	display: flex;
 	align-items: flex-start;
 	flex-direction: row;
-	gap: 20px;
-	width: auto;
-	padding: 0 20px;
+	gap: 10px;
+	width: 100%;
+	padding: 0 10px;
 }
 
 @media screen and (max-width: 810px) {
 	.flex-container-2-col {
 		flex-wrap: wrap;
 		flex-direction: column-reverse;
-		padding: 0 10px;
+		padding: 0 5px;
 	}
 
 	.flex-center {
-		margin: 0 auto;
+		margin: 0;
+		width: 100%;
 	}
 }
 
@@ -336,6 +341,12 @@ em {
 	margin: 0;
 }
 
+@media screen and (max-width: 810px) {
+	.inline-left {
+		justify-content: center;
+	}
+}
+
 .inline-center {
 	display: flex;
 	justify-content: center;
@@ -406,6 +417,13 @@ em {
 	align-items: flex-start;
 	min-width: 25%;
 	overflow-y: scroll;
+}
+
+@media screen and (max-width: 810px) {
+	.nav-ul-container {
+		width: 100%;
+		align-items: center;
+	}
 }
 
 .nav-ul-container::-webkit-scrollbar {
@@ -490,34 +508,38 @@ em {
 	flex-flow: column;
 	border-radius: 0.25rem;
 	overflow: hidden;
-	margin: 20px auto;
+	margin: 10px auto;
 	width: 100%;
+}
+
+.table p {
+	margin: 10px;
+}
+
+@media screen and (max-width: 810px) {
+	.table p {
+		margin: 5px;
+	}
 }
 
 .row {
 	display: flex;
 	flex-flow: row;
 	text-align: left;
-	border-bottom: 1px solid var(--light);
+	width: 100%;
 }
 
-.row::first-child {
-	margin: 10px 20px;
-	line-height: 1;
+.row + .row {
+	border-bottom: 1px solid var(--light);
 }
 
 .row > * {
-	display: flex;
 	flex-basis: 0;
 	flex-grow: 1;
-	align-items: center;
-	width: 20%;
 }
 
 .row-head {
-	border-bottom: 1px solid var(--light);
 	background-color: var(--gold);
 	color: var(--dark);
 	font-weight: bold;
-	height: 40px;
 }

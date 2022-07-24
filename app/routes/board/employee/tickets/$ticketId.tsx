@@ -228,7 +228,7 @@ export default function userTicketIdRoute() {
 					<em>&nbsp;-&nbsp;Scroll to see its associated notes</em>
 				) : null}
 			</p>
-			<div className='form-scroll form-scroll-margin-left'>
+			<div className='form-scroll'>
 				<fetcher.Form
 					reloadDocument
 					method='post'
@@ -363,25 +363,27 @@ export default function userTicketIdRoute() {
 								<div className='form-group inline-center'>
 									<label>
 										Created at:&nbsp;
-										<input
-											type='text'
+										<textarea
+											rows={2}
 											id='createdAt'
 											name='createdAt'
 											defaultValue={new Date(ticket.createdAt).toLocaleString(
 												'en-us'
 											)}
+											className='form-textarea form-textarea-date'
 											disabled
 										/>
 									</label>
 									<label>
 										Updated at:&nbsp;
-										<input
-											type='text'
+										<textarea
+											rows={2}
 											id='updatedAt'
 											name='updatedAt'
 											defaultValue={new Date(ticket.updatedAt).toLocaleString(
 												'en-us'
 											)}
+											className='form-textarea form-textarea-date'
 											disabled
 										/>
 									</label>
@@ -442,6 +444,7 @@ export default function userTicketIdRoute() {
 					<>
 						<div className='table'>
 							<div className='row row-head'>
+								<p>Author</p>
 								<p>Text</p>
 								<p>Date</p>
 								<p>View</p>
@@ -449,6 +452,7 @@ export default function userTicketIdRoute() {
 							{notesByTicketId?.length
 								? notesByTicketId.map((note) => (
 										<div key={note.noteId} className='row'>
+											<p>{note.noteUser.username}</p>
 											<p>{note.text}</p>
 											<p>
 												{new Date(note.createdAt).toLocaleString('en-us') !==
