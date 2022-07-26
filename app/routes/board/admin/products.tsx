@@ -23,11 +23,12 @@ export default function adminProductRoute() {
 		<>
 			<header className='container header'>
 				<Link to='/board/admin' className='icon-header'>
-					<FaTools className='icon-size icon-shadow' /> Back to Board
+					<FaTools className='icon-size icon-shadow' />
+					Back to Board
 				</Link>
 				<AdminNavBar />
 				<div className='header-flex'>
-					<h1>Manage Product List </h1>
+					<h1>Products </h1>
 					<LogoutButton />
 				</div>
 			</header>
@@ -36,10 +37,10 @@ export default function adminProductRoute() {
 					<div>
 						<p className='inline-left'>
 							<MdOutlineDevicesOther className='icon-size icon-container' />
-							Product List:&nbsp;<span>{products.length}</span>&nbsp;products
+							<span>{products.length}</span>&nbsp;products
 						</p>
 						<nav className='nav-ul-container'>
-							<ul>
+							<ul className='nav-ul'>
 								{products.map((product) => (
 									<li key={product.productId} className='inline-between'>
 										<NavLink
@@ -52,7 +53,10 @@ export default function adminProductRoute() {
 											<span>{product.device}</span>
 										</NavLink>
 										&nbsp;
-										<Link to={`/board/admin/products/${product.productId}`}>
+										<Link
+											to={`/board/admin/products/${product.productId}`}
+											className='view'
+										>
 											View
 										</Link>
 									</li>

@@ -264,11 +264,11 @@ export default function userTicketIdRoute() {
 											className='form-select'
 										>
 											<option
-												defaultValue='-- Select a status --'
+												defaultValue='- Select a status -'
 												disabled
 												className='form-option-disabled'
 											>
-												-- Select a status --
+												- Select a status -
 											</option>
 											{statuses.map((status: Status) => (
 												<option
@@ -297,11 +297,11 @@ export default function userTicketIdRoute() {
 											className='form-select'
 										>
 											<option
-												defaultValue={'-- Select a product --'}
+												defaultValue={'- Select a product -'}
 												disabled
 												className='form-option-disabled'
 											>
-												-- Select a product --
+												- Select a product -
 											</option>
 											{products.map((product: Product) => (
 												<option
@@ -347,28 +347,46 @@ export default function userTicketIdRoute() {
 							) : null}
 							{ticket ? (
 								<>
-									<div className='form-group inline'>
-										<label>
+									<div className='form-group inline-center'>
+										<label className='inline-date'>
 											Created at:&nbsp;
 											<input
 												type='text'
 												id='createdAt'
 												name='createdAt'
 												defaultValue={new Date(ticket.createdAt).toLocaleString(
-													'en-us'
+													'en-us',
+													{
+														month: '2-digit',
+														day: '2-digit',
+														year: '2-digit',
+														hour: '2-digit',
+														minute: '2-digit',
+														hour12: false
+													}
 												)}
+												className='form-textarea-date'
 												disabled
 											/>
 										</label>
-										<label>
+										<label className='inline-date'>
 											Updated at:&nbsp;
 											<input
 												type='text'
 												id='updatedAt'
 												name='updatedAt'
 												defaultValue={new Date(ticket.updatedAt).toLocaleString(
-													'en-us'
+													'en-us',
+													{
+														month: '2-digit',
+														day: '2-digit',
+														year: '2-digit',
+														hour: '2-digit',
+														minute: '2-digit',
+														hour12: false
+													}
 												)}
+												className='form-textarea-date'
 												disabled
 											/>
 										</label>
@@ -410,55 +428,74 @@ export default function userTicketIdRoute() {
 					{notesByTicketId?.length ? (
 						<>
 							<div className='table'>
-								<table>
-									<thead>
-										<tr>
-											<th>Title</th>
-											<th>Author</th>
-											<th>Text</th>
-											<th>Date</th>
-											<th></th>
-										</tr>
-									</thead>
-									<tbody>
-										{notesByTicketId?.length
-											? notesByTicketId.map((note) => (
-													<tr key={note.noteId}>
-														<td>{note.noteTicket.title}</td>
-														<td>{note.noteUser.username}</td>
-														<td>{note.text}</td>
-														<td>
-															{new Date(note.createdAt).toLocaleString(
-																'en-us'
-															) !==
-															new Date(note.updatedAt).toLocaleString(
-																'en-us'
-															) ? (
-																<span>
-																	{new Date(note.updatedAt).toLocaleString(
-																		'en-us'
-																	)}
-																</span>
-															) : (
-																<span>
-																	{new Date(note.createdAt).toLocaleString(
-																		'en-us'
-																	)}
-																</span>
+								<div className='row row-head'>
+									<p>Author</p>
+									<p>Text</p>
+									<p>Date</p>
+									<p className='view'>View</p>
+								</div>
+								{notesByTicketId?.length
+									? notesByTicketId.map((note) => (
+											<div key={note.noteId} className='row'>
+												<p>{note.noteUser.username}</p>
+												<p>{note.text}</p>
+												<p>
+													{new Date(note.createdAt).toLocaleString('en-us', {
+														month: '2-digit',
+														day: '2-digit',
+														year: '2-digit',
+														hour: '2-digit',
+														minute: '2-digit',
+														hour12: false
+													}) !==
+													new Date(note.updatedAt).toLocaleString('en-us', {
+														month: '2-digit',
+														day: '2-digit',
+														year: '2-digit',
+														hour: '2-digit',
+														minute: '2-digit',
+														hour12: false
+													}) ? (
+														<span>
+															{new Date(note.updatedAt).toLocaleString(
+																'en-us',
+																{
+																	month: '2-digit',
+																	day: '2-digit',
+																	year: '2-digit',
+																	hour: '2-digit',
+																	minute: '2-digit',
+																	hour12: false
+																}
 															)}
-														</td>
-														<td>
-															<Link
-																to={`/board/admin/users/ticketlist/${ticket?.ticketId}/${note.noteId}`}
-															>
-																View
-															</Link>
-														</td>
-													</tr>
-											  ))
-											: null}
-									</tbody>
-								</table>
+														</span>
+													) : (
+														<span>
+															{new Date(note.createdAt).toLocaleString(
+																'en-us',
+																{
+																	month: '2-digit',
+																	day: '2-digit',
+																	year: '2-digit',
+																	hour: '2-digit',
+																	minute: '2-digit',
+																	hour12: false
+																}
+															)}
+														</span>
+													)}
+												</p>
+												<p>
+													<Link
+														to={`/board/admin/users/ticketlist/${ticket?.ticketId}/${note.noteId}`}
+														className='view'
+													>
+														View
+													</Link>
+												</p>
+											</div>
+									  ))
+									: null}
 							</div>
 						</>
 					) : null}

@@ -1,7 +1,6 @@
 input {
 	font-family: inherit;
 	height: 2.5rem;
-	width: 100%;
 	background-color: rgba(52, 46, 80);
 	border-radius: 0.5rem;
 	padding: 0 1.5em;
@@ -10,6 +9,7 @@ input {
 	color: var(--gold);
 	border: none;
 	box-shadow: 3px 3px 3px #211b36 inset, -3px -3px 3px #372f5c inset;
+	width: 100%;
 }
 
 input:-webkit-autofill {
@@ -38,17 +38,29 @@ input:focus {
 	flex-direction: column;
 	justify-content: center;
 	align-content: center;
+	width: 75%;
 	z-index: 1;
-	width: 98%;
 }
 
 .form-container-center {
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
-	align-content: center;
-	margin: calc(2rem + 20px) auto 0;
-	width: 95vw;
+	align-items: center;
+	height: 100%;
+	margin-top: -90px;
+}
+
+@media screen and (max-width: 810px) {
+	.form-container {
+		width: 98%;
+	}
+
+	.form-container-center {
+		justify-content: flex-start;
+		width: 95vw;
+		margin: 0 auto;
+	}
 }
 
 .form-container-message {
@@ -61,16 +73,18 @@ input:focus {
 	width: 50vw;
 }
 
+@media screen and (max-width: 810px) {
+	.form-container-user {
+		width: 98%;
+	}
+}
+
 .form-container-admin {
-	margin-left: 20vw;
+	margin: 0 auto;
 }
 
 .form-container-ticket {
 	margin-left: 20%;
-}
-
-.form-scroll {
-	width: 100%;
 }
 
 .form-scroll::-webkit-scrollbar {
@@ -139,14 +153,8 @@ input:focus {
 	resize: none;
 }
 
-.form-textarea-date {
+.form-input-date {
 	height: 2.5rem;
-}
-
-@media screen and (max-width: 810px) {
-	.form-textarea-date {
-		height: 4rem;
-	}
 }
 
 .form-textarea:focus-visible {

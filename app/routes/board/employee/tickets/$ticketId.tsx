@@ -267,17 +267,17 @@ export default function userTicketIdRoute() {
 										defaultValue={
 											ticket
 												? `${ticket.ticketStatus?.type}`
-												: '-- Select a status --'
+												: '- Select a status -'
 										}
 										onSelect={(e) => handleSelectStatus}
 										className='form-select'
 									>
 										<option
-											defaultValue='-- Select a status --'
+											defaultValue='- Select a status -'
 											disabled
 											className='form-option-disabled'
 										>
-											-- Select a status --
+											- Select a status -
 										</option>
 										{statuses.map((status: Status) => (
 											<option
@@ -304,17 +304,17 @@ export default function userTicketIdRoute() {
 										defaultValue={
 											ticket
 												? `${ticket.ticketProduct?.device}`
-												: '-- Select a product --'
+												: '- Select a product -'
 										}
 										onSelect={(e) => handleSelectProduct}
 										className='form-select'
 									>
 										<option
-											defaultValue={'-- Select a product --'}
+											defaultValue={'- Select a product -'}
 											disabled
 											className='form-option-disabled'
 										>
-											-- Select a product --
+											- Select a product -
 										</option>
 										{products.map((product: Product) => (
 											<option
@@ -363,14 +363,21 @@ export default function userTicketIdRoute() {
 								<div className='form-group inline-center'>
 									<label>
 										Created at:&nbsp;
-										<textarea
-											rows={2}
+										<input
 											id='createdAt'
 											name='createdAt'
 											defaultValue={new Date(ticket.createdAt).toLocaleString(
-												'en-us'
+												'en-us',
+												{
+													month: '2-digit',
+													day: '2-digit',
+													year: '2-digit',
+													hour: '2-digit',
+													minute: '2-digit',
+													hour12: false
+												}
 											)}
-											className='form-textarea form-textarea-date'
+											className='form-textarea form-input-date'
 											disabled
 										/>
 									</label>
@@ -381,7 +388,15 @@ export default function userTicketIdRoute() {
 											id='updatedAt'
 											name='updatedAt'
 											defaultValue={new Date(ticket.updatedAt).toLocaleString(
-												'en-us'
+												'en-us',
+												{
+													month: '2-digit',
+													day: '2-digit',
+													year: '2-digit',
+													hour: '2-digit',
+													minute: '2-digit',
+													hour12: false
+												}
 											)}
 											className='form-textarea form-textarea-date'
 											disabled
@@ -403,7 +418,7 @@ export default function userTicketIdRoute() {
 							</button>
 							{isNewTicket ? null : (
 								<Link to='/board/employee/tickets/new-ticket'>
-									<button className='btn'>Back to New Ticket</button>
+									<button className='btn'>Go to New Ticket</button>
 								</Link>
 							)}
 						</div>
@@ -447,7 +462,7 @@ export default function userTicketIdRoute() {
 								<p>Author</p>
 								<p>Text</p>
 								<p>Date</p>
-								<p>View</p>
+								<p className='view'>View</p>
 							</div>
 							{notesByTicketId?.length
 								? notesByTicketId.map((note) => (
@@ -455,14 +470,42 @@ export default function userTicketIdRoute() {
 											<p>{note.noteUser.username}</p>
 											<p>{note.text}</p>
 											<p>
-												{new Date(note.createdAt).toLocaleString('en-us') !==
-												new Date(note.updatedAt).toLocaleString('en-us') ? (
+												{new Date(note.createdAt).toLocaleString('en-us', {
+													month: '2-digit',
+													day: '2-digit',
+													year: '2-digit',
+													hour: '2-digit',
+													minute: '2-digit',
+													hour12: false
+												}) !==
+												new Date(note.updatedAt).toLocaleString('en-us', {
+													month: '2-digit',
+													day: '2-digit',
+													year: '2-digit',
+													hour: '2-digit',
+													minute: '2-digit',
+													hour12: false
+												}) ? (
 													<span>
-														{new Date(note.updatedAt).toLocaleString('en-us')}
+														{new Date(note.updatedAt).toLocaleString('en-us', {
+															month: '2-digit',
+															day: '2-digit',
+															year: '2-digit',
+															hour: '2-digit',
+															minute: '2-digit',
+															hour12: false
+														})}
 													</span>
 												) : (
 													<span>
-														{new Date(note.createdAt).toLocaleString('en-us')}
+														{new Date(note.createdAt).toLocaleString('en-us', {
+															month: '2-digit',
+															day: '2-digit',
+															year: '2-digit',
+															hour: '2-digit',
+															minute: '2-digit',
+															hour12: false
+														})}
 													</span>
 												)}
 											</p>

@@ -23,11 +23,12 @@ export default function adminServiceRoute() {
 		<>
 			<header className='container header'>
 				<Link to='/board/admin' className='icon-header'>
-					<FaTools className='icon-size icon-shadow' /> Back to Board
+					<FaTools className='icon-size icon-shadow' />
+					Back to Board
 				</Link>
 				<AdminNavBar />
 				<div className='header-flex'>
-					<h1>Manage Service List</h1>
+					<h1>Services</h1>
 					<LogoutButton />
 				</div>
 			</header>
@@ -38,10 +39,10 @@ export default function adminServiceRoute() {
 							<IconContext.Provider value={{ color: '#a9a5c0' }}>
 								<MdAutoAwesome className='icon-size icon-container' />
 							</IconContext.Provider>
-							Service List:&nbsp;<span>{services.length}</span>&nbsp;services
+							<span>{services.length}</span>&nbsp;services
 						</p>
 						<nav className='nav-ul-container'>
-							<ul>
+							<ul className='nav-ul'>
 								{services.map((service) => (
 									<li key={service.serviceId} className='inline-between'>
 										<NavLink
@@ -54,7 +55,10 @@ export default function adminServiceRoute() {
 											<span>{service.name}</span>
 										</NavLink>
 										&nbsp;
-										<Link to={`/board/admin/services/${service.serviceId}`}>
+										<Link
+											to={`/board/admin/services/${service.serviceId}`}
+											className='view'
+										>
 											View
 										</Link>
 									</li>
@@ -67,9 +71,7 @@ export default function adminServiceRoute() {
 						No service available yet
 					</p>
 				)}
-				<div>
-					<Outlet />
-				</div>
+				<Outlet />
 			</main>
 		</>
 	);

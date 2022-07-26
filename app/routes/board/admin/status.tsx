@@ -22,11 +22,12 @@ export default function adminStatusRoute() {
 		<>
 			<header className='container header'>
 				<Link to='/board/admin' className='icon-header'>
-					<FaTools className='icon-size icon-shadow' /> Back to Board
+					<FaTools className='icon-size icon-shadow' />
+					Back to Board
 				</Link>
 				<AdminNavBar />
 				<div className='header-flex'>
-					<h1>Manage Status List</h1>
+					<h1>Status</h1>
 					<LogoutButton />
 				</div>
 			</header>
@@ -35,10 +36,10 @@ export default function adminStatusRoute() {
 					<div>
 						<p className='inline-left'>
 							<SiStatuspage className='icon-size icon-container' />
-							Status List:&nbsp;<span>{statuses.length}</span>&nbsp;status
+							<span>{statuses.length}</span>&nbsp;status
 						</p>
 						<nav className='nav-ul-container'>
-							<ul>
+							<ul className='nav-ul'>
 								{statuses.map((status) => (
 									<li key={status.statusId} className='inline-between'>
 										<NavLink
@@ -51,7 +52,10 @@ export default function adminStatusRoute() {
 											<span>{status.type}</span>
 										</NavLink>
 										&nbsp;
-										<Link to={`/board/admin/status/${status.statusId}`}>
+										<Link
+											to={`/board/admin/status/${status.statusId}`}
+											className='view'
+										>
 											View
 										</Link>
 									</li>

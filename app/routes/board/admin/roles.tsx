@@ -23,11 +23,12 @@ export default function adminRoleRoute() {
 		<>
 			<header className='container header'>
 				<Link to='/board/admin' className='icon-header'>
-					<FaTools className='icon-size icon-shadow' /> Back to Board
+					<FaTools className='icon-size icon-shadow' />
+					Back to Board
 				</Link>
 				<AdminNavBar />
 				<div className='header-flex'>
-					<h1>Manage Role List</h1>
+					<h1>Roles</h1>
 					<LogoutButton />
 				</div>
 			</header>
@@ -36,10 +37,10 @@ export default function adminRoleRoute() {
 					<div>
 						<p className='inline-left'>
 							<MdMiscellaneousServices className='icon-size icon-container' />
-							Role List:&nbsp;<span>{roles.length}</span>&nbsp;roles
+							<span>{roles.length}</span>&nbsp;roles
 						</p>
 						<nav className='nav-ul-container'>
-							<ul>
+							<ul className='nav-ul'>
 								{roles.map((role) => (
 									<li key={role.roleId} className='inline-between'>
 										<NavLink
@@ -52,7 +53,12 @@ export default function adminRoleRoute() {
 											<span>{role.roleType}</span>
 										</NavLink>
 										&nbsp;
-										<Link to={`/board/admin/roles/${role.roleId}`}>View</Link>
+										<Link
+											to={`/board/admin/roles/${role.roleId}`}
+											className='view'
+										>
+											View
+										</Link>
 									</li>
 								))}
 							</ul>

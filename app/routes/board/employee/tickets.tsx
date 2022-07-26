@@ -25,7 +25,8 @@ export default function employeeTicketRoute() {
 		<>
 			<header className='container header'>
 				<Link to='/board/employee' className='icon-header'>
-					<FaTools className='icon-size icon-shadow' /> Back to Board
+					<FaTools className='icon-size icon-shadow' />
+					Back to Board
 				</Link>
 				<p>My Tickets</p>
 				<LogoutButton />
@@ -45,7 +46,11 @@ export default function employeeTicketRoute() {
 										<Link to={ticket.ticketId} prefetch='intent'>
 											<span>{ticket.title}</span>
 										</Link>
-										<Link to={ticket.ticketId} prefetch='intent'>
+										<Link
+											to={ticket.ticketId}
+											prefetch='intent'
+											className='view'
+										>
 											View
 										</Link>
 									</li>
@@ -72,14 +77,42 @@ export default function employeeTicketRoute() {
 									</li>
 									<li className='list'>
 										Date:&nbsp;
-										{new Date(ticket.createdAt).toLocaleString('en-us') !==
-										new Date(ticket.updatedAt).toLocaleString('en-us') ? (
+										{new Date(ticket.createdAt).toLocaleString('en-us', {
+											month: '2-digit',
+											day: '2-digit',
+											year: '2-digit',
+											hour: '2-digit',
+											minute: '2-digit',
+											hour12: false
+										}) !==
+										new Date(ticket.updatedAt).toLocaleString('en-us', {
+											month: '2-digit',
+											day: '2-digit',
+											year: '2-digit',
+											hour: '2-digit',
+											minute: '2-digit',
+											hour12: false
+										}) ? (
 											<span>
-												{new Date(ticket.updatedAt).toLocaleString('en-us')}
+												{new Date(ticket.updatedAt).toLocaleString('en-us', {
+													month: '2-digit',
+													day: '2-digit',
+													year: '2-digit',
+													hour: '2-digit',
+													minute: '2-digit',
+													hour12: false
+												})}
 											</span>
 										) : (
 											<span>
-												{new Date(ticket.createdAt).toLocaleString('en-us')}
+												{new Date(ticket.createdAt).toLocaleString('en-us', {
+													month: '2-digit',
+													day: '2-digit',
+													year: '2-digit',
+													hour: '2-digit',
+													minute: '2-digit',
+													hour12: false
+												})}
 											</span>
 										)}
 									</li>

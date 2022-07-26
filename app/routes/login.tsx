@@ -8,7 +8,11 @@ import {
 	Link
 } from '@remix-run/react';
 
-import { safeRedirect, validateEmail, validatePassword } from '~/utils/functions';
+import {
+	safeRedirect,
+	validateEmail,
+	validatePassword
+} from '~/utils/functions';
 import { createUserSession, login } from '~/utils/session.server';
 import { FaTools } from 'react-icons/fa';
 
@@ -50,10 +54,14 @@ export const action: ActionFunction = async ({ request }) => {
 		return badRequest({ formError: 'Form not submitted correctly.' });
 	}
 
-	const isAdmin = email !== null && await getUserByEmail(email);
-	(isAdmin && isAdmin.service === process.env.ADMIN_ROLE)
-	?	(redirectTo ? safeRedirect(redirectTo)	: redirectTo = safeRedirect('/board/admin'))
-	: (redirectTo ? safeRedirect(redirectTo) : redirectTo = safeRedirect('/board/employee'))
+	const isAdmin = email !== null && (await getUserByEmail(email));
+	isAdmin && isAdmin.service === process.env.ADMIN_ROLE
+		? redirectTo
+			? safeRedirect(redirectTo)
+			: (redirectTo = safeRedirect('/board/admin'))
+		: redirectTo
+		? safeRedirect(redirectTo)
+		: (redirectTo = safeRedirect('/board/employee'));
 
 	const fields = { email, password };
 	const fieldErrors = {
@@ -68,7 +76,8 @@ export const action: ActionFunction = async ({ request }) => {
 	if (!user) {
 		return badRequest({
 			fields,
-			formError: 'Email / password combination not valid or need to register first'
+			formError:
+				'Email / password combination not valid or need to register first'
 		});
 	}
 
@@ -83,13 +92,19 @@ export default function Login() {
 		<>
 			<header className='container header'>
 				<Link to='/register' className='icon-header'>
-					<FaTools className='icon-size icon-shadow icon-linked icon-header' />Register
+					<FaTools className='icon-size icon-shadow icon-linked icon-header' />
+					Register
 				</Link>
 				<p>Login to the Support-Desk!</p>
 			</header>
 			<main className='form-container-center'>
 				<h1>Login</h1>
-				<em>Not registered yet? <Link to='/register'><span>Register</span></Link></em>
+				<em>
+					Not registered yet?{' '}
+					<Link to='/register'>
+						<span>Register</span>
+					</Link>
+				</em>
 				<div className='form-content'>
 					<Form method='post' className='form'>
 						<input
@@ -112,11 +127,7 @@ export default function Login() {
 								autoFocus
 							/>
 							{actionData?.fieldErrors?.email ? (
-								<p
-									className='error-danger'
-									role='alert'
-									id='email-error'
-								>
+								<p className='error-danger' role='alert' id='email-error'>
 									{actionData.fieldErrors.email}
 								</p>
 							) : null}
@@ -137,11 +148,7 @@ export default function Login() {
 								}
 							/>
 							{actionData?.fieldErrors?.password ? (
-								<p
-									className='error-danger'
-									role='alert'
-									id='password-error'
-								>
+								<p className='error-danger' role='alert' id='password-error'>
 									{actionData.fieldErrors.password}
 								</p>
 							) : null}
@@ -154,7 +161,7 @@ export default function Login() {
 							) : null}
 						</div>
 						<button type='submit' className='btn form-btn btn-center'>
-						{transition.submission ? 'Logging in...' : 'Log in'}
+							{transition.submission ? 'Logging in...' : 'Log in'}
 						</button>
 					</Form>
 				</div>

@@ -65,7 +65,7 @@ export default function deleteNoteConfirmRoute() {
 						This action is permanent.
 					</span>
 				</p>
-				<p>All notes for this ticket will be deleted from the database.</p>
+				<p>All this ticket notes will be deleted from the database.</p>
 				<p>
 					To delete only one note, click on its 'view' button, then on the
 					respective 'delete' button{' '}

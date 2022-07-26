@@ -1,6 +1,17 @@
-import type {	MetaFunction, LoaderFunction, ActionFunction }from '@remix-run/node';
+import type {
+	MetaFunction,
+	LoaderFunction,
+	ActionFunction
+} from '@remix-run/node';
 import { json, redirect } from '@remix-run/node';
-import { Form, Link, useLoaderData, useActionData, useCatch, useTransition } from '@remix-run/react';
+import {
+	Form,
+	Link,
+	useLoaderData,
+	useActionData,
+	useCatch,
+	useTransition
+} from '@remix-run/react';
 
 import { requireUserId, getUser } from '~/utils/session.server';
 import { prisma } from '~/utils/db.server';
@@ -35,11 +46,11 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 		throw new Response('Unauthorized', { status: 401 });
 	}
 
-	if(params.roleId === 'new-role') {
+	if (params.roleId === 'new-role') {
 		const data: LoaderData = {
 			user,
 			role: null
-		}
+		};
 
 		return data;
 	} else {
@@ -48,7 +59,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 		const data: LoaderData = {
 			user,
 			role
-		}
+		};
 
 		return data;
 	}
@@ -80,8 +91,8 @@ export const action: ActionFunction = async ({ request, params }) => {
 
 	const intent = form.get('intent');
 
-	if(intent === 'delete') {
-		await deleteRole(params.roleId)
+	if (intent === 'delete') {
+		await deleteRole(params.roleId);
 		return redirect('/board/admin/roles/new-role');
 	}
 
@@ -105,7 +116,7 @@ export const action: ActionFunction = async ({ request, params }) => {
 		});
 	}
 
-	if(params.roleId === 'new-role') {
+	if (params.roleId === 'new-role') {
 		await prisma.role.create({
 			data: { roleType, authorId: userId }
 		});
@@ -126,39 +137,49 @@ export default function adminRoleRoute() {
 	const actionData = useActionData() as ActionData;
 	const transition = useTransition();
 
-	const isNewRole = !data.role?.roleType ;
-	const isAdding = Boolean(transition.submission?.formData.get('intent') === 'create');
-	const isUpdating = Boolean(transition.submission?.formData.get('intent') === 'update');
-	const isDeleting = Boolean(transition.submission?.formData.get('intent') === 'delete');
+	const isNewRole = !data.role?.roleType;
+	const isAdding = Boolean(
+		transition.submission?.formData.get('intent') === 'create'
+	);
+	const isUpdating = Boolean(
+		transition.submission?.formData.get('intent') === 'update'
+	);
+	const isDeleting = Boolean(
+		transition.submission?.formData.get('intent') === 'delete'
+	);
 
 	return (
 		<>
-			<main className='form-container'>
+			<main className='form-scroll-main'>
 				<div className='form-scroll'>
-					<Form reloadDocument method='post' key={data.role?.roleId ?? 'new-role'} className='form'>
-						<p className='list'>
-						{isNewRole ? 'New' : null }&nbsp;Role from:<span className='capitalize'>&nbsp;{user?.username}&nbsp;</span> - Email:<span>&nbsp;{user?.email}</span>
+					<Form
+						reloadDocument
+						method='post'
+						key={data.role?.roleId ?? 'new-role'}
+					>
+						<p>
+							{isNewRole ? 'New' : null}&nbsp;Role from:
+							<span className='capitalize'>&nbsp;{user?.username}&nbsp;</span> -
+							Email:<span>&nbsp;{user?.email}</span>
 						</p>
 						<div className='form-content'>
 							<div className='form-group'>
 								<label htmlFor='roleType'>
-									{isNewRole ? 'New' : null }&nbsp;Role:{' '}
+									{isNewRole ? 'New' : null}&nbsp;Role:{' '}
 									<input
 										type='text'
 										defaultValue={data.role?.roleType}
 										name='roleType'
 										aria-invalid={Boolean(actionData?.fieldErrors?.roleType)}
 										aria-errormessage={
-											actionData?.fieldErrors?.roleType ? 'role-error' : undefined
+											actionData?.fieldErrors?.roleType
+												? 'role-error'
+												: undefined
 										}
 									/>
 								</label>
 								{actionData?.fieldErrors?.roleType ? (
-									<p
-										className='error-danger'
-										role='alert'
-										id='role-error'
-									>
+									<p className='error-danger' role='alert' id='role-error'>
 										{actionData.fieldErrors.roleType}
 									</p>
 								) : null}
@@ -170,27 +191,47 @@ export default function adminRoleRoute() {
 									</p>
 								) : null}
 								{data.role ? (
-								<>
-									<div className='form-group inline'>
-										<label>Created at:&nbsp;
-											<input
-												type='text'
-												id='createdAt'
-												name='createdAt'
-												defaultValue={new Date(data.role.createdAt).toLocaleString('en-us')}
-											/>
-										</label>
-										<label>Updated at:&nbsp;
-											<input
-												type='text'
-												id='updatedAt'
-												name='updatedAt'
-												defaultValue={new Date(data.role.updatedAt).toLocaleString('en-us')}
-											/>
-										</label>
-									</div>
-								</>) : null
-							}
+									<>
+										<div className='form-group inline'>
+											<label>
+												Created at:&nbsp;
+												<input
+													type='text'
+													id='createdAt'
+													name='createdAt'
+													defaultValue={new Date(
+														data.role.createdAt
+													).toLocaleString('en-us', {
+														month: '2-digit',
+														day: '2-digit',
+														year: '2-digit',
+														hour: '2-digit',
+														minute: '2-digit',
+														hour12: false
+													})}
+												/>
+											</label>
+											<label>
+												Updated at:&nbsp;
+												<input
+													type='text'
+													id='updatedAt'
+													name='updatedAt'
+													defaultValue={new Date(
+														data.role.updatedAt
+													).toLocaleString('en-us', {
+														month: '2-digit',
+														day: '2-digit',
+														year: '2-digit',
+														hour: '2-digit',
+														minute: '2-digit',
+														hour12: false
+													})}
+												/>
+											</label>
+										</div>
+									</>
+								) : null}
 								<div className='inline'>
 									<button
 										type='submit'
@@ -199,15 +240,25 @@ export default function adminRoleRoute() {
 										className='btn form-btn'
 										disabled={isAdding || isUpdating}
 									>
-										{isNewRole ? (isAdding ? 'Adding...' : 'Add'): null}
-										{isNewRole ? null : (isUpdating ? 'Updating...' : 'Update')}
+										{isNewRole ? (isAdding ? 'Adding...' : 'Add') : null}
+										{isNewRole ? null : isUpdating ? 'Updating...' : 'Update'}
 									</button>
-									{isNewRole ? null : <Link to='/board/admin/roles/new-role'>
-										<button className='btn form-btn'>Back to New Role</button>
-									</Link>}
-									{isNewRole ? null : <button type='submit' name='intent' value='delete' className='btn form-btn btn-danger' disabled={isDeleting}>
-									{isDeleting ? 'isDeleting...' : 'Delete'}
-									</button>}
+									{isNewRole ? null : (
+										<Link to='/board/admin/roles/new-role'>
+											<button className='btn form-btn'>Back to New Role</button>
+										</Link>
+									)}
+									{isNewRole ? null : (
+										<button
+											type='submit'
+											name='intent'
+											value='delete'
+											className='btn form-btn btn-danger'
+											disabled={isDeleting}
+										>
+											{isDeleting ? 'isDeleting...' : 'Delete'}
+										</button>
+									)}
 								</div>
 							</div>
 						</div>
@@ -225,7 +276,9 @@ export function CatchBoundary() {
 		return (
 			<div className='error-container'>
 				<div className='form-container form-content'>
-					<p>You must be logged in with administrator rights to create a role.</p>
+					<p>
+						You must be logged in with administrator rights to create a role.
+					</p>
 					<Link to='/login?redirectTo=/board/admin/roles/new-role'>
 						<button className='btn form-btn'>Login</button>
 					</Link>
@@ -236,7 +289,7 @@ export function CatchBoundary() {
 	throw new Error(`Unexpected caught response with status: ${caught.status}`);
 }
 
-export function ErrorBoundary({ error }: { error: Error; }) {
+export function ErrorBoundary({ error }: { error: Error }) {
 	console.error(error);
 	return (
 		<div className='error-container'>

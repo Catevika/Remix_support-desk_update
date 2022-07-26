@@ -107,7 +107,7 @@ export const action: ActionFunction = async ({ request, params }) => {
 		form.get('redirectTo') || `/board/admin/users/userlist`
 	);
 
-	if (!username && !email && !password && !service) {
+	if (!user || (!username && !email && !password && !service)) {
 		return null;
 	}
 
@@ -190,7 +190,7 @@ export default function adminUserIdRoute() {
 				</div>
 			</header>
 			{user ? (
-				<main className='form-container form-container-center form-container-user'>
+				<main className='form-container form-container-center'>
 					<h1>User Profile</h1>
 					<div className='form-content'>
 						<fetcher.Form
@@ -284,11 +284,11 @@ export default function adminUserIdRoute() {
 											className='form-select'
 										>
 											<option
-												defaultValue='-- Select your service --'
+												defaultValue='- Select your service -'
 												disabled
 												className='form-option-disabled'
 											>
-												-- Select your service --
+												- Select your service -
 											</option>
 											{services.map((service) => (
 												<option

@@ -150,13 +150,12 @@ export default function adminServiceRoute() {
 	);
 
 	return (
-		<main className='form-container'>
+		<main className='form-scroll-main'>
 			<div className='form-scroll'>
 				<Form
 					reloadDocument
 					method='post'
 					key={data.service?.serviceId ?? 'new-service'}
-					className='form'
 				>
 					<p>
 						{isNewService ? 'New' : null}&nbsp;Service from:
@@ -199,7 +198,14 @@ export default function adminServiceRoute() {
 											name='createdAt'
 											defaultValue={new Date(
 												data.service.createdAt
-											).toLocaleString('en-us')}
+											).toLocaleString('en-us', {
+												month: '2-digit',
+												day: '2-digit',
+												year: '2-digit',
+												hour: '2-digit',
+												minute: '2-digit',
+												hour12: false
+											})}
 										/>
 									</label>
 									<label>
@@ -210,7 +216,14 @@ export default function adminServiceRoute() {
 											name='updatedAt'
 											defaultValue={new Date(
 												data.service.updatedAt
-											).toLocaleString('en-us')}
+											).toLocaleString('en-us', {
+												month: '2-digit',
+												day: '2-digit',
+												year: '2-digit',
+												hour: '2-digit',
+												minute: '2-digit',
+												hour12: false
+											})}
 										/>
 									</label>
 								</div>

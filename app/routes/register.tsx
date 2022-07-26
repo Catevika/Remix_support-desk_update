@@ -1,5 +1,9 @@
-import type { MetaFunction, LoaderFunction, ActionFunction } from '@remix-run/node';
-import { json } from "@remix-run/node";
+import type {
+	MetaFunction,
+	LoaderFunction,
+	ActionFunction
+} from '@remix-run/node';
+import { json } from '@remix-run/node';
 import {
 	Link,
 	useLoaderData,
@@ -8,7 +12,13 @@ import {
 	useFetcher
 } from '@remix-run/react';
 
-import { safeRedirect, validateUsername, validateEmail, validatePassword, validateService } from '~/utils/functions';
+import {
+	safeRedirect,
+	validateUsername,
+	validateEmail,
+	validatePassword,
+	validateService
+} from '~/utils/functions';
 import { createUserSession, register } from '~/utils/session.server';
 import { FaTools } from 'react-icons/fa';
 import { getUserByEmail } from '~/models/users.server';
@@ -84,10 +94,10 @@ export const action: ActionFunction = async ({ request }) => {
 	if (Object.values(fieldErrors).some(Boolean)) {
 		return badRequest({ fieldErrors, fields });
 	}
-	
+
 	const userExists = await prisma.user.findUnique({
-    where: { email }
-  });
+		where: { email }
+	});
 
 	if (userExists) {
 		return badRequest({
@@ -137,13 +147,19 @@ export default function Register() {
 		<>
 			<header className='container header'>
 				<Link to='/login' className='icon-header'>
-					<FaTools className='icon-size icon-shadow icon-linked icon-header' />Login
+					<FaTools className='icon-size icon-shadow icon-linked icon-header' />
+					Login
 				</Link>
 				<p>Register to get support!</p>
 			</header>
 			<div className='form-container-center'>
 				<h1>Register</h1>
-				<em>Already registered? <Link to='/login'><span>Login</span></Link></em>
+				<em>
+					Already registered?{' '}
+					<Link to='/login'>
+						<span>Login</span>
+					</Link>
+				</em>
 				<div className='form-content'>
 					<fetcher.Form reloadDocument method='post' className='form'>
 						<input
@@ -152,7 +168,8 @@ export default function Register() {
 							value={searchParams.get('redirectTo') ?? undefined}
 						/>
 						<div className='form-group'>
-							<label htmlFor='username-input'>Username
+							<label htmlFor='username-input'>
+								Username
 								<input
 									type='text'
 									id='username-input'
@@ -169,17 +186,14 @@ export default function Register() {
 								/>
 							</label>
 							{actionData?.fieldErrors?.username ? (
-								<p
-									className='error-danger'
-									role='alert'
-									id='username-error'
-								>
+								<p className='error-danger' role='alert' id='username-error'>
 									{actionData.fieldErrors.username}
 								</p>
 							) : null}
 						</div>
 						<div className='form-group'>
-							<label htmlFor='email-input'>Email
+							<label htmlFor='email-input'>
+								Email
 								<input
 									type='email'
 									id='email-input'
@@ -193,17 +207,14 @@ export default function Register() {
 								/>
 							</label>
 							{actionData?.fieldErrors?.email ? (
-								<p
-									className='error-danger'
-									role='alert'
-									id='email-error'
-								>
+								<p className='error-danger' role='alert' id='email-error'>
 									{actionData.fieldErrors.email}
 								</p>
 							) : null}
 						</div>
 						<div className='form-group'>
-							<label htmlFor='password-input'>Password
+							<label htmlFor='password-input'>
+								Password
 								<input
 									type='password'
 									id='password-input'
@@ -219,31 +230,28 @@ export default function Register() {
 								/>
 							</label>
 							{actionData?.fieldErrors?.password ? (
-								<p
-									className='error-danger'
-									role='alert'
-									id='password-error'
-								>
+								<p className='error-danger' role='alert' id='password-error'>
 									{actionData.fieldErrors.password}
 								</p>
 							) : null}
 						</div>
 						<div className='form-group'>
-							<label htmlFor='service-select'>Service
+							<label htmlFor='service-select'>
+								Service
 								{services.length ? (
 									<select
 										name='service'
 										id='service-select'
-										defaultValue='-- Select your service --'
+										defaultValue='- Select your service -'
 										onSelect={(e) => handleSelect}
 										className='form-select'
 									>
 										<option
-											defaultValue='-- Select your service --'
+											defaultValue='- Select your service -'
 											disabled
 											className='form-option-disabled'
 										>
-											-- Select your service --
+											- Select your service -
 										</option>
 										{services.map((service) => (
 											<option
@@ -260,11 +268,7 @@ export default function Register() {
 								)}
 							</label>
 							{actionData?.fieldErrors?.service ? (
-								<p
-									className='error-danger'
-									role='alert'
-									id='service-error'
-								>
+								<p className='error-danger' role='alert' id='service-error'>
 									{actionData.fieldErrors.service}
 								</p>
 							) : null}
