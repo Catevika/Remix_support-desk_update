@@ -93,14 +93,14 @@ export const action: ActionFunction = async ({ request, params }) => {
 	const status = form.get('status');
 	const product = form.get('product');
 	const description = form.get('description');
-	const intent = form.get('intent');
+	/* const intent = form.get('intent'); */
 
 	const ticketId = params.ticketId;
 
-	if (intent === 'delete') {
+	/* if (intent === 'delete') {
 		await deleteTicket(ticketId);
 		return redirect('/board/admin/users/ticketlist');
-	}
+	} */
 
 	function onlyNumbers(str: string) {
 		return /^[0-9]+$/.test(str);
@@ -196,12 +196,14 @@ export default function userTicketIdRoute() {
 		return fetcher.submission?.formData.get('product') === selectedProduct;
 	}
 
+	const hasNotes = notesByTicketId && notesByTicketId.length > 1;
+
 	const isUpdating = Boolean(
 		fetcher.submission?.formData.get('intent') === 'update'
 	);
-	const isDeleting = Boolean(
-		fetcher.submission?.formData.get('intent') === 'delete'
-	);
+	// const isDeleting = Boolean(
+	// 	fetcher.submission?.formData.get('intent') === 'delete'
+	// );
 
 	return (
 		<>
@@ -212,7 +214,7 @@ export default function userTicketIdRoute() {
 				<h1>Ticket</h1>
 				<LogoutButton />
 			</header>
-			<main className='form-container form-container-admin'>
+			<div className='form-container form-container-admin'>
 				<p>
 					Ticket from:
 					<span className='capitalize'>
@@ -406,7 +408,7 @@ export default function userTicketIdRoute() {
 								<Link to='/board/admin/users/ticketlist/'>
 									<button className='btn'>Back to Ticket List</button>
 								</Link>
-								<button
+								{/* <button
 									type='submit'
 									name='intent'
 									value='delete'
@@ -414,7 +416,7 @@ export default function userTicketIdRoute() {
 									disabled={isDeleting}
 								>
 									{isDeleting ? 'isDeleting...' : 'Delete'}
-								</button>
+								</button> */}
 								<Link
 									to={`/board/admin/users/ticketlist/${ticket?.ticketId}/add`}
 									className='btn btn-note'
@@ -422,6 +424,22 @@ export default function userTicketIdRoute() {
 									Add Note
 								</Link>
 								<Outlet />
+							</div>
+							<div className='inline'>
+								{hasNotes ? (
+									<Link
+										to={`/board/admin/users/ticketlist/${ticket?.ticketId}/deleteNote`}
+										className='btn btn-danger'
+									>
+										Delete all Notes
+									</Link>
+								) : null}
+								<Link
+									to={`/board/admin/users/ticketlist/${ticket?.ticketId}/deleteTicket`}
+									className='btn btn-danger'
+								>
+									Delete Ticket
+								</Link>
 							</div>
 						</div>
 					</fetcher.Form>
@@ -500,7 +518,7 @@ export default function userTicketIdRoute() {
 						</>
 					) : null}
 				</div>
-			</main>
+			</div>
 		</>
 	);
 }
@@ -510,7 +528,7 @@ export function ErrorBoundary({ error }: { error: Error }) {
 	console.log(error);
 	return (
 		<div className='error-container' style={{ fontSize: '1.5rem' }}>
-			<div className='form-container form-container-message form-content'>
+			<div className='form-container-message form-content'>
 				<p>
 					To{' '}
 					<span className='error-danger error-danger-big'>

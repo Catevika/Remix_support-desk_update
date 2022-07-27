@@ -11,8 +11,7 @@ import {
 	Link,
 	useFetcher,
 	useCatch,
-	Outlet,
-	useParams
+	Outlet
 } from '@remix-run/react';
 
 import { getUser, requireUserId } from '~/utils/session.server';
@@ -20,10 +19,8 @@ import { prisma } from '~/utils/db.server';
 import { getProducts } from '~/models/products.server';
 import { getStatuses } from '~/models/status.server';
 import { validateTitle, validateDescription } from '~/utils/functions';
-import { getTicket, deleteTicket } from '~/models/tickets.server';
+import { getTicket } from '~/models/tickets.server';
 import { getNoteListingByTicketId } from '~/models/notes.server';
-import { FaTools } from 'react-icons/fa';
-import LogoutButton from '~/components/LogoutButton';
 
 export const meta: MetaFunction = ({
 	data
@@ -545,25 +542,11 @@ export function CatchBoundary() {
 }
 
 export function ErrorBoundary({ error }: { error: Error }) {
-	const { ticketId } = useParams();
-	console.log(error);
+	console.error(error);
 	return (
-		<div className='error-container' style={{ fontSize: '1.5rem' }}>
+		<div className='error-container'>
 			<div className='form-container form-container-message form-content'>
-				<p>
-					To{' '}
-					<span className='error-danger error-danger-big'>
-						delete your Ticket
-					</span>
-					, <span>delete its associated notes</span> or send a{' '}
-					<Link to='/board/employee/tickets/new-ticket'>
-						<span>Ticket</span>
-					</Link>{' '}
-					to the Support Desk.
-				</p>
-				<Link to={`/board/employee/tickets/${ticketId}`}>
-					<button className='btn form-btn'>Back to Ticket</button>
-				</Link>
+				Something unexpected went wrong. Sorry about that.
 			</div>
 		</div>
 	);

@@ -190,8 +190,7 @@ export default function adminUserIdRoute() {
 				</div>
 			</header>
 			{user ? (
-				<main className='form-container form-container-center'>
-					<h1>User Profile</h1>
+				<main className='form-container-center'>
 					<div className='form-content'>
 						<fetcher.Form
 							reloadDocument
