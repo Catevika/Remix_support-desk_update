@@ -182,7 +182,7 @@ export default function adminUserIdRoute() {
 		<>
 			<header className='container header'>
 				<Link to='/board/admin/users/userlist' className='icon-header'>
-					<FaTools className='icon-size icon-shadow' /> Back to User List
+					<FaTools className='icon-size icon-shadow' /> Users
 				</Link>
 				<div className='header-flex'>
 					<p>User Profile</p>

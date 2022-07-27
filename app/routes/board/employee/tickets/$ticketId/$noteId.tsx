@@ -177,7 +177,7 @@ export default function userNoteViewRoute() {
 						{isUpdating ? 'Updating...' : 'Update'}
 					</button>
 					<button type='button' className='btn form-btn' onClick={onDismiss}>
-						Cancel
+						Back to Notes
 					</button>
 					<button
 						type='submit'

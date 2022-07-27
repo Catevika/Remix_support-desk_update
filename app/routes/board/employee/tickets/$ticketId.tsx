@@ -377,14 +377,13 @@ export default function userTicketIdRoute() {
 													hour12: false
 												}
 											)}
-											className='form-textarea form-input-date'
+											className='form-input-date'
 											disabled
 										/>
 									</label>
 									<label>
 										Updated at:&nbsp;
-										<textarea
-											rows={2}
+										<input
 											id='updatedAt'
 											name='updatedAt'
 											defaultValue={new Date(ticket.updatedAt).toLocaleString(
@@ -398,7 +397,7 @@ export default function userTicketIdRoute() {
 													hour12: false
 												}
 											)}
-											className='form-textarea form-textarea-date'
+											className='form-input-date'
 											disabled
 										/>
 									</label>

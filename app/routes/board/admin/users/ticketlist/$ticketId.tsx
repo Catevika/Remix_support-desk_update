@@ -207,7 +207,7 @@ export default function userTicketIdRoute() {
 		<>
 			<header className='container header'>
 				<Link to='/board/admin/users/ticketlist' className='icon-header'>
-					<FaTools className='icon-size icon-shadow' /> Back to Ticket List
+					<FaTools className='icon-size icon-shadow' /> Tickets
 				</Link>
 				<h1>Ticket</h1>
 				<LogoutButton />
@@ -365,7 +365,7 @@ export default function userTicketIdRoute() {
 														hour12: false
 													}
 												)}
-												className='form-textarea-date'
+												className='form-input-date'
 												disabled
 											/>
 										</label>
@@ -386,7 +386,7 @@ export default function userTicketIdRoute() {
 														hour12: false
 													}
 												)}
-												className='form-textarea-date'
+												className='form-input-date'
 												disabled
 											/>
 										</label>
