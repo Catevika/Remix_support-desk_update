@@ -51,7 +51,7 @@ input:focus {
 	margin-top: -90px;
 }
 
-@media screen and (max-width: 810px) {
+@media screen and (max-width: 900px) {
 	.form-container {
 		width: 98%;
 	}
@@ -73,7 +73,7 @@ input:focus {
 	width: 50vw;
 }
 
-@media screen and (max-width: 810px) {
+@media screen and (max-width: 900px) {
 	.form-container-user {
 		width: 98%;
 	}

@@ -172,7 +172,7 @@ em {
 	border-bottom: 1px solid var(--gold);
 }
 
-@media screen and (max-width: 810px) {
+@media screen and (max-width: 900px) {
 	.border-bottom {
 		padding-bottom: 5px;
 	}
@@ -194,7 +194,7 @@ em {
 	box-shadow: 5px 5px 15px #211b36, -5px -5px 15px #372f5c;
 }
 
-@media screen and (max-width: 810px) {
+@media screen and (max-width: 900px) {
 	.card {
 		width: 100%;
 		margin-bottom: 5px;
@@ -259,7 +259,7 @@ em {
 	padding: 0 10px;
 }
 
-@media screen and (max-width: 810px) {
+@media screen and (max-width: 900px) {
 	.flex-container-2-col {
 		flex-wrap: wrap;
 		flex-direction: column-reverse;
@@ -363,7 +363,7 @@ em {
 	margin-bottom: 0;
 }
 
-@media screen and (max-width: 810px) {
+@media screen and (max-width: 900px) {
 	.inline-left {
 		justify-content: center;
 	}
@@ -415,7 +415,7 @@ em {
 	display: none;
 }
 
-@media screen and (max-width: 810px) {
+@media screen and (max-width: 900px) {
 	h1 {
 		display: none;
 	}
@@ -512,16 +512,17 @@ em {
 	#menu {
 		display: block;
 		position: absolute;
-		width: 742px;
-		left: -358px;
+		width: 820px;
+		left: -400px;
 		margin: 0;
 		margin-top: 16px;
 		background-color: var(--dark);
 		-webkit-font-smoothing: antialiased;
-		border: 1px solid var(--light);
+		border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+		box-shadow: 5px 5px 15px #211b36, -5px -5px 15px #372f5c;
 
 		transform-origin: left;
-		transform: translate(-800px, 0);
+		transform: translate(-820px, 0);
 
 		transition: transform 0.5s cubic-bezier(0.77, 0.2, 0.05, 1);
 
@@ -548,7 +549,7 @@ em {
 	border-radius: 0.5rem;
 }
 
-@media screen and (max-width: 810px) {
+@media screen and (max-width: 900px) {
 	.nav {
 		width: 80vw;
 		padding: 0.5em;
@@ -578,7 +579,7 @@ em {
 	overflow-y: scroll;
 }
 
-@media screen and (max-width: 810px) {
+@media screen and (max-width: 900px) {
 	.nav-ul-container {
 		width: 100%;
 		align-items: center;
@@ -676,7 +677,7 @@ em {
 	margin: 10px 0 10px 10px;
 }
 
-@media screen and (max-width: 810px) {
+@media screen and (max-width: 900px) {
 	.table p,
 	.table span {
 		margin: 5px 0 5px 5px;
